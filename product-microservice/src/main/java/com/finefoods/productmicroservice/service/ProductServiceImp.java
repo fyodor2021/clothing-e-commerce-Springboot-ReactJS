@@ -17,6 +17,7 @@ public class ProductServiceImp implements ProductService{
 
     private final ProductRepository productRepository;
 
+    @Override
     public Boolean creatProduct (ProductRequest productRequest){
         Product product = Product.builder()
                 .picture(productRequest.getPicture())
@@ -39,29 +40,36 @@ public class ProductServiceImp implements ProductService{
 
         return Boolean.TRUE;
     }
+    @Override
     public ProductResponse getProduct(Long id){
         Product p = productRepository.findProductById(id);
         return productToProductResponse(p);
     }
+    @Override
     public List<ProductResponse> getAllProducts(){
         List<Product> products = productRepository.findAll();
         return products.stream().map(this::productToProductResponse).toList();
 
 
     }
+    @Override
     public List<ProductResponse> getProductsByCategory(String category){
         List<Product> products = productRepository.findProductByCategory(category);
         return products.stream().map(this::productToProductResponse).toList();
 
     }
+
+    @Override
     public List<ProductResponse> getProductsBySearchTerm(String word){
         List<Product> products = productRepository.findByProductNameContainingIgnoreCase(word);
         return products.stream().map(this::productToProductResponse).toList();
 
     }
+    @Override
     public List<ProductResponse> getProductsBySortOrder(String sortOrder){
         return null;
     }
+    @Override
     public List<Boolean> validateProductList(List<ProductRequest> products ){
         return products.stream().map(this::doesExist).toList();
     }
@@ -74,7 +82,9 @@ public class ProductServiceImp implements ProductService{
         else {
             return true;
         }
+
     }
+    @Override
     public Boolean updateProduct(Long id, ProductRequest p){
         Product product = productRepository.findProductById(id);
         if (product != null){
@@ -92,10 +102,15 @@ public class ProductServiceImp implements ProductService{
             product.setSkuCode(p.getSkuCode());
             product.setUpcCode(p.getUpcCode());
             product.setVendor(p.getVendor());
+
+            productRepository.save(product);
             return true;
         }
         return false;
     }
+
+
+    @Override
     public Boolean deleteProduct(Long id){
         Product p = productRepository.findProductById(id);
         if (p != null){
