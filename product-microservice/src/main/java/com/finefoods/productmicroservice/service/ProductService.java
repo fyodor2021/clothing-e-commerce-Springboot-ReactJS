@@ -15,5 +15,4 @@ public interface ProductService {
     List<Boolean> validateProductList(List<ProductRequest> products );
     Boolean updateProduct(Long id, ProductRequest productRequest);
     Boolean deleteProduct(Long id);
-
 }
