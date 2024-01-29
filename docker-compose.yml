@@ -24,7 +24,7 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
     ports:
-      - "5430:5432"
+      - "5431:5432"
     restart: unless-stopped
     container_name: postgres-user
     volumes:
@@ -32,3 +32,7 @@ services:
       - ./init/postgres/user-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - spring
+
+networks:
+  spring:
+    driver: bridge

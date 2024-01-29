@@ -17,24 +17,24 @@ public class UserController {
     private final UserServiceImpl userService;
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String createUser(@RequestBody UserRequest userRequest){
+    public String createUser(@RequestBody UserRequest userRequest) throws Exception {
        return userService.createUser(userRequest);
     }
 
     @PutMapping("/{userId}")
     public String updateUser(@PathVariable("userId") String userId,
-                             @RequestBody UserRequest userRequest){
+                             @RequestBody UserRequest userRequest) throws Exception{
         return userService.updateUser(userId,userRequest);
 
     }
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable("userId") String userId){
-        userService.deleteUser(userId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public String deleteUser(@PathVariable("userId") String userId){
+        return userService.deleteUser(userId);
     }
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public User getUser(@PathVariable("userId") String userId){
+
         return userService.getUser(userId);
     }
     @GetMapping("/role/{userId}")

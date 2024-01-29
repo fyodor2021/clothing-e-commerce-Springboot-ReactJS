@@ -1,5 +1,6 @@
 package com.finefoods.usermicroservice.dto;
 
+import com.finefoods.usermicroservice.model.DateOfBirth;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,7 @@ public class UserRequest {
     private String lname;
     private String address;
     private String province;
-    private Date dateOfBirth;
+    private DateOfBirth dateOfBirth;
     private String password;
     private String passwordRetype;
 
