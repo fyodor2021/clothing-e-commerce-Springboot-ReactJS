@@ -1,2 +1,2 @@
 rootProject.name = "arz-fine-foods-final"
-include("user-microservice","cart-microservice","inventory-microservice","product-microservice","order-microservice","review-microservice", "flyer-microservice")
+include("discovery-microservice","user-microservice","cart-microservice","inventory-microservice","product-microservice","order-microservice","review-microservice", "flyer-microservice")
