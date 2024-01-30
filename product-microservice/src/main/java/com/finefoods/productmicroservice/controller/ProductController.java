@@ -9,9 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,40 +36,39 @@ public class ProductController {
     }
 
     @GetMapping({"/{id}"})
-    public ProductResponse getProduct(@PathVariable Long id){
-        ProductResponse pr = productService.getProduct(id);
-        if(pr != null ){
-            return pr;
-        }
-        return null;
+    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id){
+        return productService.getProduct(id);
     }
     @GetMapping
     public List<ProductResponse> getAllProducts(){
         return productService.getAllProducts();
     }
-    @GetMapping({""})
+
+
+    @GetMapping({"category"})
     public List<ProductResponse> getProductsByCategory(@RequestParam("category") String category){
         return productService.getProductsByCategory(category);
     }
-    public List<ProductResponse> getProductsBySearchTerm(String word){
+    @GetMapping({"search"})
+    public List<ProductResponse> getProductsBySearchTerm(@RequestParam("search") String word){
         return productService.getProductsBySearchTerm(word);
     }
-    public List<ProductResponse> getProductsBySortOrder(String sortOrder){
-        return  productService.getProductsBySortOrder(sortOrder);
-    }
-    public List<Boolean> validateProductList(List<ProductRequest> products ){
+
+
+    @GetMapping({"validate"})
+    public List<Boolean> validateProductList(@RequestBody List<ProductRequest> products ){
         return productService.validateProductList(products);
     }
-    @PutMapping({"/{productId}"})
-    public String updateProduct(Long id, ProductRequest productRequest){
+    @PutMapping({"/{id}"})
+    public String updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest){
         Boolean bool = productService.updateProduct(id,productRequest);
         if (bool){
             return "Product was updated successfully";
         }
         return "Error occurred";
     }
-    @DeleteMapping({"/{productId}"})
-    public String deleteProduct(Long id) {
+    @DeleteMapping({"/{id}"})
+    public String deleteProduct(@PathVariable Long id) {
         Boolean bool = productService.deleteProduct(id);
         if (bool) {
             return "Product was deleted successfully";

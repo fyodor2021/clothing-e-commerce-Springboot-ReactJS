@@ -18,7 +18,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Byte[] picture;
+    private byte[] picture;
     private String brand;
     private String name;
     private String description;
@@ -27,6 +27,7 @@ public class Product {
     private String size;
     private String unit;
     private Integer cost;
+    private Integer price;
     private Integer currentPrice;
     private Boolean isTaxed;
     private String skuCode;

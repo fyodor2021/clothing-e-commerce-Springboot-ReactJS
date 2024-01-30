@@ -10,8 +10,8 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     Product findProductById(Long id);
     List<Product> findProductByCategory(String category);
 
-    List<Product> findByProductNameContainingIgnoreCase(String word);
+    List<Product> findByNameContainingIgnoreCase(String word);
 
-    Boolean deleteProductById(Long id);
+    void deleteById(Long id);
 }
 
