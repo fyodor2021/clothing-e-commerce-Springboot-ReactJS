@@ -1,6 +1,7 @@
 package com.finefoods.usermicroservice.service;
 
 import com.finefoods.usermicroservice.dto.UserRequest;
+import com.finefoods.usermicroservice.dto.UserResponse;
 import com.finefoods.usermicroservice.model.DateOfBirth;
 import com.finefoods.usermicroservice.model.User;
 import com.finefoods.usermicroservice.repository.UserRepository;
@@ -76,10 +77,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(String userId) {
+    public UserResponse getUserByUserId(String userId) {
         User userLookup = userRepository.findUserByUserId(Long.parseLong(userId));
         if(userLookup != null){
-            return userLookup;
+            return mapToUserResponse(userLookup);
         }else{
             return null;
         }
@@ -108,6 +109,13 @@ public class UserServiceImpl implements UserService {
         cal.set(Calendar.MONTH, dob.getMonth() -1);
         cal.set(Calendar.DAY_OF_MONTH, dob.getDay());
         return new Date(cal.getTimeInMillis());
+    }
+    private UserResponse mapToUserResponse(User user){
+        return UserResponse.builder()
+                .fname(user.getFname())
+                .lname(user.getLname())
+                .province(user.getProvince())
+                .dateOfBirth(user.getDateOfBirth()).build();
     }
 
 }

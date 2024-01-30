@@ -1,6 +1,7 @@
 package com.finefoods.usermicroservice.controller;
 
 import com.finefoods.usermicroservice.dto.UserRequest;
+import com.finefoods.usermicroservice.dto.UserResponse;
 import com.finefoods.usermicroservice.model.User;
 import com.finefoods.usermicroservice.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +34,8 @@ public class UserController {
     }
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public User getUser(@PathVariable("userId") String userId){
-
-        return userService.getUser(userId);
+    public UserResponse getUserByUserId(@PathVariable("userId") String userId){
+        return userService.getUserByUserId(userId);
     }
     @GetMapping("/role/{userId}")
     public String getUserRole(@PathVariable("userId") String userId){

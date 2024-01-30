@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
     ports:
-      - "5430:5432"
+      - "5432:5432"
     restart: unless-stopped
     container_name: postgres-product
     volumes:
@@ -30,6 +30,22 @@ services:
     volumes:
       - ./data/postgres/user-microservice:/data/postgres
       - ./init/postgres/user-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - spring
+
+  postgres-review:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: review-microservice
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5430:5432"
+    restart: unless-stopped
+    container_name: postgres-review
+    volumes:
+      - ./data/postgres/review-microservice:/data/postgres
+      - ./init/postgres/review-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - spring
 

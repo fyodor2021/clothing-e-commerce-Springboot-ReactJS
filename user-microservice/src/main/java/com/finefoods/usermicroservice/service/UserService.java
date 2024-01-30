@@ -14,7 +14,7 @@ public interface UserService {
 
     String deleteUser(String userId);
 
-    User getUser(String userId);
+    UserResponse getUserByUserId(String userId);
     String getUserRole(String userId);
 
 }

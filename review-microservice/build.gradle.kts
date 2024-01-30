@@ -22,8 +22,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-web-services")
     compileOnly("org.projectlombok:lombok")
@@ -34,7 +32,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.2")
     implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.2")
     runtimeOnly("org.postgresql:postgresql")
-    implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.2")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.2")
     compileOnly("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
