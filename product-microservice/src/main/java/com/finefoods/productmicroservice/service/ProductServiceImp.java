@@ -6,6 +6,8 @@ import com.finefoods.productmicroservice.model.Product;
 import com.finefoods.productmicroservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +22,7 @@ public class ProductServiceImp implements ProductService{
     @Override
     public Boolean creatProduct (ProductRequest productRequest){
         Product product = Product.builder()
-                .picture(productRequest.getPicture())
+//                .picture(productRequest.getPicture())
                 .brand(productRequest.getBrand())
                 .name(productRequest.getName())
                 .description(productRequest.getDescription())
@@ -41,9 +43,14 @@ public class ProductServiceImp implements ProductService{
         return Boolean.TRUE;
     }
     @Override
-    public ProductResponse getProduct(Long id){
+    public ResponseEntity<ProductResponse> getProduct(Long id){
         Product p = productRepository.findProductById(id);
-        return productToProductResponse(p);
+        if(p != null ){
+            ProductResponse pr = productToProductResponse(p);
+            return ResponseEntity.ok(pr);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
     }
     @Override
     public List<ProductResponse> getAllProducts(){
@@ -61,13 +68,9 @@ public class ProductServiceImp implements ProductService{
 
     @Override
     public List<ProductResponse> getProductsBySearchTerm(String word){
-        List<Product> products = productRepository.findByProductNameContainingIgnoreCase(word);
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(word);
         return products.stream().map(this::productToProductResponse).toList();
 
-    }
-    @Override
-    public List<ProductResponse> getProductsBySortOrder(String sortOrder){
-        return null;
     }
     @Override
     public List<Boolean> validateProductList(List<ProductRequest> products ){
@@ -88,7 +91,7 @@ public class ProductServiceImp implements ProductService{
     public Boolean updateProduct(Long id, ProductRequest p){
         Product product = productRepository.findProductById(id);
         if (product != null){
-            product.setPicture(p.getPicture());
+//            product.setPicture(p.getPicture());
             product.setBrand(p.getBrand());
             product.setName(p.getName());
             product.setDescription(p.getDescription());
@@ -114,7 +117,7 @@ public class ProductServiceImp implements ProductService{
     public Boolean deleteProduct(Long id){
         Product p = productRepository.findProductById(id);
         if (p != null){
-            productRepository.deleteProductById(id);
+            productRepository.deleteById(id);
             return true;
         }
        return false;
@@ -122,7 +125,8 @@ public class ProductServiceImp implements ProductService{
 
     private ProductResponse productToProductResponse(Product p){
         return ProductResponse.builder()
-                .picture(p.getPicture())
+                .id(p.getId())
+//                .picture(p.getPicture())
                 .brand(p.getBrand())
                 .name(p.getName())
                 .description(p.getDescription())

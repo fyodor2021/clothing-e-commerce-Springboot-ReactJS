@@ -32,7 +32,7 @@ services:
       - ./init/postgres/user-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - spring
-
+      
   postgres-review:
     image: postgres:latest
     environment:
