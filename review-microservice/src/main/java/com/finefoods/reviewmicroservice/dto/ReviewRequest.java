@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ReviewRequest {
+    private Long userId;
+    private Long productId;
 }

@@ -20,6 +20,4 @@ public class ReviewController {
     public String createReview(@RequestBody ReviewRequest reviewRequest) {
         return reviewService.createReview(reviewRequest);
     }
-
-
 }

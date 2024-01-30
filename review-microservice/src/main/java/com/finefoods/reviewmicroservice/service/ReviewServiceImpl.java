@@ -4,10 +4,12 @@ import com.finefoods.reviewmicroservice.dto.ProductResponse;
 import com.finefoods.reviewmicroservice.dto.ReviewRequest;
 import com.finefoods.reviewmicroservice.dto.UserResponse;
 import com.finefoods.reviewmicroservice.model.Review;
+import com.finefoods.reviewmicroservice.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
@@ -15,17 +17,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
-
-    @Value("${user-microservice.uri}")
+    private final ReviewRepository reviewRepository;
+    private final WebClient.Builder webClientBuilder;
+    @Value("${user-microservice.url}")
     private String userUri;
-    @Value("${product-microservice.uri}")
+    @Value("${product-microservice.url}")
     private String productUri;
     @Override
     public String createReview(ReviewRequest reviewRequest) {
-        //UserResponse userLookup = validateUser(reviewRequest.getUserId());
-        //ProductResponse productLookup = validateProduct(reviewRequest.getProductId());
-return "hello world";
+        UserResponse userLookup = validateUser(reviewRequest.getUserId().toString());
+        ProductResponse productLookup = validateProduct(reviewRequest.getProductId().toString());
+        if(userLookup != null && productLookup != null){
+            reviewRepository.save(Review.builder()
+                            .userId(reviewRequest.getUserId())
+                            .productId(reviewRequest.getProductId())
+                            .reviewBody(reviewRequest.getReviewBody)
 
+                    .build());
+        }
+        return "hello world";
     }
 
     @Override
@@ -52,10 +62,19 @@ return "hello world";
         return null;
     }
     private UserResponse validateUser(String userId){
-        return null;
+        return webClientBuilder.build()
+                .get()
+                .uri(userUri + "/" + userId)
+                .retrieve()
+                .bodyToMono(UserResponse.class)
+                .block();
     }
-    private ProductResponse validateProduct(String userId){
-        return null;
-
+    private ProductResponse validateProduct(String productId){
+        return webClientBuilder.build()
+                .get()
+                .uri(productUri + "/" + productId)
+                .retrieve()
+                .bodyToMono(ProductResponse.class)
+                .block();
     }
 }
