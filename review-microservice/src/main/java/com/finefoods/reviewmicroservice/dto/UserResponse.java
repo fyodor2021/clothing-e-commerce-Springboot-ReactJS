@@ -1,4 +1,4 @@
-package com.finefoods.usermicroservice.dto;
+package com.finefoods.reviewmicroservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
