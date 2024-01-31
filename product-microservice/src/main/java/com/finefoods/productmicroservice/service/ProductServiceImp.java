@@ -22,9 +22,9 @@ public class ProductServiceImp implements ProductService{
     @Override
     public Boolean creatProduct (ProductRequest productRequest){
         Product product = Product.builder()
-//                .picture(productRequest.getPicture())
+                .picture(productRequest.getPicture())
                 .brand(productRequest.getBrand())
-                .name(productRequest.getName())
+                .productName(productRequest.getProductName())
                 .description(productRequest.getDescription())
                 .category(productRequest.getCategory())
                 .tags(productRequest.getTags())
@@ -44,12 +44,13 @@ public class ProductServiceImp implements ProductService{
     }
     @Override
     public ResponseEntity<ProductResponse> getProduct(Long id){
-        Product p = productRepository.findProductById(id);
+        Product p = productRepository.findProductByProductId(id);
         if(p != null ){
             ProductResponse pr = productToProductResponse(p);
             return ResponseEntity.ok(pr);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        ProductResponse emptyObject = ProductResponse.builder().build();
+        return ResponseEntity.ok(emptyObject);
 
     }
     @Override
@@ -68,32 +69,32 @@ public class ProductServiceImp implements ProductService{
 
     @Override
     public List<ProductResponse> getProductsBySearchTerm(String word){
-        List<Product> products = productRepository.findByNameContainingIgnoreCase(word);
+        List<Product> products = productRepository.findByProductNameContainingIgnoreCase(word);
         return products.stream().map(this::productToProductResponse).toList();
 
     }
     @Override
-    public List<Boolean> validateProductList(List<ProductRequest> products ){
+    public List<ProductResponse> validateProductList(List<ProductRequest> products ){
         return products.stream().map(this::doesExist).toList();
     }
 
-    private Boolean doesExist(ProductRequest p){
-        Product pp = productRepository.findProductById(p.getId());
-        if(pp == null){
-            return false;
+    private ProductResponse doesExist(ProductRequest p){
+        Product pp = productRepository.findProductByProductId(p.getProductId());
+        if(pp != null){
+            return productToProductResponse(pp);
         }
         else {
-            return true;
+            return ProductResponse.builder().build();
         }
 
     }
     @Override
     public Boolean updateProduct(Long id, ProductRequest p){
-        Product product = productRepository.findProductById(id);
+        Product product = productRepository.findProductByProductId(id);
         if (product != null){
-//            product.setPicture(p.getPicture());
+            product.setPicture(p.getPicture());
             product.setBrand(p.getBrand());
-            product.setName(p.getName());
+            product.setProductName(p.getProductName());
             product.setDescription(p.getDescription());
             product.setCategory(p.getCategory());
             product.setTags(p.getTags());
@@ -115,7 +116,7 @@ public class ProductServiceImp implements ProductService{
 
     @Override
     public Boolean deleteProduct(Long id){
-        Product p = productRepository.findProductById(id);
+        Product p = productRepository.findProductByProductId(id);
         if (p != null){
             productRepository.deleteById(id);
             return true;
@@ -125,10 +126,10 @@ public class ProductServiceImp implements ProductService{
 
     private ProductResponse productToProductResponse(Product p){
         return ProductResponse.builder()
-                .id(p.getId())
-//                .picture(p.getPicture())
+                .productId(p.getProductId())
+                .picture(p.getPicture())
                 .brand(p.getBrand())
-                .name(p.getName())
+                .productName(p.getProductName())
                 .description(p.getDescription())
                 .category(p.getCategory())
                 .tags(p.getTags())

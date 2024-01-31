@@ -45,18 +45,18 @@ public class ProductController {
     }
 
 
-    @GetMapping({"category"})
-    public List<ProductResponse> getProductsByCategory(@RequestParam("category") String category){
+    @GetMapping({"category/{category}"})
+    public List<ProductResponse> getProductsByCategory(@PathVariable("category") String category){
         return productService.getProductsByCategory(category);
     }
-    @GetMapping({"search"})
+    @GetMapping({"search/{search}"})
     public List<ProductResponse> getProductsBySearchTerm(@RequestParam("search") String word){
         return productService.getProductsBySearchTerm(word);
     }
 
 
     @GetMapping({"validate"})
-    public List<Boolean> validateProductList(@RequestBody List<ProductRequest> products ){
+    public List<ProductResponse> validateProductList(@RequestBody List<ProductRequest> products ){
         return productService.validateProductList(products);
     }
     @PutMapping({"/{id}"})

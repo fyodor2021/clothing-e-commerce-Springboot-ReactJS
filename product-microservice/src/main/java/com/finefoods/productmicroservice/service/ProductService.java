@@ -12,7 +12,7 @@ public interface ProductService {
     List<ProductResponse> getAllProducts();
     List<ProductResponse> getProductsByCategory(String category);
     List<ProductResponse> getProductsBySearchTerm(String word);
-    List<Boolean> validateProductList(List<ProductRequest> products );
+    List<ProductResponse> validateProductList(List<ProductRequest> products );
     Boolean updateProduct(Long id, ProductRequest productRequest);
     Boolean deleteProduct(Long id);
 }

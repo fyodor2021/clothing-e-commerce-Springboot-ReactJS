@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ProductResponse {
-    private Long id;
-    private Byte[] picture;
+    private Long productId;
+    private byte[] picture;
     private String brand;
-    private String name;
+    private String productName;
     private String description;
     private String category;
     private String tags;
