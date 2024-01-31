@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-web-services")
 	compileOnly("org.projectlombok:lombok")
@@ -32,6 +32,10 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.0")
+	implementation("org.apache.httpcomponents.client5:httpclient5:5.2")
+	implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.2")
+	implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.1.0")
+	compileOnly("org.springframework.boot:spring-boot-starter-aop")
 
 }
 

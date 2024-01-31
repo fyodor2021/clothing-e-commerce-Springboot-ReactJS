@@ -7,11 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product,Long> {
-    Product findProductById(Long id);
+    Product findProductByProductId(Long id);
     List<Product> findProductByCategory(String category);
 
-    List<Product> findByNameContainingIgnoreCase(String word);
+    List<Product> findByProductNameContainingIgnoreCase(String word);
 
-    void deleteById(Long id);
 }
 

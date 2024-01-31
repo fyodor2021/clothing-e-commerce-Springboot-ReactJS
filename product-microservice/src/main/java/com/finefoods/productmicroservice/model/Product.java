@@ -11,16 +11,16 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "product")
+@Table(name = "t_product")
 @Data
 @Builder
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long productId;
     private byte[] picture;
     private String brand;
-    private String name;
+    private String productName;
     private String description;
     private String category;
     private String tags;
