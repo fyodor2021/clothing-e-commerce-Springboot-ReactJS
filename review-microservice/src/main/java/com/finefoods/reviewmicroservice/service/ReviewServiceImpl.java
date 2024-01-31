@@ -2,16 +2,14 @@ package com.finefoods.reviewmicroservice.service;
 
 import com.finefoods.reviewmicroservice.dto.ProductResponse;
 import com.finefoods.reviewmicroservice.dto.ReviewRequest;
+import com.finefoods.reviewmicroservice.dto.ReviewResponse;
 import com.finefoods.reviewmicroservice.dto.UserResponse;
 import com.finefoods.reviewmicroservice.model.Review;
 import com.finefoods.reviewmicroservice.repository.ReviewRepository;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -30,37 +28,64 @@ public class ReviewServiceImpl implements ReviewService {
     public String createReview(ReviewRequest reviewRequest) {
         UserResponse userLookup = validateUser(reviewRequest.getUserId());
         ProductResponse productLookup = validateProduct(reviewRequest.getProductId());
-        if(userLookup != null && productLookup != null){
-            reviewRepository.save(Review.builder()
-                            .userId(reviewRequest.getUserId())
-                            .productId(reviewRequest.getProductId())
-                            .reviewBody(reviewRequest.getReviewBody())
-                    .build());
-        }
-        return "hello world";
+        if(userLookup != null ){
+            if(productLookup != null){
+                reviewRepository.save(Review.builder()
+                        .userId(reviewRequest.getUserId())
+                        .userFname(userLookup.getFname())
+                        .userLname(userLookup.getLname())
+                        .productId(reviewRequest.getProductId())
+                        .reviewBody(reviewRequest.getReviewBody())
+                        .build());
+                return "review created successfully";
+            }else return "product doesn't exist";
+        }else return "user doesn't exist";
     }
 
     @Override
-    public String updateReview(ReviewRequest reviewRequest) {
-        return null;
+    public ReviewResponse updateReview(ReviewRequest reviewRequest, Long reviewId) {
+        Review reviewLookup = reviewRepository.findReviewByReviewId(reviewId);
+        if (reviewLookup != null) {
+            if(reviewLookup.getReviewBody()
+                    .equals(reviewRequest.getReviewBody()))
+                return mapToReviewResponse(reviewLookup);
+            reviewLookup.setReviewBody(reviewRequest.getReviewBody());
+            reviewRepository.save(reviewLookup);
+            return mapToReviewResponse(reviewLookup);
+        }
+        return ReviewResponse.builder()
+                .reviewBody("Review Not Found")
+                .build();
     }
 
     @Override
     public String deleteReview(Long reviewId) {
-        return null;
+        Review reviewLookup = reviewRepository.findReviewByReviewId(reviewId);
+        if(reviewLookup != null) {
+            reviewRepository.deleteReviewByReviewId(reviewId);
+            return "User deleted Successfully";
+
+        }else{
+            return "User Not Found";
+        }
     }
     @Override
-    public Review getReviewById(Long reviewId) {
-        return null;
+    public ReviewResponse getReviewById(Long reviewId) {
+        Review reviewLookup = reviewRepository.findReviewByReviewId(reviewId);
+        return mapToReviewResponse(reviewLookup);
     }
 
     @Override
-    public List<Review> getReviewsByProductId(Long productId) {
-        return null;
+    public List<ReviewResponse> getReviewsByProductId(Long productId) {
+        ProductResponse productLookup = validateProduct(productId);
+        if(productLookup != null){
+            List<Review> reviewsLookup = reviewRepository.findReviewsByProductId(productId);
+            return reviewsLookup.stream().map(this::mapToReviewResponse).toList();
+        }else throw new RuntimeException("Product Not Found");
     }
 
     @Override
-    public List<Review> getReviewsByUserId(Long userId) {
+    public List<ReviewResponse> getReviewsByUserId(Long userId) {
         return null;
     }
     private UserResponse validateUser(Long userId){
@@ -83,5 +108,14 @@ public class ReviewServiceImpl implements ReviewService {
                         .block()
         ).join();
     }
-
+    private ReviewResponse mapToReviewResponse(Review review){
+        return ReviewResponse.builder()
+                .reviewId(review.getReviewId())
+                .reviewBody(review.getReviewBody())
+                .userId(review.getUserId())
+                .userFname(review.getUserFname())
+                .userLname(review.getUserLname())
+                .productId(review.getProductId())
+                .build();
+    }
 }

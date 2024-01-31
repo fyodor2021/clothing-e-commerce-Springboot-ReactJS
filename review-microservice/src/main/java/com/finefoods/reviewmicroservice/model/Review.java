@@ -20,5 +20,7 @@ public class Review {
     private Long reviewId;
     private String reviewBody;
     private Long userId;
+    private String userFname;
+    private String userLname;
     private Long productId;
 }
