@@ -5,13 +5,16 @@ import com.finefoods.reviewmicroservice.dto.ReviewRequest;
 import com.finefoods.reviewmicroservice.dto.UserResponse;
 import com.finefoods.reviewmicroservice.model.Review;
 import com.finefoods.reviewmicroservice.repository.ReviewRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -25,14 +28,13 @@ public class ReviewServiceImpl implements ReviewService {
     private String productUri;
     @Override
     public String createReview(ReviewRequest reviewRequest) {
-        UserResponse userLookup = validateUser(reviewRequest.getUserId().toString());
-        ProductResponse productLookup = validateProduct(reviewRequest.getProductId().toString());
+        UserResponse userLookup = validateUser(reviewRequest.getUserId());
+        ProductResponse productLookup = validateProduct(reviewRequest.getProductId());
         if(userLookup != null && productLookup != null){
             reviewRepository.save(Review.builder()
                             .userId(reviewRequest.getUserId())
                             .productId(reviewRequest.getProductId())
-                            .reviewBody(reviewRequest.getReviewBody)
-
+                            .reviewBody(reviewRequest.getReviewBody())
                     .build());
         }
         return "hello world";
@@ -61,20 +63,25 @@ public class ReviewServiceImpl implements ReviewService {
     public List<Review> getReviewsByUserId(Long userId) {
         return null;
     }
-    private UserResponse validateUser(String userId){
-        return webClientBuilder.build()
-                .get()
-                .uri(userUri + "/" + userId)
-                .retrieve()
-                .bodyToMono(UserResponse.class)
-                .block();
+    private UserResponse validateUser(Long userId){
+        return CompletableFuture.supplyAsync(() ->
+                webClientBuilder.build()
+                        .get()
+                        .uri(userUri + "/" + userId.toString())
+                        .retrieve()
+                        .bodyToMono(UserResponse.class)
+                        .block()
+        ).join();
     }
-    private ProductResponse validateProduct(String productId){
-        return webClientBuilder.build()
-                .get()
-                .uri(productUri + "/" + productId)
-                .retrieve()
-                .bodyToMono(ProductResponse.class)
-                .block();
+    private ProductResponse validateProduct(Long productId){
+        return CompletableFuture.supplyAsync(() ->
+                webClientBuilder.build()
+                        .get()
+                        .uri(productUri + "/" + productId.toString())
+                        .retrieve()
+                        .bodyToMono(ProductResponse.class)
+                        .block()
+        ).join();
     }
+
 }
