@@ -23,22 +23,22 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public String updateUser(@PathVariable("userId") String userId,
+    public String updateUser(@PathVariable("userId") Long userId,
                              @RequestBody UserRequest userRequest) throws Exception{
         return userService.updateUser(userId,userRequest);
 
     }
     @DeleteMapping("/{userId}")
-    public String deleteUser(@PathVariable("userId") String userId){
+    public String deleteUser(@PathVariable("userId") Long userId){
         return userService.deleteUser(userId);
     }
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public UserResponse getUserByUserId(@PathVariable("userId") String userId){
+    public UserResponse getUserByUserId(@PathVariable("userId") Long userId){
         return userService.getUserByUserId(userId);
     }
     @GetMapping("/role/{userId}")
-    public String getUserRole(@PathVariable("userId") String userId){
+    public String getUserRole(@PathVariable("userId") Long userId){
         return userService.getUserRole(userId);
     }
 

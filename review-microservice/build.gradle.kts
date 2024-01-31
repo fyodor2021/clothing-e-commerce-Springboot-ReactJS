@@ -30,12 +30,15 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.2")
-    implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.2")
     runtimeOnly("org.postgresql:postgresql")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.2")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.2")
     compileOnly("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.0")
+    implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.1.0")
+    compileOnly("org.springframework.boot:spring-boot-starter-aop")
+
 
 }
 

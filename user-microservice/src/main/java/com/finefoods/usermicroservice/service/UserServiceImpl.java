@@ -49,8 +49,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String updateUser(String userId, UserRequest userRequest) throws Exception{
-        User userLookup = userRepository.findUserByUserId(Long.parseLong(userId));
+    public String updateUser(Long userId, UserRequest userRequest) throws Exception{
+        User userLookup = userRepository.findUserByUserId(userId);
         if(userLookup != null){
             String hashedPassword = hashPassword(userRequest.getPassword());
             userLookup.setFname(userRequest.getFname());
@@ -66,10 +66,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String deleteUser(String userId) {
-        User userLookup = userRepository.findUserByUserId(Long.parseLong(userId));
+    public String deleteUser(Long userId) {
+        User userLookup = userRepository.findUserByUserId(userId);
         if(userLookup != null){
-            userRepository.deleteById(Long.parseLong(userId));
+            userRepository.deleteById(userId);
         }else{
             return "User was not found";
         }
@@ -77,8 +77,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse getUserByUserId(String userId) {
-        User userLookup = userRepository.findUserByUserId(Long.parseLong(userId));
+    public UserResponse getUserByUserId(Long userId) {
+        User userLookup = userRepository.findUserByUserId(userId);
         if(userLookup != null){
             return mapToUserResponse(userLookup);
         }else{
@@ -86,8 +86,8 @@ public class UserServiceImpl implements UserService {
         }
     }
     @Override
-    public String getUserRole(String userId){
-        User userLookup = userRepository.findUserByUserId(Long.parseLong(userId));
+    public String getUserRole(Long userId){
+        User userLookup = userRepository.findUserByUserId(userId);
         if(userLookup != null)return userLookup.getRole();
         else return "User was not found";
     }
