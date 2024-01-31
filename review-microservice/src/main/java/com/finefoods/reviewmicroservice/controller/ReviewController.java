@@ -4,6 +4,8 @@ import com.finefoods.reviewmicroservice.dto.ReviewRequest;
 import com.finefoods.reviewmicroservice.dto.ReviewResponse;
 import com.finefoods.reviewmicroservice.service.ReviewServiceImpl;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import jakarta.persistence.GeneratedValue;
+import jakarta.ws.rs.Path;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,25 @@ public class ReviewController {
     public String createReview(@RequestBody ReviewRequest reviewRequest) {
         return reviewService.createReview(reviewRequest);
     }
+    //FALL BACK METHOD BELOW
     public String createReviewFallBack(ReviewRequest reviewRequest, RuntimeException e){
         return "service unavailable";
+    }
+    @PutMapping("/{reviewId}")
+    public ReviewResponse updateReview(@PathVariable Long reviewId,@RequestBody ReviewRequest reviewRequest){
+        return reviewService.updateReview(reviewRequest, reviewId);
+    }
+    @GetMapping("/{reviewId}")
+    public ReviewResponse getReviewById(@PathVariable Long reviewId){
+        return reviewService.getReviewById(reviewId);
+    }
+
+    @DeleteMapping("/{reviewId}")
+    public String deleteReview(@PathVariable Long reviewId){
+        return reviewService.deleteReview(reviewId);
+    }
+    @GetMapping("/product/{productId}")
+    public List<ReviewResponse> getReviewsByReviewId(@PathVariable Long productId){
+        return reviewService.getReviewsByProductId(productId);
     }
 }
