@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import NavBar from "./components/NavBar";
+import DepartNav from './components/CatLinks'
+import { Routes, Route } from 'react-router-dom'
+import HomePage from "./pages/HomePage";
+import LoginPage from './pages/LoginPage'
+import AboutPage from "./pages/AboutPage";
+import OrdersPage from "./pages/OrdersPage";
+import AccountPage from "./pages/AccountPage";
+import CartPage from "./pages/CartPage";
+export default function App() {
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return <>
+        <NavBar />
+        <DepartNav />
+        <Routes>
+            <Route path='/' element={<HomePage />} />
+            <Route path='/about' element={<AboutPage />} />
+            <Route path='/orders' element={<OrdersPage />} />
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/account' element={<AccountPage />} />
+            <Route path='/cart' element={<CartPage />} />
+            <Route path='/meat' element={<HomePage />}>Meat</Route>
+            <Route path='/cafe' element={<HomePage />}>Cafe</Route>
+            <Route path='/deli' element={<HomePage />}>Deli</Route>
+            <Route path='/nuts' element={<HomePage />}>Nuts</Route>
+            <Route path='/sweets' element={<HomePage />}>Sweets</Route>
+            <Route path='/bread' element={<HomePage />}>Bread</Route>
+            <Route path='/grocery' element={<HomePage />}>Grocery</Route>
+            <Route path='/catering' element={<HomePage />}>Catering</Route>
+            <Route path='/arz-brand' element={<HomePage />}>Arz Brand</Route>
+            <Route path='/produce' element={<HomePage />}>Produce</Route>
+        </Routes>
+
+    </>
 }
-
-export default App;
