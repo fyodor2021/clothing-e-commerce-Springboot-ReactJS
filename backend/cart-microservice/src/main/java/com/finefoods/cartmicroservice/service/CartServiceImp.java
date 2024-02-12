@@ -22,33 +22,35 @@ public class CartServiceImp implements CartService {
     final CartRepository cartRepository;
 
 
-    public boolean createCartForUser(Long userId){
-        Cart doesExist  = cartRepository.findCartByUserId(userId);
-        if (doesExist == null){
+    public String createCartForGuest(){
             Cart cart = Cart.builder()
-                    .userId(userId)
+                    .userId(null)
                     .products(new ArrayList<>()).build();
             cartRepository.save(cart);
-            return true;
-        }
-        return false;
-
+        return cart.getCartId();
 
     }
 
     public void addToCart(CartRequest request ){
-        Cart doesExist  = cartRepository.findCartByUserId(request.getUserId());
-        if (doesExist == null){
-            Cart cart = Cart.builder()
-                    .userId(request.getUserId())
-                    .products(request.getProducts().stream().map(product -> productBuilder(product)).toList()).build();
-            cartRepository.save(cart);
-        }
-        else{
-            List<Product> productsInCart = doesExist.getProducts();
+        if (request.getUserId() == null){
+            Cart guestCart = cartRepository.findCartByCartId(request.getCartId());
+            List<Product> productsInCart = guestCart.getProducts();
             productsInCart.addAll(request.getProducts());
-            doesExist.setProducts(productsInCart);
-            cartRepository.save(doesExist);
+            guestCart.setProducts(productsInCart);
+            cartRepository.save(guestCart);
+        }
+//        if (doesExist == null){
+//            Cart cart = Cart.builder()
+//                    .userId(request.getUserId())
+//                    .products(request.getProducts().stream().map(product -> productBuilder(product)).toList()).build();
+//            cartRepository.save(cart);
+//        }
+        else{
+            Cart userCart  = cartRepository.findCartByUserId(request.getUserId());
+            List<Product> productsInCart = userCart.getProducts();
+            productsInCart.addAll(request.getProducts());
+            userCart.setProducts(productsInCart);
+            cartRepository.save(userCart);
 
         }
     }

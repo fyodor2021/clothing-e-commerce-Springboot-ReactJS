@@ -21,15 +21,9 @@ public class CartController {
 
     final CartServiceImp cartService;
 
-    @PostMapping("/{userId}")
-    public String createCartForUser(@PathVariable  Long userId) {
-        Boolean bool = cartService.createCartForUser(userId);
-        if (bool){
-            return "it was created successfully";
-        }
-        else{
-            return "It did not create the cart";
-        }
+    @PostMapping
+    public String createCartForGuest() {
+        return cartService.createCartForGuest();
     }
 
     @PostMapping()
