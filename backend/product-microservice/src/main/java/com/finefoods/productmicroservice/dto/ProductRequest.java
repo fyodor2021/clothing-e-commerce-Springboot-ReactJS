@@ -1,10 +1,13 @@
 package com.finefoods.productmicroservice.dto;
 
 
+import com.finefoods.productmicroservice.model.Image;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -12,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProductRequest {
     private Long productId;
-    private byte[] picture;
+    private List<Image> imageList;
     private String brand;
     private String productName;
     private String description;
