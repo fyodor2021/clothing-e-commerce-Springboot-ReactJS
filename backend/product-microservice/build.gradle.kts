@@ -34,6 +34,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.0")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.2")
     implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.2")
+    implementation("com.amazonaws:aws-java-sdk-s3:1.12.656")
 }
 
 tasks.withType<Test> {
