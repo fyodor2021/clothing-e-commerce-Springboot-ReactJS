@@ -66,6 +66,22 @@ services:
     networks:
       - spring
 
+
+  postgres-points:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: points-microservice
+      POSTGRES_USER : root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5434:5432"
+    restart: unless-stopped
+    volumes:
+      - ./data/postgres/points-microservice:/data/postgres
+      - ./init/postgres/points-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - spring
+
   mongo-cart:
     image: mongo:latest
     environment:

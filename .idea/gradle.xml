@@ -17,6 +17,16 @@
             <option value="$PROJECT_DIR$/backend/product-microservice" />
             <option value="$PROJECT_DIR$/backend/review-microservice" />
             <option value="$PROJECT_DIR$/backend/user-microservice" />
+            <option value="$PROJECT_DIR$/backend/wallet-microservice" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/backend/wallet-microservice" />
+        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/backend/wallet-microservice" />
           </set>
         </option>
       </GradleProjectSettings>

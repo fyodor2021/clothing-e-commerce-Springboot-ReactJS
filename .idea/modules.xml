@@ -5,6 +5,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/Arz-fine-foods-final-final-project.iml" filepath="$PROJECT_DIR$/.idea/Arz-fine-foods-final-final-project.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/cart-microservice/arz-fine-foods-final.cart-microservice.main.iml" filepath="$PROJECT_DIR$/.idea/modules/cart-microservice/arz-fine-foods-final.cart-microservice.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/product-microservice/arz-fine-foods-final.product-microservice.main.iml" filepath="$PROJECT_DIR$/.idea/modules/product-microservice/arz-fine-foods-final.product-microservice.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/wallet-microservice/arz-fine-foods-final.wallet-microservice.main.iml" filepath="$PROJECT_DIR$/.idea/modules/wallet-microservice/arz-fine-foods-final.wallet-microservice.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/points-microservice/points-microservice.iml" filepath="$PROJECT_DIR$/backend/points-microservice/points-microservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/wallet-microservice.main.iml" filepath="$PROJECT_DIR$/.idea/modules/wallet-microservice.main.iml" />
     </modules>
   </component>
 </project>

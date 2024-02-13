@@ -12,6 +12,7 @@
         <module name="arz-fine-foods-final.review-microservice.main" />
         <module name="arz-fine-foods-final.cart-microservice.main" />
         <module name="arz-fine-foods-final.user-microservice.main" />
+        <module name="arz-fine-foods-final.wallet-microservice.main" />
         <module name="arz-fine-foods-final.product-microservice.main" />
         <module name="arz-fine-foods-final.flyer-microservice.main" />
       </profile>
