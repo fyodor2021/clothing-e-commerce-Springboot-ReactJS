@@ -7,8 +7,14 @@ import AboutPage from "./pages/AboutPage";
 import OrdersPage from "./pages/OrdersPage";
 import AccountPage from "./pages/AccountPage";
 import CartPage from "./pages/CartPage";
+import DetailsPage from './pages/DetailsPage'
+import { useContext, useEffect } from "react"
+import ProductContext from "./context/ProductContext";
 export default function App() {
-
+    const {fetchProducts} = useContext(ProductContext)
+    useEffect( () => {
+         fetchProducts();
+    },[])
     return <>
         <NavBar />
         <DepartNav />
@@ -18,6 +24,7 @@ export default function App() {
             <Route path='/orders' element={<OrdersPage />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/account' element={<AccountPage />} />
+            <Route path='/details/:productId' element={<DetailsPage />} />
             <Route path='/cart' element={<CartPage />} />
             <Route path='/meat' element={<HomePage />}>Meat</Route>
             <Route path='/cafe' element={<HomePage />}>Cafe</Route>
