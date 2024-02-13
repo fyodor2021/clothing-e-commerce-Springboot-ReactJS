@@ -19,8 +19,6 @@ export default function CatLinks() {
                 <span className='cat-bar-item'  to={'/arz-brand'} onClick={() => handleCategroyClick('Arz Brand')}>Arz Brand</span>
                 <span className='cat-bar-item'  to={'/produce'} onClick={() => handleCategroyClick('Produce')}>Produce</span>
             </div>
-            <div>
-            {cat ? <HomePage category={cat}/> : <HomePage/>}
-            </div>
+
     </div>
 }

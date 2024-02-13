@@ -8,14 +8,24 @@ import CartPage from '../pages/CartPage';
 import { BsCart4 } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineNotifications } from "react-icons/md";
-
+import { GiHamburgerMenu } from "react-icons/gi";
+import {useState} from 'react'
+import arzBrand from '../statics/arz-brand.png'
 export default function NavBar() {
+    const [menu, setMenu] = useState(false)
+    const handleMenuToggle = () => {
+        setMenu(!menu)
+    }
     return (
         <div className='nav-container'>
             <div>
-                <Link className='nav-bar-item' to={'/home'} element={<HomePage />}>
-                    Home
+                <Link className='nav-bar-item' to={'/'} element={<HomePage />}>
+                    <img className="arz-logo-home" src={arzBrand}/>
                 </Link>
+
+                <div className='hamburger-menu-icon' onClick={handleMenuToggle}>
+                    <GiHamburgerMenu />
+                </div>
             </div>
 
             <div className='nav-search-bar-container'>
@@ -32,6 +42,26 @@ export default function NavBar() {
                 <Link className='nav-bar-item' to={'/about'} element={<AboutPage />}>About</Link>
                 <Link className='nav-bar-item' to={'/cart'} element={<CartPage />}><BsCart4 /></Link>
             </div>
+            {menu ? <div className='navigation-menu'>
+                <div>
+                    <button className='button'>sign in</button>
+                </div>
+                <div>
+                    <button className='button'>My orders</button>
+                </div>
+                <div>
+                <button className='button'>Account</button>
+
+                </div>
+                <div>
+                <button className='button'>About</button>
+
+                </div>
+                <div></div>
+                <div></div>
+            </div> : ''}
+            <Link className='nav-bar-item hamburger-menu-icon' to={'/cart'} element={<CartPage />}><BsCart4 /></Link>
+
         </div>
     )
 }

@@ -1,3 +1,3 @@
 export default function CartPage(){
-    return <div>cart page</div>
+    return <div></div>
 }
