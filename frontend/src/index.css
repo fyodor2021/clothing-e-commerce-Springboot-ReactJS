@@ -141,7 +141,8 @@ margin: 10px;
 width: 100px;
 height: 100px;
 border-radius: 10px;
-box-shadow: 2px 3px 3px 1px;
+box-shadow: 0 1.5rem 3rem -0.75rem black;
+
 }
 .uploaded-image-container{
 display: flex;
@@ -199,8 +200,9 @@ width: 60%;
 height: 500px;
 border-radius: 10px;
 overflow: hidden;
-box-shadow: 0px 0px 20px 7px;
-border: 40px solid black;
+box-shadow: 0 1.5rem 3rem -0.75rem black;
+
+border: 5px solid rgba(255, 255, 255,.5);
 }
 .arz-logo-home{
     position: absolute;
@@ -215,8 +217,9 @@ justify-content: center;
 position: relative;
 background-color: var(--arzColor);
 border-radius: 20px;
-margin: 1px;
-box-shadow: 0px 0px 20px 0px;
+margin: 30px;
+box-shadow: 0 1.5rem 3rem -0.75rem black;
+
 }
 .slides{
 width: 500%;
@@ -277,7 +280,8 @@ flex-direction: column;
 justify-content: flex-start;
 width: 200px;
 border-radius: 10px;
-box-shadow: 0px 0px 10px 1px;
+box-shadow: 0 1.5rem 3rem -0.75rem black;
+
 max-height: 300px;
 transition: transform 0.3s ease;
 height: 100%;
@@ -428,7 +432,8 @@ animation: animateWaves 3s linear infinite;
     width: 25vw;
     margin: 20px;
     margin-top: 30px;
-    box-shadow: 0px 0px 10px 1px;
+    box-shadow: 0 1.5rem 3rem -0.75rem black;
+
     border-radius: 10px;
 }
 .home-page-cards-filter-container{
@@ -456,10 +461,11 @@ animation: animateWaves 3s linear infinite;
 }
 .filter-item:hover{
     background-color: rgba(255, 177, 0,.5);
-    box-shadow: inset  0px 0px 2px 1px gray;
+    box-shadow: 0 1.5rem 3rem -0.75rem black;
+
 }
 .home-page-cards-filter-container,.slider-container{
-    margin: 3px 50px;
+    margin: 30px 50px;
 }
 
 .input-label{
@@ -563,20 +569,21 @@ animation: animateWaves 3s linear infinite;
     padding:2rem;
     margin: 2rem;
     display: flex;
-    height: 70vh;
+    height: 50vh;
 
 }
 .details-body-container{
     display: flex;
     flex-direction: row;
     padding:2rem;
-    margin: 2rem;
+    margin: 1.48rem;
     background-color: rgba(143, 143, 143, 0.2);
     border-radius: 20px;
+    margin-top: 1rem;
 }
 .details-content-container{
-    padding:2rem;
-    margin: 2rem;
+    padding: 1rem;
+    margin: 1rem;
     width: 50%;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 20px;
@@ -617,7 +624,7 @@ animation: animateWaves 3s linear infinite;
     aspect-ratio: 16 / 9;
     overflow-x: hidden;
     scroll-snap-type: x mandatory;
-
+    margin-top: 1rem;
     scroll-behavior: smooth;
     box-shadow: 0 1.5rem 3rem -0.75rem black;
     border-radius: .75rem;
@@ -647,7 +654,22 @@ animation: animateWaves 3s linear infinite;
     align-items: center;
 }
 .account-page-container{
-    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 85vh;
+    width: 99vw;
+}
+.account-page-wrapper{
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    height: 70vh;
+    width: 80vw;
+    background-color: rgba(199, 199, 199,.3);
+    border-radius: 10px;
+
 }
 @media (max-width: 1400px ){
     .login-vertical-line{
