@@ -1,0 +1,86 @@
+:root{
+    --arzColor: #ffb100;
+    --navArzColor:#5f1f00;
+    }
+
+.image-cover{
+    height: 620px;
+    width: 1800px;
+    
+}
+.about-text{
+    /* font-family: 'Snell Roundhand, cursive'; */
+    font-family:'Gill Sans', 'Gill Sans MT';
+
+    font-size: 100px;
+    font-weight:400;
+    text-decoration-color: #9c3d0d;
+    display: flex;
+    justify-content: center;
+    /* background-color: #ffb100; */
+
+}
+.about-two-paragraph-container{
+    display: flex;
+    width: 1000px;
+    justify-content: space-between;
+    align-items: flex-start;
+    
+}
+.two-paragraph{
+    width: 480px;
+    padding: 40px;
+    padding-bottom: 60px;
+    font-size: 20px;
+}
+.about-container{
+    display: flex;
+    justify-content: space-around;
+}
+.image-about{
+    width: 1300px;
+    height: 450px;
+}
+.image-container{
+    display: flex;
+    justify-content: center;
+
+}
+.about-three-paragraph-container{
+    display: flex;
+    width: 1380px;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.three-paragraph{
+    width: 450px;
+    padding: 40px;
+    padding-top: 80px;
+    font-size: 20px;
+    height: 720px;
+    display: flex-1;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    margin-bottom: 80px;
+
+
+}
+.label{
+    font-weight: bold;
+    font-size: larger;
+    padding-bottom: 10px;
+}
+.three-paragraph:last-child>:nth-child(3){
+    padding-bottom: 0%;
+    height: 280px;
+    width: 370px;
+    margin-top: 20px;
+
+
+}
+.three-paragraph:nth-child(1)>:nth-child(3){
+    padding-bottom: 0%;
+    margin-top: 20px;
+    height: 280px;
+    width: 370px;
+}
