@@ -11,7 +11,8 @@ html{
 body{
 margin: 0;
 padding-top: 140px;
-min-width: 570px
+min-width: 570px;
+background-color: rgb(255, 255, 255)
 }
 
 
@@ -36,7 +37,9 @@ color: white;
 text-decoration: none;
 font-size: 15px;
 }
-
+.nav-item-container > :nth-child(2):hover{
+    color: rgb(255, 0, 0);
+}
 .nav-bar-item:hover{
 transition-duration: 200ms;
 transition-timing-function: ease-in;
@@ -56,7 +59,7 @@ background-color: #5f1f00;
 border-radius: 0px 0px 20px 20px;
 position: fixed;
 width: 100%;
-top: 85px;
+top: 84px;
 z-index: 9999;
 }
 .cat-bar-item{
@@ -593,13 +596,13 @@ animation: animateWaves 3s linear infinite;
     margin: 10px;
     width: 100px;
     height: 100px;
+    box-shadow: 0 1.5rem 3rem -0.75rem black;
+    border-radius: 1rem;
     
 }
 .vertical-image-container{
-    margin: 2rem;
-    padding: 2rem;
-
-
+    margin: 1rem;
+    padding: 1rem;
 }
 .details-slider-wrapper{
     max-width:  48rem;
@@ -658,18 +661,62 @@ animation: animateWaves 3s linear infinite;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 85vh;
+    height: 80vh;
     width: 99vw;
+    padding: 2rem;
+
 }
 .account-page-wrapper{
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: flex-start;
     height: 70vh;
     width: 80vw;
     background-color: rgba(199, 199, 199,.3);
-    border-radius: 10px;
+    border-radius: 2rem;
+    box-shadow: 1px 0rem 3rem -0.75rem black;
+    flex: 1 0 100%
 
+}
+.account-page-item > h1:not(:last-child){
+    border-bottom: 1px solid rgba(199, 199, 199,1);
+}
+.account-page-item{
+    margin: 1.5rem 2rem;
+    padding: .15rem 4rem;
+    background-color: rgb(224, 224, 224);
+    border-radius: 2rem;
+}
+.account-page-item:not(:last-child){
+    border-right: 1px solid rgba(199, 199, 199,.7);
+    box-shadow: 0 .5rem 1rem -0.75rem black;
+
+}
+.account-page-item > *{
+    padding: .5rem;
+    border-radius: .75rem;
+    margin: .05rem;
+    
+}
+
+
+.account-page-item > h1:last-child:hover{
+    cursor: pointer;
+    box-shadow: 0 1.5rem 3rem -0.75rem black;
+    background-color: rgba(255, 0, 0, 0.5);
+    border-radius: .75rem;
+    transition: .3s ease;
+
+}
+.account-page-item > div > h1:hover{
+    cursor: pointer;
+    box-shadow: 0 1.5rem 3rem -0.75rem black;
+    background-color: rgba(255, 177, 0,.5);
+    border-radius: .75rem;
+    transition: .3s ease;
+}
+.account-page-item > div > *{
+    padding: .25rem;
 }
 @media (max-width: 1400px ){
     .login-vertical-line{
