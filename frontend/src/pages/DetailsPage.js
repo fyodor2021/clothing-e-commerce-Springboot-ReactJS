@@ -24,13 +24,12 @@ export default function DetailsPage() {
         const verticalImages = product.imageList.map((image, key) => {
             return <img className='vertical-image' src={'data:image/jpeg;base64,' + image} key={key} />
         })
-        const handleltClick = () => {
+        const handleltClick = (event) => {
             if (slideNumber < renderedImages.length - 1) {
-
                 setSlideNumber(slideNumber + 1)
             }
         }
-        const handlegtClick = () => {
+        const handlegtClick = (event) => {
             if (slideNumber > 0) {
                 setSlideNumber(slideNumber - 1)
             }
@@ -44,13 +43,13 @@ export default function DetailsPage() {
                 <div className="details-slider-container">
                     <div className="details-slider-wrapper">
                         <button className='scroll-button left-scroll-button' onClick={handlegtClick}>
-                            <a href={'#slide-' + slideNumber}>&lt;</a>
+                            <a href={'#slide-' + slideNumber} className="text-4xl">&lt;</a>
                         </button>
                         <div className="details-slider">
                             {renderedImages}
                         </div>
                         <button className='scroll-button right-scroll-button' onClick={handleltClick}>
-                            <a href={'#slide-' + slideNumber}>&gt;</a>
+                            <a href={'#slide-' + slideNumber} className="text-4xl">&gt;</a>
                         </button>
                     </div>
                 </div>
