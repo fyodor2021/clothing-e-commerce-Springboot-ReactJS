@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Input from '../components/Input'
 import arzPic from '../statics/arz-fine-foods-mis.png'
 import { useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer'
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -85,7 +86,9 @@ export default function Login() {
                     <img src={arzPic} width='800px'/>
                 </div>
             </div>
-
+            <div>
+                <Footer/>
+            </div>
         </div>
     )
 
