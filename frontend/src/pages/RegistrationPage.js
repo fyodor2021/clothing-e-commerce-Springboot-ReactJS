@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import Input from '../components/Input'
 import arzPic from '../statics/arz-fine-foods-mis.png'
+import Footer from '../components/Footer';
+import { useNavigate } from 'react-router-dom';
 export default function RegistrationPage() {
     const [Email, setEmail] = useState('');
     const [username, setUsername] = useState('');
@@ -11,10 +13,13 @@ export default function RegistrationPage() {
     const [passwordRetype, setPasswordRetype] = useState('');
     const [valMessage, setValMessage] = useState('');
     const [login, setLogin] = useState(false)
+    const navigate = useNavigate()
     const handleClick = () => {
         // setReg(false);
     };
-
+    const handleLoginNavigate = () => {
+        navigate('/login')
+    }
     const onFormSubmit = async (event) => {
         event.preventDefault();
         // setUsername('');
@@ -52,93 +57,101 @@ export default function RegistrationPage() {
             <div className='reg-body-container'>
                 <div className='reg-input-container'>
                     <form onSubmit={onFormSubmit}>
-                    <div className='reg-input'>
-                            <Input
-                                state={[Email, setEmail]}
-                                htmlFor='email'
-                                fieldClassName='reg-input-field'
-                                labelClassName='reg-input-label'
-                                labelContent='Email: '
-                                required={true}
-                                type='text'
-                            />
-                        </div>
-                        <div className='reg-input'>
-                            <Input
-                                state={[username, setUsername]}
-                                htmlFor='username'
-                                fieldClassName='reg-input-field'
-                                labelClassName='reg-input-label'
-                                labelContent='Username: '
-                                required={true}
-                                type='text'
-                            />
+                        <div className='reg-input-wrapper '>
+                            <div >
+                                <div  className='reg-input'>
+                                    <Input
+                                        state={[Email, setEmail]}
+                                        htmlFor='email'
+                                        fieldClassName='input-field'
+                                        labelClassName='input-label'
+                                        labelContent='Email: '
+                                        required={true}
+                                        type='text'
+                                    />
+                                </div>
+                                <div className='reg-input'>
+                                    <Input
+                                        state={[username, setUsername]}
+                                        htmlFor='username'
+                                        fieldClassName='input-field'
+                                        labelClassName='input-label'
+                                        labelContent='Username: '
+                                        required={true}
+                                        type='text'
+                                    />
+                                </div>
+
+                                <div className='reg-input'>
+                                    <Input
+                                        state={[address, setAddress]}
+                                        htmlFor={'address'}
+                                        labelContent={'Address: '}
+                                        fieldClassName='input-field'
+                                        labelClassName='input-label'
+                                        required={true}
+                                        type='text'
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <div className='reg-input'>
+                                    <Input
+                                        state={[province, setProvince]}
+                                        htmlFor={'province'}
+                                        labelContent={'Province: '}
+                                        fieldClassName='input-field'
+                                        labelClassName='input-label'
+                                        required={true}
+                                        type='text'
+                                    />
+                                </div>
+                                <div className='reg-input'>
+                                    <Input
+                                        state={[dob, setDob]}
+                                        htmlFor={'date'}
+                                        labelContent={'Date of Birth: '}
+                                        fieldClassName='input-field'
+                                        labelClassName='input-label'
+                                        required={true}
+                                        type='date'
+                                    />
+                                </div>
+                                <div className='reg-input'>
+                                    <Input
+                                        state={[password, setPassword]}
+                                        htmlFor={'password'}
+                                        labelContent={'Password: '}
+                                        fieldClassName='input-field'
+                                        labelClassName='input-label'
+                                        required={true}
+                                        type='password'
+                                    />
+                                </div>
+                                <div className='reg-input'>
+                                    <Input
+                                        state={[passwordRetype, setPasswordRetype]}
+                                        htmlFor={'passwordretype'}
+                                        labelContent={'Retype Password: '}
+                                        fieldClassName='input-field'
+                                        labelClassName='input-label'
+                                        required={true}
+                                        type='password'
+                                    />
+                                </div>
+                            </div>
+
                         </div>
 
-                        <div className='reg-input'>
-                            <Input
-                                state={[address, setAddress]}
-                                htmlFor={'address'}
-                                labelContent={'Address: '}
-                                fieldClassName='reg-input-field'
-                                labelClassName='reg-input-label'
-                                required={true}
-                                type='text'
-                            />
-                        </div>
-                        <div className='reg-input'>
-                            <Input
-                                state={[province, setProvince]}
-                                htmlFor={'province'}
-                                labelContent={'Province: '}
-                                fieldClassName='reg-input-field'
-                                labelClassName='reg-input-label'
-                                required={true}
-                                type='text'
-                            />
-                        </div>
-                        <div className='reg-input'>
-                            <Input
-                                state={[dob, setDob]}
-                                htmlFor={'date'}
-                                labelContent={'Date of Birth: '}
-                                fieldClassName='reg-input-field'
-                                labelClassName='reg-input-label'
-                                required={true}
-                                type='date'
-                            />
-                        </div>
-                        <div className='reg-input'>
-                            <Input
-                                state={[password, setPassword]}
-                                htmlFor={'password'}
-                                labelContent={'Password: '}
-                                fieldClassName='reg-input-field'
-                                labelClassName='reg-input-label'
-                                required={true}
-                                type='password'
-                            />
-                        </div>
-                        <div className='reg-input'>
-                            <Input
-                                state={[passwordRetype, setPasswordRetype]}
-                                htmlFor={'passwordretype'}
-                                labelContent={'Retype Password: '}
-                                fieldClassName='reg-input-field'
-                                labelClassName='reg-input-label'
-                                required={true}
-                                type='password'
-                            />
-                        </div>
                         <span style={{ color: 'red' }}>{valMessage}</span>
                         <div className='login-button-container'>
-                            <button className='button'>Login</button>
+                            <button className='button'>Register</button>
                         </div>
                     </form>
                     <div style={{ margin: '10px' }}>
                         <span>Or </span>
-                        <span style={{ color: 'red' }} onClick={handleClick}>
-                            Register
+                        <span style={{ color: 'red' }} onClick={handleLoginNavigate}>
+                            Login
                         </span>
                     </div>
 
@@ -149,6 +162,8 @@ export default function RegistrationPage() {
                     <img src={arzPic} width='800px' />
                 </div>
             </div>
-
+            <div>
+                <Footer />
+            </div>
         </div>)
 }

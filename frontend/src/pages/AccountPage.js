@@ -1,3 +1,9 @@
-export default function AccountPage(){
-    return <div>Account page</div>
+export default function AccountPage() {
+    return (
+        <div className="account-page-container">
+            
+
+
+        </div>
+    )
 }

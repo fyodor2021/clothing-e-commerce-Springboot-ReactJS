@@ -1,15 +1,19 @@
 import { useState } from 'react'
 import Input from '../components/Input'
 import arzPic from '../statics/arz-fine-foods-mis.png'
+import { useNavigate } from 'react-router-dom';
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [valMessage, setValMessage] = useState('');
     const [login, setLogin] = useState(false)
+    const navigate = useNavigate();
     const handleClick = () => {
         // setReg(false);
     };
-
+    const handleRegisterNavigate = () => {
+        navigate('/register')
+    }
     const onFormSubmit = async (event) => {
         event.preventDefault();
         // setUsername('');
@@ -34,16 +38,6 @@ export default function Login() {
         //     }
         // }
     };
-
-    const handleUserChange = (event) => {
-        setUsername(event.target.value);
-    };
-
-    const handlePassChange = (event) => {
-
-        setPassword(event.target.value.trim());
-    };
-
     return (
         <div>
             <div className='login-body-container'>
@@ -79,7 +73,7 @@ export default function Login() {
                     </form>
                     <div style={{ margin: '10px' }}>
                         <span>Or </span>
-                        <span style={{ color: 'red' }} onClick={handleClick}>
+                        <span style={{ color: 'red' }} onClick={handleRegisterNavigate}>
                             Register
                         </span>
                     </div>
