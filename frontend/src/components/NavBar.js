@@ -12,6 +12,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { useEffect, useState } from 'react'
 import arzBrand from '../statics/arz-brand.png'
 import userAvatar from '../statics/user-avatar.png'
+import { IoTriangle } from "react-icons/io5";
 export default function NavBar() {
     const [menu, setMenu] = useState(false)
 
@@ -33,7 +34,8 @@ export default function NavBar() {
             username
         </div>
         <div>
-            Please disregard the content of this message as it does not contain any real information
+            Please disregard the content of this message as it does not
+             contain any real information. "Chat GPT.."
         </div>
     </div>
 </div>
@@ -42,6 +44,7 @@ export default function NavBar() {
             <div>
                 <Link className='nav-bar-item' to={'/'} element={<HomePage />}>
                     <img className="arz-logo-home" src={arzBrand} />
+                    <img className="arz-logo-home-hidden" src={arzBrand} />
                 </Link>
 
                 <div className='hamburger-menu-icon' onClick={handleMenuToggle}>
@@ -57,14 +60,14 @@ export default function NavBar() {
             </div>
             <div className='nav-item-container' >
                 <MdOutlineNotifications className='nav-bar-item' onClick={handleNotificationExpand} />
-
                 <Link className='nav-bar-item' to={'/login'} element={<LoginPage />}>Sign-out</Link>
                 <Link className='nav-bar-item' to={'/orders'} element={<OrdersPage />}>My Orders</Link>
                 <Link className='nav-bar-item' to={'/account'} element={<AccountPage />}>Account</Link>
                 <Link className='nav-bar-item' to={'/about'} element={<AboutPage />}>About</Link>
                 <Link className='nav-bar-item' to={'/cart'} element={<CartPage />}><BsCart4 /></Link>
             </div>
-            {notificationPanel ? <div className='notification-panel'>
+            {notificationPanel ? 
+            <div className='notification-panel'>
                         {notiItem}
                         {notiItem}
                         {notiItem}
