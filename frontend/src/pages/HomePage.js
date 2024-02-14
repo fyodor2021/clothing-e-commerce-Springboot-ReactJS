@@ -33,13 +33,16 @@ export default function HomePage({ category }) {
             counter = 1;
           }
         }, 2500);
-            window.addEventListener('scroll', handleScrollEvent);
+        if(!isLoading){
+
+          window.addEventListener('scroll', handleScrollEvent);
+        }
 
         return () => {
           clearInterval(interval);
             window.removeEventListener('scroll', handleScrollEvent);
         };
-      }, []);
+      }, [isLoading]);
             
     return (
         <div>        

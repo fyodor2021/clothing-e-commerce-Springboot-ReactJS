@@ -9,18 +9,39 @@ import { BsCart4 } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineNotifications } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
-import {useState} from 'react'
+import { useEffect, useState } from 'react'
 import arzBrand from '../statics/arz-brand.png'
+import userAvatar from '../statics/user-avatar.png'
 export default function NavBar() {
     const [menu, setMenu] = useState(false)
+
+    const [notificationPanel, setNotificationPanel] = useState(false);
     const handleMenuToggle = () => {
         setMenu(!menu)
     }
+    const handleNotificationExpand = () => {
+        setNotificationPanel(!notificationPanel)
+    }
+
+    console.log(notificationPanel)
+    const notiItem = <div>
+    <div className='noti-user-avatar'>
+        <img src={userAvatar} />
+    </div>
+    <div>
+        <div className='text-2xl'> 
+            username
+        </div>
+        <div>
+            Please disregard the content of this message as it does not contain any real information
+        </div>
+    </div>
+</div>
     return (
         <div className='nav-container'>
             <div>
                 <Link className='nav-bar-item' to={'/'} element={<HomePage />}>
-                    <img className="arz-logo-home" src={arzBrand}/>
+                    <img className="arz-logo-home" src={arzBrand} />
                 </Link>
 
                 <div className='hamburger-menu-icon' onClick={handleMenuToggle}>
@@ -35,13 +56,24 @@ export default function NavBar() {
                 </div>
             </div>
             <div className='nav-item-container' >
-                <MdOutlineNotifications className='nav-bar-item' />
+                <MdOutlineNotifications className='nav-bar-item' onClick={handleNotificationExpand} />
+
                 <Link className='nav-bar-item' to={'/login'} element={<LoginPage />}>Sign-out</Link>
                 <Link className='nav-bar-item' to={'/orders'} element={<OrdersPage />}>My Orders</Link>
                 <Link className='nav-bar-item' to={'/account'} element={<AccountPage />}>Account</Link>
                 <Link className='nav-bar-item' to={'/about'} element={<AboutPage />}>About</Link>
                 <Link className='nav-bar-item' to={'/cart'} element={<CartPage />}><BsCart4 /></Link>
             </div>
+            {notificationPanel ? <div className='notification-panel'>
+                        {notiItem}
+                        {notiItem}
+                        {notiItem}
+                        {notiItem}
+                        {notiItem}
+                        {notiItem}
+                        {notiItem}
+
+                </div> : ''}
             {menu ? <div className='navigation-menu'>
                 <div>
                     <button className='button'>sign in</button>
@@ -50,11 +82,11 @@ export default function NavBar() {
                     <button className='button'>My orders</button>
                 </div>
                 <div>
-                <button className='button'>Account</button>
+                    <button className='button'>Account</button>
 
                 </div>
                 <div>
-                <button className='button'>About</button>
+                    <button className='button'>About</button>
 
                 </div>
                 <div></div>
