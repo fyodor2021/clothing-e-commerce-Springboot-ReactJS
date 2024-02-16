@@ -84,3 +84,125 @@
     height: 280px;
     width: 370px;
 }
+.cart-main-container{
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    margin-left: 80px;
+    /* margin-right 4; */
+    
+    /* background-color: lightgreen; */
+    
+
+
+
+}
+.left-container{
+    flex: 60%;
+    height: 100%;
+
+
+    background-color: coral;
+}
+.right-container{
+    flex: 30%;
+    height: 100%;
+    margin-right: 80px;
+
+    background-color: chocolate;
+
+}
+.cart-labels-container{
+    /* background-color: aquamarine; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+.cart-labels-fields{
+    justify-items: center;
+    /* background-color: blue; */
+    width: 25%;
+
+}
+.cart-product-card{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 190px;
+    width: 100%;
+
+
+    /* background-color: darkorchid; */
+}
+
+.cart-product-fields{
+    height: auto;
+    /* background-color: #ffb100; */
+    justify-content: left;
+    align-items: left;
+ 
+
+
+}
+.cart-product-fields:nth-child(1){
+    width: 25%;
+    height: 100%;
+
+}
+.cart-product-fields:nth-child(2){
+    width: 23%;
+
+
+}
+.cart-product-fields:nth-child(3){
+    width: 27%;
+
+
+}
+.cart-product-fields:nth-child(4){
+    width: 25%;
+
+
+}
+.qty-field{
+    display: flex;
+    flex-direction: row;
+    width: 30%;
+    justify-content: space-between;
+
+    
+    /* background-color:aquamarine; */
+    
+
+}
+.cart-product-image-container{
+    /* margin-top: 20px; */
+    /* background-color: azure; */
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;    
+    /* border-radius: 40px; */
+
+}
+.cart-product-image{
+    height: 50%;
+    width: 50%;
+    border-radius: 10px;
+}
+.cart-checkout-container{
+    border: 1px solid black;
+    border-color: black;
+    border-radius: 5px;
+    background-color: aqua;
+
+}
+.cart-checkout-small-containers{
+    border-bottom: 1px solid black;
+    display: flex;
+    justify-content: space-between;
+
+}
