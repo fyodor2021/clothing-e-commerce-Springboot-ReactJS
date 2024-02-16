@@ -20,6 +20,7 @@ public class ReviewController {
     private final ReviewServiceImpl reviewService;
     @PostMapping()
     @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = "*")
     @CircuitBreaker(name="review", fallbackMethod = "createReviewFallBack")
     public String createReview(@RequestBody ReviewRequest reviewRequest) {
         return reviewService.createReview(reviewRequest);
@@ -42,7 +43,9 @@ public class ReviewController {
         return reviewService.deleteReview(reviewId);
     }
     @GetMapping("/product/{productId}")
-    public List<ReviewResponse> getReviewsByReviewId(@PathVariable Long productId){
+    @CrossOrigin(origins = "*")
+
+    public List<ReviewResponse> getReviewsByProductId(@PathVariable Long productId){
         return reviewService.getReviewsByProductId(productId);
     }
 }

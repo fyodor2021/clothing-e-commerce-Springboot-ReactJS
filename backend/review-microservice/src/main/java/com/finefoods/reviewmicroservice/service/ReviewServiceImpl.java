@@ -25,6 +25,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Value("${product-microservice.url}")
     private String productUri;
     @Override
+
     public String createReview(ReviewRequest reviewRequest) {
         UserResponse userLookup = validateUser(reviewRequest.getUserId());
         ProductResponse productLookup = validateProduct(reviewRequest.getProductId());
@@ -62,11 +63,11 @@ public class ReviewServiceImpl implements ReviewService {
     public String deleteReview(Long reviewId) {
         Review reviewLookup = reviewRepository.findReviewByReviewId(reviewId);
         if(reviewLookup != null) {
-            reviewRepository.deleteReviewByReviewId(reviewId);
-            return "User deleted Successfully";
+            reviewRepository.deleteById(reviewId);
+            return "review deleted Successfully";
 
         }else{
-            return "User Not Found";
+            return "review Not Found";
         }
     }
     @Override
