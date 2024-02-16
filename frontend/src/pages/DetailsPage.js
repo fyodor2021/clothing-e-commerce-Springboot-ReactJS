@@ -11,7 +11,7 @@ import { FaChevronCircleRight } from "react-icons/fa";
 import { FaChevronCircleLeft } from "react-icons/fa";
 export default function DetailsPage() {
     const { productId } = useParams();
-    const { fetchProductDetails, product, fetchProductReviews, reviews , isLoading} = useProductContext();
+    const { fetchProductDetails, product, fetchProductReviews, reviews, isLoading } = useProductContext();
 
     const [slideNumber, setSlideNumber] = useState(0)
     const [reviewTab, setReviewTab] = useState(false)
@@ -27,15 +27,18 @@ export default function DetailsPage() {
         }
     }
     useEffect(() => {
-        if (!isLoading) {
+        if (product) {
+            if (!isLoading) {
 
-            window.addEventListener('scroll', handleScrollEvent);
+                window.addEventListener('scroll', handleScrollEvent);
+            }
+
+            return () => {
+                window.removeEventListener('scroll', handleScrollEvent);
+            };
         }
 
-        return () => {
-            window.removeEventListener('scroll', handleScrollEvent);
-        };
-    }, [isLoading]);
+    }, [isLoading,product]);
 
 
     useEffect(() => {
@@ -107,14 +110,14 @@ export default function DetailsPage() {
                     <div className="details-slider-wrapper">
                         <button className='scroll-button left-scroll-button' onClick={handleLeftClick}>
                             {/* <a href={'#slide-' + slideNumber} className="text-4xl">&lt;</a> */}
-                            <FaChevronCircleLeft/>
+                            <FaChevronCircleLeft />
                         </button>
                         <div className="details-slider">
                             {renderedImages}
                         </div>
                         <button className='scroll-button right-scroll-button' onClick={handleRightClick}>
                             {/* <a href={'#slide-' + slideNumber} className="text-4xl">&gt;</a> */}
-                            <FaChevronCircleRight/>
+                            <FaChevronCircleRight />
                         </button>
                     </div>
                 </div>

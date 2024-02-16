@@ -18,7 +18,7 @@ export default function Product({ product}) {
     return <div className="card-container" onClick={handleCardClick}>
         <div className="card-image-container">
             {images[0]}
-            {images ? <img style={{ position: 'absolute' }} src={logo} width="100px" height="100px" /> : ''}
+            {product.brand === 'Arz' ? <img style={{ position: 'absolute' }} src={logo} width="100px" height="100px" /> : ''}
         </div>
         <div className="card-content">
 
