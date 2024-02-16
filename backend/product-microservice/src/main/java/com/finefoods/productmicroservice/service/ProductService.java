@@ -12,6 +12,7 @@ public interface ProductService {
     Boolean creatProduct (MultipartFile[] files, ProductRequest productRequest);
     ResponseEntity<ProductResponse> getProduct(Long id) throws IOException;
     List<ProductResponse> getAllProducts() throws IOException;
+    ProductResponse validateProduct(Long id);
 //    List<ProductResponse> getProductsByCategory(String category);
 //    List<ProductResponse> getProductsBySearchTerm(String word);
 //    List<ProductResponse> validateProductList(List<ProductRequest> products );

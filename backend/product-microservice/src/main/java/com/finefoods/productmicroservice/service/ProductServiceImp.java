@@ -60,6 +60,33 @@ public class ProductServiceImp implements ProductService{
         return Boolean.TRUE;
     }
     @Override
+    public ProductResponse validateProduct(Long id){
+        Product product = productRepository.findProductByProductId(id);
+        if(product != null ){
+            return mapToProductResponseValidate(product);
+        }
+        return ProductResponse.builder().build();
+    }
+    private ProductResponse mapToProductResponseValidate(Product product){
+        return ProductResponse.builder()
+                .productId(product.getProductId())
+                .brand(product.getBrand())
+                .productName(product.getProductName())
+                .description(product.getDescription())
+                .category(product.getCategory())
+                .tags(product.getTags())
+                .size(product.getSize())
+                .unit(product.getUnit())
+                .cost(product.getCost())
+                .currentPrice(product.getCurrentPrice())
+                .isTaxed(product.getIsTaxed())
+                .skuCode(product.getSkuCode())
+                .upcCode(product.getUpcCode())
+                .vendor(product.getVendor())
+                .build();
+    }
+
+    @Override
     public ResponseEntity<ProductResponse> getProduct(Long id) throws IOException {
         List<Image> imageList = imageRepository.getImageByProductId(id);
         List<byte[]> imagesInBytes = new ArrayList<>();

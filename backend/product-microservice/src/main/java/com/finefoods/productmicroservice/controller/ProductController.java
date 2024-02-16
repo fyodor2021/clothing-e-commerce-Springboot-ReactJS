@@ -44,8 +44,11 @@ public class ProductController {
         }
         return "Error occurred";
     }
-
-    @GetMapping({"/{id}"})
+    @GetMapping("/{id}")
+    public ProductResponse validateProduct(@PathVariable Long id){
+        return productService.validateProduct(id);
+    }
+    @GetMapping({"/image/{id}"})
     @CrossOrigin(origins = "*")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) throws IOException {
         return productService.getProduct(id);
@@ -55,6 +58,7 @@ public class ProductController {
     public List<ProductResponse> getAllProducts() throws IOException {
         return productService.getAllProducts();
     }
+
 //
 //
 //    @GetMapping({"category/{category}"})
