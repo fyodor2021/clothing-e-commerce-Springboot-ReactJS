@@ -11,6 +11,7 @@ import DetailsPage from './pages/DetailsPage'
 import { useContext, useEffect } from "react"
 import ProductContext from "./context/ProductContext";
 import RegistrationPage from "./pages/RegistrationPage";
+import AddProductPage from "./pages/AddProductPage";
 export default function App() {
     const {fetchProducts} = useContext(ProductContext)
     useEffect( () => {
@@ -27,6 +28,7 @@ export default function App() {
             <Route path='/register' element={<RegistrationPage />} />
             <Route path='/account' element={<AccountPage />} />
             <Route path='/details/:productId' element={<DetailsPage />} />
+            <Route path='/add-product' element={<AddProductPage />} />
             <Route path='/cart' element={<CartPage />} />
             <Route path='/meat' element={<HomePage />}>Meat</Route>
             <Route path='/cafe' element={<HomePage />}>Cafe</Route>

@@ -1,13 +1,19 @@
+import { useNavigate, useNavigation } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import {useState } from 'react'
 export default function CatLinks() {
     const [cat, setCat]  = useState('');
+    const navigate = useNavigate()
     const handleCategroyClick = (department) => {
         setCat(department)
+    }
+    const handleAddProductClick = () => {
+        navigate('/add-product')
     }
     return <div>
             <div  className='cat-container'>
 
+                <span className='cat-bar-item'onClick={() => handleAddProductClick('product')}>Add Product</span>
                 <span className='cat-bar-item'onClick={() => handleCategroyClick('meat')}>Meat</span>
                 <span className='cat-bar-item'  to={'/cafe'} onClick={() => handleCategroyClick('Cafe')}>Cafe</span>
                 <span className='cat-bar-item'  to={'/deli'} onClick={() => handleCategroyClick('Deli')}>Deli</span>

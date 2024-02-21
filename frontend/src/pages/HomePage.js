@@ -13,6 +13,7 @@ import Skeleton from '../components/Skeleton'
 import { useEffect, useState } from "react";
 import arzBrand from '../statics/arz-brand.png'
 import FilterSkeleton from "../components/FilterSkeleton";
+import AddProductPage from '../pages/AddProductPage'
 export default function HomePage({ category }) {
     const { products, isLoading } = useProductContext();
     const filterPanel = document.getElementsByClassName('filter-panel-container');
