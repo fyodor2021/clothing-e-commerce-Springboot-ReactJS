@@ -34,6 +34,7 @@ public class ReviewController {
         return reviewService.updateReview(reviewRequest, reviewId);
     }
     @GetMapping("/{reviewId}")
+    @CrossOrigin(origins = "*")
     public ReviewResponse getReviewById(@PathVariable Long reviewId){
         return reviewService.getReviewById(reviewId);
     }
@@ -44,7 +45,6 @@ public class ReviewController {
     }
     @GetMapping("/product/{productId}")
     @CrossOrigin(origins = "*")
-
     public List<ReviewResponse> getReviewsByProductId(@PathVariable Long productId){
         return reviewService.getReviewsByProductId(productId);
     }
