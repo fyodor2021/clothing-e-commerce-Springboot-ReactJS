@@ -4,7 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-
+backend/data/
 ### STS ###
 .apt_generated
 .classpath
@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+# Ignore specific directories and files within cart-microservice
+backend/data/mongo/cart-microservice/journal/
+backend/data/mongo/cart-microservice/diagnostic.data/
+backend/data/mongo/cart-microservice/.mongodb/
+
+# Ignore specific files
+backend/data/mongo/cart-microservice/WiredTiger

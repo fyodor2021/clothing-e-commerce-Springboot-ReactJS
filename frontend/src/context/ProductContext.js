@@ -29,12 +29,11 @@ function ProductProvider({ children }) {
     }
     const fetchProductReviews = (productId) => {
         setIsLoading(true)
-        console.log(productId)
-
         const res = axios.get("http://localhost:3001/api/review/product/" + productId)
         .then((response) => {
             setReviews(response.data)
         })
+        console.log(res)
         setIsLoading(false)
     }
     const valueProvided = {
