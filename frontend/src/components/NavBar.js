@@ -26,19 +26,19 @@ export default function NavBar() {
 
     console.log(notificationPanel)
     const notiItem = <div>
-    <div className='noti-user-avatar'>
-        <img src={userAvatar} />
-    </div>
-    <div>
-        <div className='text-2xl'> 
-            username
+        <div className='noti-user-avatar'>
+            <img src={userAvatar} />
         </div>
         <div>
-            Please disregard the content of this message as it does not
-             contain any real information. "Chat GPT.."
+            <div className='text-2xl'>
+                username
+            </div>
+            <div>
+                Please disregard the content of this message as it does not
+                contain any real information. "Chat GPT.."
+            </div>
         </div>
     </div>
-</div>
     return (
         <div className='nav-container'>
             <div>
@@ -66,15 +66,15 @@ export default function NavBar() {
                 <Link className='nav-bar-item' to={'/about'} element={<AboutPage />}>About</Link>
                 <Link className='nav-bar-item' to={'/cart'} element={<CartPage />}><BsCart4 /></Link>
             </div>
-            {notificationPanel ? 
-            <div className='notification-panel'>
-                        {notiItem}
-                        {notiItem}
-                        {notiItem}
-                        {notiItem}
-                        {notiItem}
-                        {notiItem}
-                        {notiItem}
+            {notificationPanel ?
+                <div className='notification-panel'>
+                    {notiItem}
+                    {notiItem}
+                    {notiItem}
+                    {notiItem}
+                    {notiItem}
+                    {notiItem}
+                    {notiItem}
 
                 </div> : ''}
             {menu ? <div className='navigation-menu'>

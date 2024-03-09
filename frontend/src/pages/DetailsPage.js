@@ -9,10 +9,12 @@ import { MdAssignmentReturn } from "react-icons/md";
 import userAvatar from "../statics/user-avatar.png"
 import { FaChevronCircleRight } from "react-icons/fa";
 import { FaChevronCircleLeft } from "react-icons/fa";
+import useReivewContext from "../hooks/useReviewContext";
+import { IoConstructOutline } from "react-icons/io5";
 export default function DetailsPage() {
     const { productId } = useParams();
     const { fetchProductDetails, product, fetchProductReviews, reviews, isLoading } = useProductContext();
-
+    const { addReview } = useReivewContext();
     const [slideNumber, setSlideNumber] = useState(0)
     const [reviewTab, setReviewTab] = useState(false)
     const handleReviewTabExtend = () => {
@@ -26,6 +28,7 @@ export default function DetailsPage() {
             filterPanel[0].classList.remove('fix-detail-panel');
         }
     }
+
     useEffect(() => {
         if (product) {
             if (!isLoading) {
@@ -38,7 +41,7 @@ export default function DetailsPage() {
             };
         }
 
-    }, [isLoading,product]);
+    }, [isLoading, product]);
 
 
     useEffect(() => {
@@ -47,7 +50,7 @@ export default function DetailsPage() {
     }, [])
     useEffect(() => {
         const el = document.getElementById('slide-' + slideNumber)
-        console.log(el)
+
         if (el) {
             el.scrollIntoView({ block: 'center' });
         }
@@ -101,6 +104,17 @@ export default function DetailsPage() {
         const handleLeftClick = (event) => {
             updateSlideNumber('left');
         };
+
+        const handleReivewAddFormSubmit = (event) => {
+            event.preventDefault()
+            addReview(
+                {
+                    userId: 1,
+                    productId,
+                    reviewBody: event.target[0].value
+                }
+            )
+        }
         return <div className="details-page-content">
             <div className="details-body-container">
                 <div className="vertical-image-container">
@@ -160,8 +174,14 @@ export default function DetailsPage() {
                     </div>
                     <div className="details-review-content-container">
                         {
-                            reviewTab ? (<div>
-                                <textarea rows='20' cols='55' />
+                            reviewTab ? (<div className="add-review-container">
+                                <div>
+                                    Tell us How we did?
+                                </div>
+                                <form className="flex-col" onSubmit={handleReivewAddFormSubmit}>
+                                    <textarea className="review-box" rows='5' cols='60' />
+                                    <button className="button" type="submit">Review</button>
+                                </form>
                             </div>) : (<div className="review-content-container">
 
                                 <h1>
@@ -173,7 +193,10 @@ export default function DetailsPage() {
                                 <h1>
                                     We value your feedback, share your thoughts with other customers!
                                 </h1>
-                                <button className="button details-review-button" onClick={handleReviewTabExtend}>Write a Customer Review</button>
+                                <div className="write-review-button">
+                                    <button className="button details-review-button" onClick={handleReviewTabExtend}>Write a Customer Review</button>
+                                </div>
+
                             </div>
                             )
                         }

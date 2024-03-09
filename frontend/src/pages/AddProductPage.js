@@ -36,8 +36,8 @@ export default function AddProductPage() {
                                         src={result} />
                         </div>])
                 }
-                if(event.target.files[0]){
-                        new Compressor(event.target.files[0],{
+                if (event.target.files[0]) {
+                        new Compressor(event.target.files[0], {
                                 quality: .5,
                                 success: result => {
 
@@ -76,18 +76,17 @@ export default function AddProductPage() {
         }
 
         return <div>
-
                 <form onSubmit={handleFileSubmit}>
                         <div className="uploaded-image-wrapper">
                                 <div className="uploaded-star-image">{renederedImages[renederedImages.length - 1]}</div>
                                 <div className="uploaded-image-container">{renederedImages}</div>
                         </div>
                         <div>
-                                <div style={{display:'flex', justifyContent: 'center'}}>
-                                <button className="button">
-                                        <input id="fileupload" type="file" name="images" multiple accept="image/png, image/jpeg, image/jpg" onChange={handleFileUploadChange} />
-                                        file upload
-                                </button>
+                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <button className="button">
+                                                <input id="fileupload" type="file" name="images" multiple accept="image/png, image/jpeg, image/jpg" onChange={handleFileUploadChange} />
+                                                file upload
+                                        </button>
                                 </div>
                                 <div className="input-component-wrapper">
                                         <Input htmlFor={'productName'}
