@@ -9,13 +9,21 @@ import AccountPage from "./pages/AccountPage";
 import CartPage from "./pages/CartPage";
 import DetailsPage from './pages/DetailsPage'
 import { useContext, useEffect } from "react"
-import ProductContext from "./context/ProductContext";
 import RegistrationPage from "./pages/RegistrationPage";
 import AddProductPage from "./pages/AddProductPage";
+import useGeneralContext from "./hooks/useGeneralContext";
+import useProductContext from "./hooks/useProductContext";
+import useCartContext from "./hooks/useCartContext";
 export default function App() {
-    const {fetchProducts} = useContext(ProductContext)
-    useEffect( () => {
+    const {fetchProducts} = useProductContext()
+    const {createCart} = useCartContext()
+    const {getCookie} = useGeneralContext()
+    useEffect(() => {
          fetchProducts();
+         const cartId = getCookie('cart')
+         if(!cartId){
+             createCart();
+         }
     },[])
     return <>
         <NavBar />

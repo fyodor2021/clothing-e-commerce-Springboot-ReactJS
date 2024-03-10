@@ -1,146 +1,100 @@
-import productPic from "../statics/Bread-Selection.jpg"
+import { useEffect } from "react"
+import useCartContext from "../hooks/useCartContext"
 export default function CartPage() {
+    const { getCartProducts, cartProducts } = useCartContext();
+    const checkoutPanel = document.getElementsByClassName('right-container');
+    const handleScrollEvent = () => {
+        console.log(window.scrollY)
+        if(window.scrollY > 100){
+            checkoutPanel[0].classList.add('fix-checkout-panel')
+        }else{
+            checkoutPanel[0].classList.remove('fix-checkout-panel')
+        }
+    }
+
+    useEffect(() => {
+        getCartProducts()
+        window.addEventListener('scroll', handleScrollEvent);
+        return () => {
+            window.removeEventListener('scroll', handleScrollEvent);
+        };
+    }, [])
+
+    const subTotal = cartProducts.reduce((acc, product) => {
+        return acc + (product.currentPrice * product.quantity)
+    }, 0)
+    const tax = subTotal * .13
+    const total = (subTotal + tax)
+    console.log(total)
+
+    const renderedProducts = cartProducts.map((product, key) => {
+        console.log(cartProducts)
+
+        return <div key={key}>
+            <div className="cart-product-fields">
+                <img className="cart-product-image" src={'data:image/jpeg;base64,' + product.imageList[0]} />
+            </div>
+            <div>
+                <p>{product.description}</p>
+                <p>{product.size} {product.unit}</p>
+                <p>${product.currentPrice}</p>
+                <div className="qty-field">
+                    <p>-</p>
+                    <p>{product.quantity}</p>
+                    <p>+</p>
+                </div>
+            </div>
+
+        </div>
+    })
+
+    console.log(subTotal)
     return <div>
         <div className="cart-main-container">
-
-            {/* left container */}
-            <div className="left-container">
-            <p>left </p>
-
-            {/* Labels  */}
-            <div className="cart-labels-container">
-                <div className="cart-labels-fields"><p>PRODUCT</p></div>
-                <div className="cart-labels-fields"><p>PRICE</p></div>
-                <div className="cart-labels-fields"><p>QTY</p></div>
-                <div className="cart-labels-fields"> <p>TOTAL</p></div>
+            <div className="cart-product-cards">
+                {renderedProducts}
+            </div>
+            <div>
+                <div className="right-container">
+                    <div className="cart-checkout-container">
+                        <div className="cart-checkout-small-containers">
+                            <p>Subtotal: </p>
+                            <p>${subTotal}</p>
+                        </div>
+                        <div className="cart-checkout-small-containers">
+                            <p>Tax: </p>
+                            <p>${tax.toFixed(2)}</p>
+                        </div>
+                        <div className="cart-checkout-small-containers">
+                            <p>Total: </p>
+                            <p>${total.toFixed(2)}</p>
+                        </div>
+                        <div>
+                            <button className="button">Checkout</button>
+                        </div>
+                    </div>
+                </div>
+                <div className="right-container hidden">
+                    <div className="cart-checkout-container">
+                        <div className="cart-checkout-small-containers">
+                            <p>Subtotal: </p>
+                            <p>${subTotal}</p>
+                        </div>
+                        <div className="cart-checkout-small-containers">
+                            <p>Tax: </p>
+                            <p>${tax.toFixed(2)}</p>
+                        </div>
+                        <div className="cart-checkout-small-containers">
+                            <p>Total: </p>
+                            <p>${total.toFixed(2)}</p>
+                        </div>
+                        <div>
+                            <button className="button">Checkout</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            {/* Cards to display  */}
-            <div className="cart-product-card">
-                <div className="cart-product-fields">
-
-                    {/* product image and details */}
-                    <div className="cart-product-image-container">
-                        <img  className="cart-product-image" src={productPic}></img>
-                        <p>Arz White Pita Bread</p>
-                        <p>250g</p>
-                        {/* <p>Product size</p> */}
-
-                    </div>
-                </div>
-                {/* price field */}
-                <div className="cart-product-fields" ><p>$109.00</p></div>
-
-                {/* QTY */}
-                <div className="cart-product-fields">
-                <div className="qty-field">
-                    <p>-</p>
-                    <p>4</p>
-                    <p>+</p>
-                </div>
-                </div>
-
-                {/* total */}
-                <div className="cart-product-fields"><p>$400</p></div>
-
-            </div>
-            
-            {/* SECOND CARD TO DISPLAY */}
-             {/* Cards to display  */}
-             <div className="cart-product-card">
-                <div className="cart-product-fields">
-
-                    {/* product image and details */}
-                    <div className="cart-product-image-container">
-                        <img  className="cart-product-image" src={productPic}></img>
-                        <p>Arz White Pita Bread</p>
-                        <p>250g</p>
-                        {/* <p>Product size</p> */}
-
-                    </div>
-                </div>
-                {/* price field */}
-                <div className="cart-product-fields" ><p>$109.00</p></div>
-
-                {/* QTY */}
-                <div className="cart-product-fields">
-                <div className="qty-field">
-                    <p>-</p>
-                    <p>4</p>
-                    <p>+</p>
-                </div>
-                </div>
-
-                {/* total */}
-                <div className="cart-product-fields"><p>$400</p></div>
-
-            </div>
-            {/* THIRD CARD TO DISPLAY */}
-             {/* Cards to display  */}
-             <div className="cart-product-card">
-                <div className="cart-product-fields">
-
-                    {/* product image and details */}
-                    <div className="cart-product-image-container">
-                        <img  className="cart-product-image" src={productPic}></img>
-                        <p>Arz White Pita Bread</p>
-                        <p>250g</p>
-                        {/* <p>Product size</p> */}
-
-                    </div>
-                </div>
-                {/* price field */}
-                <div className="cart-product-fields" ><p>$109.00</p></div>
-
-                {/* QTY */}
-                <div className="cart-product-fields">
-                <div className="qty-field">
-                    <p>-</p>
-                    <p>4</p>
-                    <p>+</p>
-                </div>
-                </div>
-
-                {/* total */}
-                <div className="cart-product-fields"><p>$400</p></div>
-
-            </div>
-
-
-
-            </div>
-            {/* right container */}
-            <div className="right-container">
-            <p>right</p>    
-                {/* Right checkout container */}
-                <div className="cart-checkout-container">
-
-                    {/* Button */}
-                    <div>
-                        <button className="button">Checkout</button>
-                    </div>
-
-                    {/* Subttal container */}
-                    <div className="cart-checkout-small-containers">
-                        <p>Subtotal: </p>
-                        <p>$1300</p>
-                    </div>
-
-                    {/* Tax amount */}
-                    <div className="cart-checkout-small-containers">
-                        <p>Tax: </p>
-                        <p>$130</p>
-                    </div>
-
-                    {/* Total */}
-                    <div className="cart-checkout-small-containers">
-                        <p>Subtotal: </p>
-                        <p>$1430</p>
-                    </div>
-
-                </div>
-            </div>
-        
         </div>
     </div>
 }
