@@ -1,11 +1,13 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import axios from "axios";
 const ReviewContext = createContext();
 function ReviewProvider({ children }) {
+
     const addReview = async (review) => {
-        await axios.post('http://localhost:3001/api/review', 
+        const res = await axios.post('http://localhost:3001/api/review', 
             review
         )
+
         window.location.reload()
     }
     const valueProvided = {

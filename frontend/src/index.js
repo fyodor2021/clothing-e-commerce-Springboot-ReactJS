@@ -6,6 +6,8 @@ import './index.css'
 import { ProductProvider } from './context/ProductContext.js'
 import { UserProvider } from './context/UserContext.js'
 import { ReviewProvider } from './context/ReviewContext.js'
+import { CartProvider } from './context/CartContext.js'
+import { GeneralProvider } from './context/GeneralContext.js'
 
 const el = document.getElementById('root')
 
@@ -13,14 +15,17 @@ const el = document.getElementById('root')
 const root = ReactDOM.createRoot(el)
 
 root.render(
-    <UserProvider>
-
-        <ProductProvider>
-            <ReviewProvider>
-                <BrowserRouter>
-                    <App />
-                </BrowserRouter>
-            </ReviewProvider>
-        </ProductProvider>
-    </UserProvider>
+    <GeneralProvider>
+        <UserProvider>
+            <CartProvider>
+                <ProductProvider>
+                    <ReviewProvider>
+                        <BrowserRouter>
+                            <App />
+                        </BrowserRouter>
+                    </ReviewProvider>
+                </ProductProvider>
+            </CartProvider>
+        </UserProvider>
+    </GeneralProvider>
 )

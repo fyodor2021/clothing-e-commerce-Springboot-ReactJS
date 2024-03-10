@@ -10,7 +10,6 @@ import userAvatar from "../statics/user-avatar.png"
 import { FaChevronCircleRight } from "react-icons/fa";
 import { FaChevronCircleLeft } from "react-icons/fa";
 import useReivewContext from "../hooks/useReviewContext";
-import { IoConstructOutline } from "react-icons/io5";
 export default function DetailsPage() {
     const { productId } = useParams();
     const { fetchProductDetails, product, fetchProductReviews, reviews, isLoading } = useProductContext();
@@ -109,7 +108,7 @@ export default function DetailsPage() {
             event.preventDefault()
             addReview(
                 {
-                    userId: 1,
+                    userId: 15,
                     productId,
                     reviewBody: event.target[0].value
                 }

@@ -5,6 +5,7 @@
 :root {
     --arzColor: #ffb100;
     --navArzColor: #5f1f00;
+    --page-padding: 1rem
 }
 
 html {
@@ -107,7 +108,9 @@ body {
     left: 0;
     z-index: 9999;
 }
-
+.home-page-container{
+    padding: var(--page-padding);
+}
 .notification-panel>*:hover {
 
     background-color: rgba(95, 32, 0, 0.795);
@@ -300,7 +303,7 @@ input[type="file"] {
     height: 500px;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 1.5rem 3rem -0.75rem black;
+    box-shadow: 0 0 2rem -0.75rem black;
 
     border: 5px solid rgba(255, 255, 255, .5);
 }
@@ -319,7 +322,6 @@ input[type="file"] {
     position: relative;
     background-color: var(--arzColor);
     border-radius: 20px;
-    margin: 30px;
     box-shadow: 0 1rem 3rem -0.75rem black;
 
 }
@@ -393,7 +395,6 @@ input[type="file"] {
     border-radius: 10px;
     box-shadow: 0 1.5rem 3rem -0.75rem black;
 
-    max-height: 300px;
     transition: transform 0.3s ease;
     height: 100%;
     margin: 10px;
@@ -427,7 +428,7 @@ input[type="file"] {
     flex-wrap: wrap;
 }
 
-.card-container:hover {
+.card-container:first-child:hover {
     transform: translate3D(0, -1px, 0) scale(1.10);
     cursor: pointer;
 }
@@ -442,7 +443,7 @@ input[type="file"] {
 }
 
 .card-content h4 {
-    margin: 5px;
+    margin: 2px;
 }
 
 .footer-container {
@@ -589,10 +590,6 @@ input[type="file"] {
 
 }
 
-.home-page-cards-filter-container,
-.slider-container {
-    margin: 30px 50px;
-}
 
 .input-label {
     font-size: 25px;
@@ -861,9 +858,8 @@ input[type="file"] {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 80vh;
     width: 99vw;
-    padding: 2rem;
+    padding: var(--page-padding);
 
 }
 
