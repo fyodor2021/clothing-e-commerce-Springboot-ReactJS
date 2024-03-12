@@ -96,6 +96,21 @@ services:
     networks:
       - spring
 
+  postgres-shift:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: shift-microservice
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5435:5432"
+    restart: unless-stopped
+    volumes:
+      - ./data/postgres/shift-microservice:/data/postgres
+      - ./init/postgres/shift-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - spring
+
 networks:
   spring:
     driver: bridge

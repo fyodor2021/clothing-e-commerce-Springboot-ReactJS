@@ -1,6 +1,4 @@
 package com.finefoods.cartmicroservice.service;
-
-
 import com.finefoods.cartmicroservice.dto.CartRequest;
 import com.finefoods.cartmicroservice.dto.CartResponse;
 import com.finefoods.cartmicroservice.model.Cart;
@@ -9,7 +7,6 @@ import com.finefoods.cartmicroservice.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -153,8 +150,6 @@ public class CartServiceImp implements CartService {
                 .upcCode(p.getUpcCode())
                 .vendor(p.getVendor())
                 .build();
-
-
     }
 
 
