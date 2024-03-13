@@ -28,7 +28,7 @@ public class ShiftController {
 
     }
     @PutMapping("/{shiftId}/{employeeName}")
-    public void assignShiftToEmployee(@PathVariable Long shiftId , @PathVariable String employeeName){
+    public void assignShiftToEmployee(@PathVariable String shiftId , @PathVariable String employeeName){
         shiftServiceImp.assignShiftToEmployee(shiftId,employeeName);
     }
 
@@ -38,13 +38,13 @@ public class ShiftController {
     }
 
     @DeleteMapping("/{shiftId}")
-    public void deleteShift(@PathVariable Long shiftId){
+    public void deleteShift(@PathVariable String shiftId){
         shiftServiceImp.deleteShift(shiftId);
 
     }
 
     @GetMapping("/{shiftId}")
-    public ShiftResponse getShiftByShiftId(@PathVariable Long shiftId){
+    public ShiftResponse getShiftByShiftId(@PathVariable String shiftId){
         return shiftServiceImp.getShiftByShiftId(shiftId);
 
     }
@@ -65,5 +65,14 @@ public class ShiftController {
         return shiftServiceImp.getShiftsBetweenTwoDates(startDate, endDate);
     }
 
+    @PutMapping("{employeeName}")
+    public void signUpForShifts(@RequestBody List<String> shiftIds,@PathVariable String employeeName){
+        shiftServiceImp.signUpForShifts(shiftIds,employeeName);
+    }
 
-}
+    @PutMapping("cancel/{shiftId}/{employeeName}")
+    public void cancelSignUpForShift(@PathVariable String shiftId, @PathVariable String employeeName){
+        shiftServiceImp.cancelSignUpForShift(shiftId,employeeName);
+    }
+
+    }

@@ -96,18 +96,17 @@ services:
     networks:
       - spring
 
-  postgres-shift:
-    image: postgres:latest
+  mongo-shift:
+    image: mongo:latest
     environment:
-      POSTGRES_DB: shift-microservice
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
     ports:
-      - "5435:5432"
-    restart: unless-stopped
+      - "27018:27017"
     volumes:
-      - ./data/postgres/shift-microservice:/data/postgres
-      - ./init/postgres/shift-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data/mongo/shift-microservice:/data/db
+      - ./init/mongo/shift-microservice/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    command: mongod --auth
     networks:
       - spring
 

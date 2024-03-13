@@ -1,28 +1,28 @@
 package com.finefoods.shiftmicroservice.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "t_shift")
+@Document(value = "t_shift")
 @Data
-@Entity
+
 
 public class Shift {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long shiftId;
+    private String shiftId;
     private String startTime;
     private String endTime;
     private LocalDate date;
+    private List<String> availablePeople;
     private String owner;
 
 }

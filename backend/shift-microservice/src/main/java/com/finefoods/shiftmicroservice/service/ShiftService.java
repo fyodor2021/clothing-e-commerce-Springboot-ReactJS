@@ -9,14 +9,17 @@ import java.util.List;
 
 public interface ShiftService {
     void createShift(ShiftRequest shiftRequest);
-    void assignShiftToEmployee(Long shiftId , String employeeName);
+    void assignShiftToEmployee(String shiftId , String employeeName);
     void updateShift(ShiftRequest shiftRequest);
-    void deleteShift(Long shiftId);
-     ShiftResponse getShiftByShiftId(Long id);
+    void deleteShift(String shiftId);
+     ShiftResponse getShiftByShiftId(String shiftId);
     List<ShiftResponse> getShiftByOwnerName(String owner);
     List<ShiftResponse> getAllShift();
 
     List<ShiftResponse> getShiftsBetweenTwoDates(LocalDate startDate, LocalDate endDate );
+
+    void signUpForShifts(List<String> shiftIds, String employeeName);
+    void cancelSignUpForShift(String shiftId, String employeeName);
 
 
 

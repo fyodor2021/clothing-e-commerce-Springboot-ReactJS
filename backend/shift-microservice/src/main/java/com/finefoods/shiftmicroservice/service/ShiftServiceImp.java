@@ -29,7 +29,7 @@ public class ShiftServiceImp implements ShiftService{
         shiftRepository.save(shift);
 
     }
-    public void assignShiftToEmployee(Long shiftId , String employeeName){
+    public void assignShiftToEmployee(String shiftId , String employeeName){
         Shift existShift = shiftRepository.findShiftByShiftId(shiftId);
         if (existShift != null){
             existShift.setOwner(employeeName);
@@ -51,7 +51,7 @@ public class ShiftServiceImp implements ShiftService{
         }
 
     }
-    public void deleteShift(Long shiftId){
+    public void deleteShift(String shiftId){
         Shift existShift = shiftRepository.findShiftByShiftId(shiftId);
         if (existShift != null){
             shiftRepository.deleteById(shiftId);
@@ -59,7 +59,7 @@ public class ShiftServiceImp implements ShiftService{
 
     }
 
-    public ShiftResponse getShiftByShiftId(Long shiftId){
+    public ShiftResponse getShiftByShiftId(String shiftId){
         Shift existShift = shiftRepository.findShiftByShiftId(shiftId);
         if (existShift != null){
             return shiftToShiftResponse(existShift);
@@ -86,6 +86,32 @@ public class ShiftServiceImp implements ShiftService{
 
     }
 
+    public void signUpForShifts(List<String> shiftIds, String employeeName) {
+        for (String shiftId : shiftIds) {
+            Shift shift = shiftRepository.findShiftByShiftId(shiftId);
+            List<String> savedAvailablePeople = shift.getAvailablePeople();
+
+            if (savedAvailablePeople == null) {
+                savedAvailablePeople = new ArrayList<>();
+            }
+            if (!savedAvailablePeople.contains(employeeName)) {
+                savedAvailablePeople.add(employeeName);
+                shift.setAvailablePeople(savedAvailablePeople);
+                shiftRepository.save(shift);
+            }
+        }
+    }
+
+
+    public void cancelSignUpForShift(String shiftId, String employeeName){
+        Shift shift = shiftRepository.findShiftByShiftId(shiftId);
+        if (shift.getAvailablePeople().contains(employeeName)){
+            List<String> availablePeople = shift.getAvailablePeople();
+            availablePeople.remove(employeeName);
+            shift.setAvailablePeople(availablePeople);
+            shiftRepository.save(shift);
+        }
+    }
 
     private ShiftResponse shiftToShiftResponse(Shift shift){
         LocalDate date = shift.getDate();
@@ -97,6 +123,7 @@ public class ShiftServiceImp implements ShiftService{
                 day(date.getDayOfMonth()).
                 month(date.getMonthValue()).
                 year(date.getYear()).
+                availablePeople(shift.getAvailablePeople()).
                 owner(shift.getOwner())
                 .build();
     }
