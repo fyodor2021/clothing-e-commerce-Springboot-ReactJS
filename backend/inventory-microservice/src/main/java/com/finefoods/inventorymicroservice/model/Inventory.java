@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = )
+@Table(name = "t_inventory")
 public class Inventory {
 }

@@ -96,6 +96,20 @@ services:
     networks:
       - spring
 
+  mongo-shift:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27018:27017"
+    volumes:
+      - ./data/mongo/shift-microservice:/data/db
+      - ./init/mongo/shift-microservice/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    command: mongod --auth
+    networks:
+      - spring
+
 networks:
   spring:
     driver: bridge
