@@ -1,7 +1,6 @@
 package com.finefoods.inventorymicroservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,4 +13,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "t_inventory")
 public class Inventory {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long inventoryId;
+    private long productId;
+    private float stock;
+    private String stockUnit;
 }

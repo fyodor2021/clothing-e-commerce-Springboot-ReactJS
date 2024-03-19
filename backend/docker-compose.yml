@@ -82,6 +82,21 @@ services:
     networks:
       - spring
 
+  postgres-inventory:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: inventory-microservice
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5435:5432"
+    restart: unless-stopped
+    volumes:
+      - ./data/postgres/inventory-microservice:/data/postgres
+      - ./init/postgres/inventory-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - spring
+
   mongo-cart:
     image: mongo:latest
     environment:
