@@ -2,6 +2,9 @@ package com.finefoods.inventorymicroservice.service;
 
 import com.finefoods.inventorymicroservice.dto.InventoryRequest;
 import com.finefoods.inventorymicroservice.dto.InventoryResponse;
+import com.finefoods.inventorymicroservice.dto.ProductAvailability;
+
+import java.util.List;
 
 public interface InventoryService {
     void createInventory(InventoryRequest inventoryRequest);
@@ -13,6 +16,7 @@ public interface InventoryService {
 
     Boolean checkInventory(long productId, int quantity);
     void deleteInventory(long productId);
+    List<ProductAvailability> areProductsInStock(List<InventoryRequest> inventoryRequests);
 
 
 
