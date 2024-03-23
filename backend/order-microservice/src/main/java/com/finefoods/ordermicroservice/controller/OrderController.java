@@ -17,11 +17,11 @@ import java.util.concurrent.CompletableFuture;
 public class OrderController {
     private final OrderServiceImpl orderService;
     @PostMapping
-    @CircuitBreaker(name = "order", fallbackMethod = "createOrderFallBack")
-    public String createOrder(@RequestBody OrderRequest orderRequest){
-        return orderService.createOrder(orderRequest);
+//    @CircuitBreaker(name = "order", fallbackMethod = "createOrderFallBack")
+    public String placeOrder(@RequestBody OrderRequest orderRequest){
+        return orderService.placeOrder(orderRequest);
     }
-    public String createOrderFallBack(OrderRequest orderRequest){
-        return "service unavailable";
-    }
+//    public String createOrderFallBack(OrderRequest orderRequest){
+//        return "service unavailable";
+//    }
 }

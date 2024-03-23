@@ -37,6 +37,10 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.1.0")
 	compileOnly("org.springframework.boot:spring-boot-starter-aop")
 
+	//Stripe
+	implementation("com.stripe:stripe-java:22.20.0")
+
+
 }
 
 tasks.withType<Test> {

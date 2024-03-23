@@ -2,11 +2,15 @@ package com.finefoods.inventorymicroservice.service;
 
 import com.finefoods.inventorymicroservice.dto.InventoryRequest;
 import com.finefoods.inventorymicroservice.dto.InventoryResponse;
+import com.finefoods.inventorymicroservice.dto.ProductAvailability;
 import com.finefoods.inventorymicroservice.model.Inventory;
 import com.finefoods.inventorymicroservice.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -71,6 +75,24 @@ public class InventoryServiceImpl implements InventoryService {
             inventoryRepository.deleteById(inventoryExists.getInventoryId());
         }
     }
+
+    public List<ProductAvailability> areProductsInStock(List<InventoryRequest> inventoryRequests){
+        List<ProductAvailability> products = new ArrayList<>();
+        for (InventoryRequest inventoryRequest : inventoryRequests){
+            Inventory inventoryExists = inventoryRepository.findByProductId(inventoryRequest.getProductId());
+            if (inventoryExists.getStock() >= inventoryRequest.getStock()){
+                ProductAvailability availableProduct = ProductAvailability.builder().productId(inventoryRequest.getProductId()).isInStock(true).build();
+                products.add(availableProduct);
+            }
+            else {
+                ProductAvailability unavailableProduct = ProductAvailability.builder().productId(inventoryRequest.getProductId()).isInStock(false).build();
+                products.add(unavailableProduct);
+            }
+
+        }
+        return products;
+    }
+
 
 
 

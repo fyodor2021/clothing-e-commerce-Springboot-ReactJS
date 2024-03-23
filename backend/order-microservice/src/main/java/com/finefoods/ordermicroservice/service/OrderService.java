@@ -1,8 +1,15 @@
 package com.finefoods.ordermicroservice.service;
 
 import com.finefoods.ordermicroservice.dto.OrderRequest;
-import org.springframework.stereotype.Service;
+import com.stripe.exception.StripeException;
 
 public interface OrderService {
-    String createOrder(OrderRequest orderRequest);
+    String placeOrder(OrderRequest orderRequest);
+    Boolean payForOrder(float total, String token) throws StripeException;
+    String cancelOrder(String orderId);
+    void updateOrderStatus(String orderId);
+
+
+
+
 }

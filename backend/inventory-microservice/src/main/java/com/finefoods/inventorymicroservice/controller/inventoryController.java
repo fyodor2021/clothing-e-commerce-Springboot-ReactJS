@@ -2,10 +2,13 @@ package com.finefoods.inventorymicroservice.controller;
 
 import com.finefoods.inventorymicroservice.dto.InventoryRequest;
 import com.finefoods.inventorymicroservice.dto.InventoryResponse;
+import com.finefoods.inventorymicroservice.dto.ProductAvailability;
 import com.finefoods.inventorymicroservice.service.InventoryServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/inventory")
@@ -44,6 +47,11 @@ public class inventoryController {
     @DeleteMapping("/{productId}")
     public void deleteInventory(@PathVariable long productId){
         inventoryService.deleteInventory(productId);
+    }
+
+    @PostMapping("/stock")
+    public List<ProductAvailability> areProductsInStock(@RequestBody List<InventoryRequest> inventoryRequests){
+        return inventoryService.areProductsInStock(inventoryRequests);
     }
 
 }
