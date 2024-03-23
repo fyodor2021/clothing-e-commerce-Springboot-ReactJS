@@ -14,12 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-
-
 public class Cart {
     @Id
-    private String cartId;
-    private Long userId;
+    private String headerValue;
     private List<Product> products;
 
 

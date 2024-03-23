@@ -5,6 +5,7 @@ import com.finefoods.reviewmicroservice.dto.ReviewResponse;
 import com.finefoods.reviewmicroservice.service.ReviewServiceImpl;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.persistence.GeneratedValue;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Path;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,23 +19,23 @@ import java.util.List;
 @AllArgsConstructor
 public class ReviewController {
     private final ReviewServiceImpl reviewService;
-    @PostMapping()
+
+    @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    @CrossOrigin(origins = "*")
-    @CircuitBreaker(name="review", fallbackMethod = "createReviewFallBack")
-    public String createReview(@RequestBody ReviewRequest reviewRequest) {
-        return reviewService.createReview(reviewRequest);
+//    @CircuitBreaker(name="review", fallbackMethod = "createReviewFallBack")
+    public String createReview(@RequestBody ReviewRequest reviewRequest, @RequestHeader("Authorization") String auth) {
+        String token = auth.substring(7);
+        return reviewService.createReview(reviewRequest,token);
     }
     //FALL BACK METHOD BELOW
-    public String createReviewFallBack(ReviewRequest reviewRequest, RuntimeException e){
-        return "service unavailable";
-    }
+//    public String createReviewFallBack(ReviewRequest reviewRequest, RuntimeException e){
+//        return "service unavailable";
+//    }
     @PutMapping("/{reviewId}")
     public ReviewResponse updateReview(@PathVariable Long reviewId,@RequestBody ReviewRequest reviewRequest){
         return reviewService.updateReview(reviewRequest, reviewId);
     }
     @GetMapping("/{reviewId}")
-    @CrossOrigin(origins = "*")
     public ReviewResponse getReviewById(@PathVariable Long reviewId){
         return reviewService.getReviewById(reviewId);
     }
@@ -44,7 +45,6 @@ public class ReviewController {
         return reviewService.deleteReview(reviewId);
     }
     @GetMapping("/product/{productId}")
-    @CrossOrigin(origins = "*")
     public List<ReviewResponse> getReviewsByProductId(@PathVariable Long productId){
         return reviewService.getReviewsByProductId(productId);
     }

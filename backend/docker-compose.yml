@@ -76,6 +76,7 @@ services:
     ports:
       - "5434:5432"
     restart: unless-stopped
+    container_name: postgres-points
     volumes:
       - ./data/postgres/points-microservice:/data/postgres
       - ./init/postgres/points-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -108,6 +109,49 @@ services:
       - ./data/mongo/cart-microservice:/data/db
       - ./init/mongo/cart-microservice/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     command: mongod --auth
+    container_name: mongo-cart
+    restart: unless-stopped
+    networks:
+      - spring
+
+  mongo-express:
+    image: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo-cart
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+      - ME_CONFIG_BASICAUTH_USERNAME=root
+      - ME_CONFIG_BASICAUTH_PASSWORD=root
+    depends_on:
+      - mongo-cart
+    container_name: mongo-express-cart
+    ports:
+      - "9500:8081"
+    networks:
+      - spring
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    container_name: redis-session
+    networks:
+      - spring
+
+  postgres-authentication:
+    image: postgres:latest
+    container_name: postgres-authentication
+    ports:
+      - "5436:5432"
+    environment:
+      POSTGRES_DB: authentication-microservice
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - ./data/postgres/authentication-microservice:/data/postgres
+      - ./init/postgres/authentication-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - spring
 

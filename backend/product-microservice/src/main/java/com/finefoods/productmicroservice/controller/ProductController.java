@@ -32,7 +32,6 @@ public class ProductController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    @CrossOrigin(origins = "*")
     public String creatProduct (@RequestParam("files") MultipartFile[] files,
     @RequestParam("productRequest") String productRequestJson )
      throws JsonProcessingException {
@@ -49,12 +48,10 @@ public class ProductController {
         return productService.validateProduct(id);
     }
     @GetMapping({"/image/{id}"})
-    @CrossOrigin(origins = "*")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) throws IOException {
         return productService.getProduct(id);
     }
     @GetMapping
-    @CrossOrigin(origins = "*")
     public List<ProductResponse> getAllProducts() throws IOException {
         return productService.getAllProducts();
     }

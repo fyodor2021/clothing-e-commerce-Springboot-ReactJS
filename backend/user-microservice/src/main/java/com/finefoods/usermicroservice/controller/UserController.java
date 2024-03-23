@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class UserController {
     private final UserServiceImpl userService;
-    @PostMapping
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public String createUser(@RequestBody UserRequest userRequest) throws Exception {
        return userService.createUser(userRequest);
@@ -37,9 +37,9 @@ public class UserController {
     public UserResponse getUserByUserId(@PathVariable("userId") Long userId){
         return userService.getUserByUserId(userId);
     }
-    @GetMapping("/role/{userId}")
-    public String getUserRole(@PathVariable("userId") Long userId){
-        return userService.getUserRole(userId);
-    }
+//    @GetMapping("/username/{username}")
+//    public UserResponse getUserByUsername(@PathVariable("username") String username){
+//        return userService.getUserByUsername(username);
+//    }
 
 }

@@ -9,8 +9,10 @@ import FilterPanel from '../components/FilterPanel';
 import Skeleton from '../components/Skeleton'
 import { useEffect } from "react";
 import FilterSkeleton from "../components/FilterSkeleton";
+import useCartContext from "../hooks/useCartContext";
 export default function HomePage({ category }) {
   const { products, isLoading } = useProductContext();
+  const {createCart} = useCartContext();
   const filterPanel = document.getElementsByClassName('filter-panel-container');
   const handleScrollEvent = () => {
     if (window.scrollY > 560) {
@@ -33,12 +35,12 @@ export default function HomePage({ category }) {
 
       window.addEventListener('scroll', handleScrollEvent);
     }
-
+    
     return () => {
       clearInterval(interval);
       window.removeEventListener('scroll', handleScrollEvent);
     };
-  }, [isLoading]);
+  }, [isLoading,window.location.pathname]);
   let skeletons = [];
   for (let i = 0; i < 20; i++) {
     skeletons.push(<div key={i} className="m-5">
@@ -49,7 +51,7 @@ export default function HomePage({ category }) {
     <div>
       <div className="home-page-container">
         <div className="slider-container">
-
+          
           <div className="slider">
             <div className="slides">
               <input type="radio" name="radio-btn" id="radio1" />
@@ -87,6 +89,8 @@ export default function HomePage({ category }) {
             </div>
             <div className="flex flex-row w-3/5 justify-center flex-wrap">
               {skeletons}
+
+
             </div>
           </div>
         ) : (

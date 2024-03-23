@@ -1,31 +1,30 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.js'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, useNavigate } from 'react-router-dom'
 import './index.css'
 import { ProductProvider } from './context/ProductContext.js'
-import { UserProvider } from './context/UserContext.js'
+import { AuthProvider } from './context/AuthContext.js'
 import { ReviewProvider } from './context/ReviewContext.js'
 import { CartProvider } from './context/CartContext.js'
 import { GeneralProvider } from './context/GeneralContext.js'
-
+import axios from 'axios'
 const el = document.getElementById('root')
-
-
 const root = ReactDOM.createRoot(el)
+axios.defaults.baseURL = "http://localhost:8181/";
 
 root.render(
-    <GeneralProvider>
-        <UserProvider>
-            <CartProvider>
-                <ProductProvider>
-                    <ReviewProvider>
-                        <BrowserRouter>
+    <BrowserRouter>
+        <GeneralProvider>
+            <AuthProvider>
+                <CartProvider>
+                    <ProductProvider>
+                        <ReviewProvider>
                             <App />
-                        </BrowserRouter>
-                    </ReviewProvider>
-                </ProductProvider>
-            </CartProvider>
-        </UserProvider>
-    </GeneralProvider>
+                        </ReviewProvider>
+                    </ProductProvider>
+                </CartProvider>
+            </AuthProvider>
+        </GeneralProvider>
+    </BrowserRouter>
 )
