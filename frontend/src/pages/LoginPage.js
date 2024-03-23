@@ -1,43 +1,51 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Input from '../components/Input'
 import arzPic from '../statics/arz-fine-foods-mis.png'
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer'
+import useAuthContext from '../hooks/useAuthContext';
+import useGeneralContext from '../hooks/useGeneralContext';
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [valMessage, setValMessage] = useState('');
-    const [login, setLogin] = useState(false)
+    const {login,token} = useAuthContext();
+
+        const {valMessage,setValMessage} = useGeneralContext();
+        useEffect(() => {
+            if(token){
+                navigate("/")
+            }
+        },[])
     const navigate = useNavigate();
-    const handleClick = () => {
-        // setReg(false);
-    };
     const handleRegisterNavigate = () => {
         navigate('/register')
     }
     const onFormSubmit = async (event) => {
         event.preventDefault();
-        // setUsername('');
-        // setPassword('');
-        // if (!username || !password) {
-        //     setValMessage('None of the fields can be empty');
-        // } else {
-        //     if (username.length < 3) {
-        //         setValMessage('Not a valid username');
-        //     } else if (password.length < 3) {
-        //         setValMessage('Not a valid password');
-        //     } else {
-        //         const user = await axios.post('http://localhost:8079/login', {
-        //             username,
-        //             password,
-        //         }).catch(err => setValMessage(err))
-        //         if(user.data.length > 0){
-        //             localStorage.setItem('login',true)
-        //             setLogin(true)
-        //         }
-        //         setValMessage('');
-        //     }
-        // }
+        if (!username || !password) {
+            setValMessage('None of the fields can be empty');
+        } else {
+            if (username.length < 3) {
+                setValMessage('Not a valid username');
+            } else if (password.length < 3) {
+                setValMessage('Not a valid password');
+            } else {
+                const user = {
+                    email:username,
+                    password,
+                }
+                const res = login(user)
+                // .then(res => {
+                //     if(res.response){
+                //         setValMessage("User Not Found.")
+                //     }else{
+                //         navigate('/')
+                //     }
+                // }).catch(err => {
+                //     console.log(err)
+                // })
+            }
+        }
     };
     return (
         <div>
@@ -69,7 +77,7 @@ export default function Login() {
                         </div>
                         <span style={{ color: 'red' }}>{valMessage}</span>
                         <div className='login-button-container'>
-                            <button className='button'>Login</button>
+                            <button className='button' type='submit'>Login</button>
                         </div>
                     </form>
                     <div style={{ margin: '10px' }}>

@@ -1,35 +1,55 @@
 import { createContext, useState } from "react";
 import axios from "axios";
 import useGeneralContext from "../hooks/useGeneralContext";
-
+import { useCookies } from "react-cookie";
 const CartContext = createContext();
 function CartProvider({ children }) {
     const {setCookie,getCookie} = useGeneralContext();
     const [cartProducts, setCartProducts] = useState([]);
-    const createCart = () => {
-            axios.post("http://localhost:3003/api/cart",{
-                userId: 0,
-                products: []
-            }).then(res => setCookie('cart',res.data, 1)).catch(err => console.log(err))
-    }
-    const addToCart = async (product) => {
-        const cartId = getCookie('cart')
-        const cartRequest = {
-            cartId,product
-        }
-        const res = await axios
-        .post("http://localhost:3003/api/cart/add", cartRequest)
+    const [cookies] = useCookies()
+//     const createCart = async () => {
+//         axios.post("http://localhost:3003/api/cart/add", {
+//     userId: null,
+//     products: []
+// }, {
+
+//     withCredentials: true
+// }).then(res => console.log(res.data));
+//     }
+//     }
+//     const testCart = () => {
+//         // axios.post("http://localhost:3003/api/cart/add",{
+//         // Headers:{
+//         //     'Content-Type':'application/json'
+//         // },
+//         // withCredentials:'included'
+
+//         // })
+//         // .then(res => console.log(res.data))
+//         // axios.get("http://localhost:3003/api/cart/add",{
+//         //     // userId: 0,
+//         //     // products: []
+//         //     withCredentials: true
+//         // }).then(res => console.log(res.data))
+//         axios.post("http://localhost:3003/api/cart/add", {
+//     // userId: 0,
+//     // products: []
+// }, {
+
+//     withCredentials: true
+// }).then(res => console.log(res.data));
+//     }
+    const addToCart = (product) => {
+        axios.post("api/cart/add", {product}).then(res => console.log(res))
     }
     const getCartProducts = () => {
-        const cartId = getCookie('cart')
-        axios.get("http://localhost:3003/api/cart/products/" + cartId)
+        axios.get(`api/cart/products`,{withCredentials: true})
         .then(res => setCartProducts(res.data))
     }
     const valueProvided = {
-        createCart,
         addToCart,
         getCartProducts,
-        cartProducts
+        cartProducts,
     }
     return <CartContext.Provider value={valueProvided}>
                 {children}

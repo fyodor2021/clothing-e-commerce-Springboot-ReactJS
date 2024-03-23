@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import OrdersPage from '../pages/OrdersPage';
@@ -12,19 +12,27 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { useEffect, useState } from 'react'
 import arzBrand from '../statics/arz-brand.png'
 import userAvatar from '../statics/user-avatar.png'
-import { IoTriangle } from "react-icons/io5";
+import useAuthContext from '../hooks/useAuthContext';
 export default function NavBar() {
     const [menu, setMenu] = useState(false)
-
+    const {token,setToken} = useAuthContext();
     const [notificationPanel, setNotificationPanel] = useState(false);
+    const navigate = useNavigate();
     const handleMenuToggle = () => {
         setMenu(!menu)
     }
+    console.log(token)
     const handleNotificationExpand = () => {
         setNotificationPanel(!notificationPanel)
     }
+    const handleSignout = () => {
+        window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
+        token = ''
+        // navigate('/')
+        // window.location.reload()
 
-    console.log(notificationPanel)
+    }
+
     const notiItem = <div>
         <div className='noti-user-avatar'>
             <img src={userAvatar} />
@@ -60,7 +68,11 @@ export default function NavBar() {
             </div>
             <div className='nav-item-container' >
                 <MdOutlineNotifications className='nav-bar-item' onClick={handleNotificationExpand} />
-                <Link className='nav-bar-item' to={'/login'} element={<LoginPage />}>Sign-out</Link>
+{
+    token ? 
+    <Link className=' nav-bar-item-signout nav-bar-item' onClick={handleSignout} to={'/login'} element={<LoginPage />}>Sign-out</Link> :
+    <Link className='nav-bar-item' to={'/login'} element={<LoginPage />}>Login</Link>
+}
                 <Link className='nav-bar-item' to={'/orders'} element={<OrdersPage />}>My Orders</Link>
                 <Link className='nav-bar-item' to={'/account'} element={<AccountPage />}>Account</Link>
                 <Link className='nav-bar-item' to={'/about'} element={<AboutPage />}>About</Link>

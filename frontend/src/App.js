@@ -11,19 +11,31 @@ import DetailsPage from './pages/DetailsPage'
 import { useContext, useEffect } from "react"
 import RegistrationPage from "./pages/RegistrationPage";
 import AddProductPage from "./pages/AddProductPage";
-import useGeneralContext from "./hooks/useGeneralContext";
 import useProductContext from "./hooks/useProductContext";
-import useCartContext from "./hooks/useCartContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import useAuthContext from "./hooks/useAuthContext";
 export default function App() {
     const {fetchProducts} = useProductContext()
-    const {createCart} = useCartContext()
-    const {getCookie} = useGeneralContext()
+    const navigate = useNavigate();
+    const {token} = useAuthContext();
+    axios.interceptors.request.use((request) => {
+            axios.defaults.withCredentials = true
+        if(token){
+            request.headers.Authorization = `Bearer ${token}`
+        }
+        return request;
+    })
+    
+    axios.interceptors.response.use(response => {
+        return response;
+    },error => {
+        if(error.response && error.response.status === 403){
+            navigate("/login")
+        }
+    })
     useEffect(() => {
          fetchProducts();
-         const cartId = getCookie('cart')
-         if(!cartId){
-             createCart();
-         }
     },[])
     return <>
         <NavBar />
