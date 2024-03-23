@@ -5,6 +5,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.finefoods.productmicroservice.dto.InventoryRequest;
 import com.finefoods.productmicroservice.dto.ProductRequest;
 import com.finefoods.productmicroservice.dto.ProductResponse;
 import com.finefoods.productmicroservice.model.Image;
@@ -14,11 +16,13 @@ import com.finefoods.productmicroservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
+
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
+
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,13 +36,17 @@ public class ProductServiceImp implements ProductService{
 
     private final ProductRepository productRepository;
     private final ImageRepository imageRepository;
+    private final ObjectMapper objectMapper;
 
     private final AmazonS3 amazonS3Client;
     @Value("${aws.bucket.name}")
     private String bucketName;
 
+    private final WebClient.Builder webClient;
+    @Value("${inventory.service.url}")
+    private String inventoryUri;
     @Override
-    public Boolean creatProduct(MultipartFile[] files, ProductRequest productRequest){
+    public Boolean creatProduct(MultipartFile[] files, ProductRequest productRequest) {
         Product product = Product.builder()
                 .brand(productRequest.getBrand())
                 .productName(productRequest.getProductName())
@@ -57,6 +65,25 @@ public class ProductServiceImp implements ProductService{
 
         Product savedProduct  = productRepository.save(product);
         uploadImages(files, savedProduct);
+
+        // Creating Inventory for the product that was created
+        InventoryRequest inventoryRequest = InventoryRequest.builder()
+                .productId(product.getProductId())
+                .stockUnit(product.getUnit()).build();
+
+                webClient.build().post()
+                        .uri(inventoryUri)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(inventoryRequest)
+                        .retrieve()
+                        .bodyToMono(String.class)
+                        .subscribe(responseBody -> {
+                            System.out.println("Response: " + responseBody);
+                        }, error -> {
+                            System.err.println("Error: " + error.getMessage());
+                        });
+
+
         return Boolean.TRUE;
     }
     @Override
