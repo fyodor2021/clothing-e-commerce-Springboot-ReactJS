@@ -6,6 +6,9 @@ import com.finefoods.reviewmicroservice.dto.ReviewResponse;
 import com.finefoods.reviewmicroservice.dto.UserResponse;
 import com.finefoods.reviewmicroservice.model.Review;
 import com.finefoods.reviewmicroservice.repository.ReviewRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwt;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,27 +23,25 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final WebClient.Builder webClientBuilder;
+    private final JwtService jwtService;
     @Value("${user-microservice.url}")
     private String userUri;
     @Value("${product-microservice.url}")
     private String productUri;
     @Override
-
-    public String createReview(ReviewRequest reviewRequest) {
-        UserResponse userLookup = validateUser(reviewRequest.getUserId());
+    public String createReview(ReviewRequest reviewRequest, String token) {
+         Claims tokenClaims = jwtService.extractAllGuestTokenClaims(token);
         ProductResponse productLookup = validateProduct(reviewRequest.getProductId());
-        if(userLookup != null ){
             if(productLookup != null){
                 reviewRepository.save(Review.builder()
                         .userId(reviewRequest.getUserId())
-                        .userFname(userLookup.getFname())
-                        .userLname(userLookup.getLname())
+                        .userFname(tokenClaims.get("firstName", String.class))
+                        .userLname(tokenClaims.get("lastName", String.class))
                         .productId(reviewRequest.getProductId())
                         .reviewBody(reviewRequest.getReviewBody())
                         .build());
                 return "review created successfully";
             }else return "product doesn't exist";
-        }else return "user doesn't exist";
     }
 
     @Override
@@ -65,7 +66,6 @@ public class ReviewServiceImpl implements ReviewService {
         if(reviewLookup != null) {
             reviewRepository.deleteById(reviewId);
             return "review deleted Successfully";
-
         }else{
             return "review Not Found";
         }
@@ -99,6 +99,7 @@ public class ReviewServiceImpl implements ReviewService {
                         .block()
         ).join();
     }
+
     private ProductResponse validateProduct(Long productId){
         return CompletableFuture.supplyAsync(() ->
                 webClientBuilder.build()

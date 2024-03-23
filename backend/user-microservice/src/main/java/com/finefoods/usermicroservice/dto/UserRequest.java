@@ -19,5 +19,6 @@ public class UserRequest {
     private DateOfBirth dateOfBirth;
     private String password;
     private String passwordRetype;
+    private String username;
 
 }

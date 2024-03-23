@@ -2,31 +2,50 @@ package com.finefoods.usermicroservice.service;
 
 import com.finefoods.usermicroservice.dto.UserRequest;
 import com.finefoods.usermicroservice.dto.UserResponse;
+import com.finefoods.usermicroservice.model.Cart;
 import com.finefoods.usermicroservice.model.DateOfBirth;
 import com.finefoods.usermicroservice.model.User;
 import com.finefoods.usermicroservice.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import java.net.http.HttpHeaders;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final WebClient.Builder webClientBuilder;
+    private final TokenService tokenService;
+    private final PasswordEncoder passwordEncoder;
+
+
+    @Value("${cart-microservice.url}")
+    private String cartUri;
     @Override
+    @Transactional
     public String createUser(UserRequest userRequest) throws Exception {
+        String token;
         User userLookup = userRepository
                 .findByFnameAndLnameAndAddress(userRequest.getFname()
-                        ,userRequest.getLname()
-                        ,userRequest.getAddress());
-        String hashedPassword = hashPassword(userRequest.getPassword());
+                        , userRequest.getLname()
+                        , userRequest.getAddress());
+
         if(userLookup == null){
             if(userRequest.getPassword().equals(userRequest.getPasswordRetype())){
                 User user = User.builder()
@@ -35,30 +54,43 @@ public class UserServiceImpl implements UserService {
                         .dateOfBirth(calToDate(userRequest.getDateOfBirth()))
                         .address(userRequest.getAddress())
                         .province(userRequest.getProvince())
-                        .password(hashedPassword)
+                        .password(passwordEncoder.encode(userRequest.getPassword()))
+                        .username(userRequest.getUsername())
                         .build();
-                userRepository.save(user);
+                User savedUser = userRepository.save(user);
+                token = tokenService.generateToken(savedUser.getUsername());
+//                Cart cart = Cart.builder()
+//                        .userId(savedUser.getUserId())
+//                        .build();
+//                String cartId = webClientBuilder.build()
+//                        .post()
+//                        .uri(cartUri)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .bodyValue(cart)
+//                        .retrieve()
+//                        .bodyToMono(String.class)
+//                        .block();
+                String hello = "";
             }else{
                 return "Passwords doesn't match";
             }
         }else{
             return "User Already Exists";
         }
-
-        return null;
+        return token;
     }
 
     @Override
     public String updateUser(Long userId, UserRequest userRequest) throws Exception{
         User userLookup = userRepository.findUserByUserId(userId);
         if(userLookup != null){
-            String hashedPassword = hashPassword(userRequest.getPassword());
             userLookup.setFname(userRequest.getFname());
             userLookup.setLname(userRequest.getLname());
+
             userLookup.setAddress(userRequest.getAddress());
             userLookup.setProvince(userRequest.getProvince());
             userLookup.setDateOfBirth(calToDate(userRequest.getDateOfBirth()));
-            userLookup.setPassword(hashedPassword);
+            userLookup.setPassword(passwordEncoder.encode(userRequest.getPassword()));
             userRepository.save(userLookup);
         }
 
@@ -85,24 +117,13 @@ public class UserServiceImpl implements UserService {
             return null;
         }
     }
-    @Override
-    public String getUserRole(Long userId){
-        User userLookup = userRepository.findUserByUserId(userId);
-        if(userLookup != null)return userLookup.getRole();
-        else return "User was not found";
-    }
-    private String hashPassword(String password) throws Exception{
-        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
 
-        messageDigest.update(password.getBytes());
+//    @Override
+//    public UserResponse getUserByUsername(String username) {
+//        return mapToUserResponse(userRepository.findUserByUsername(username));
+//    }
 
-        byte[] resultByteArray = messageDigest.digest();
-        StringBuilder sb =  new StringBuilder();
-        for(byte b: resultByteArray){
-            sb.append(String.format("%02x", b));
-        }
-        return sb.toString();
-    }
+
     private Date calToDate(DateOfBirth dob){
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, dob.getYear());

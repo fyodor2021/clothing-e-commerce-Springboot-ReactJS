@@ -4,7 +4,6 @@ export default function CartPage() {
     const { getCartProducts, cartProducts } = useCartContext();
     const checkoutPanel = document.getElementsByClassName('right-container');
     const handleScrollEvent = () => {
-        console.log(window.scrollY)
         if(window.scrollY > 100){
             checkoutPanel[0].classList.add('fix-checkout-panel')
         }else{
@@ -18,7 +17,7 @@ export default function CartPage() {
         return () => {
             window.removeEventListener('scroll', handleScrollEvent);
         };
-    }, [])
+    }, [window.location.pathname])
 
     const subTotal = cartProducts.reduce((acc, product) => {
         return acc + (product.currentPrice * product.quantity)

@@ -6,13 +6,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
 public class Product {
     private Long productId;
-//    private byte[] picture;
+    private List<String> imageList;
     private String brand;
     private String productName;
     private String description;
@@ -27,5 +29,5 @@ public class Product {
     private String skuCode;
     private String upcCode;
     private String vendor;
-
+    private int quantity;
 }

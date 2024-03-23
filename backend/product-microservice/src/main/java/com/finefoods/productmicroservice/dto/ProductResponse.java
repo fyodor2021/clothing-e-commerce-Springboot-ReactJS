@@ -7,11 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+
 public class ProductResponse {
     private Long productId;
     private List<byte[]> imageList;
