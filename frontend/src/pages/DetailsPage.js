@@ -21,10 +21,12 @@ export default function DetailsPage() {
     }
     const filterPanel = document.getElementsByClassName('details-content-container');
     const handleScrollEvent = () => {
-        if (window.scrollY > 100) {
-            filterPanel[0].classList.add('fix-detail-panel');
-        } else {
-            filterPanel[0].classList.remove('fix-detail-panel');
+        if(filterPanel[0]){
+            if (window.scrollY > 100) {
+                filterPanel[0].classList.add('fix-detail-panel');
+            } else {
+                filterPanel[0].classList.remove('fix-detail-panel');
+            }
         }
     }
 
@@ -34,11 +36,10 @@ export default function DetailsPage() {
 
                 window.addEventListener('scroll', handleScrollEvent);
             }
-
-            return () => {
-                window.removeEventListener('scroll', handleScrollEvent);
-            };
         }
+        return () => {
+            window.removeEventListener('scroll', handleScrollEvent);
+        };
 
     }, [isLoading, product]);
 
@@ -108,7 +109,6 @@ export default function DetailsPage() {
             event.preventDefault()
             addReview(
                 {
-                    userId: 15,
                     productId,
                     reviewBody: event.target[0].value
                 }

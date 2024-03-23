@@ -7,7 +7,10 @@
     --navArzColor: #5f1f00;
     --page-padding: 1rem
 }
-
+/* iframe
+{
+    display: none;
+} */
 html {
     margin: 0;
 }
@@ -54,9 +57,7 @@ body {
     font-size: 15px;
 }
 
-.nav-item-container> :nth-child(2):hover {
-    color: rgb(255, 0, 0);
-}
+
 
 .nav-item-container> :first-child {
     font-size: 1.5rem;
@@ -67,7 +68,9 @@ body {
     transition-timing-function: ease-in;
     color: #ffb100;
 }
-
+.nav-bar-item-signout:hover {
+    color: rgb(255, 0, 0);
+}
 .notification-panel {
     height: 70vh;
     width: 20vw;
@@ -259,8 +262,10 @@ body {
     border-radius: 10px;
     background-color: rgb(204, 204, 204);
     padding: 10px;
-    font-size: 25px;
+    font-size: 21px;
+    box-shadow: -8px 0.75rem 1rem -1rem black;
 }
+
 
 .input-component-container {
     width: 100%;
@@ -660,7 +665,7 @@ input[type="file"] {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    height: 90vh;
+    height: 100vh;
 }
 
 .reg-input-field {

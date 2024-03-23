@@ -1,16 +1,18 @@
 import { createContext } from "react";
 import axios from 'axios'
 import { useState } from 'react'
-import useUserContext from "../hooks/useUserContext";
+import useAuthContext from "../hooks/useAuthContext";
 const ProductContext = createContext();
 function ProductProvider({ children }) {
     const [products, setProducts] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [product, setProduct] = useState();
     const [reviews, setReviews] = useState([]);
-    const {fetchUser} = useUserContext();
+    const {fetchUser} = useAuthContext();
     const fetchProducts = () => {
-        axios.get("http://localhost:5000/api/product")
+        axios.get('/api/product',{
+            withCredentials:true
+        })
             .then((response) => {
                 setProducts(response.data)
                 setIsLoading(false)
@@ -20,8 +22,7 @@ function ProductProvider({ children }) {
     }
     const fetchProductDetails = (productId) => {
         setIsLoading(true)
-        console.log(productId)
-        const res = axios.get("http://localhost:5000/api/product/image/" + productId)
+        const res = axios.get("api/product/image/" + productId)
         .then((response) => {
             setProduct(response.data)
         })
@@ -29,7 +30,8 @@ function ProductProvider({ children }) {
     }
     const fetchProductReviews = (productId) => {
         setIsLoading(true)
-        const res = axios.get("http://localhost:3001/api/review/product/" + productId)
+        const res = axios.get("api/review/product/" + productId)
+
         .then((response) => {
             setReviews(response.data)
         })

@@ -1,0 +1,14 @@
+secured:
+
+
+
+
+
+
+free to access:
+    authentication-microservice:
+        http://localhost:8182
+            - /api/auth
+                - /register
+                - /authenticate
+                - /validate/{token}            

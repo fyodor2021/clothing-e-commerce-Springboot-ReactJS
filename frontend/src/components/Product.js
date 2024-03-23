@@ -9,7 +9,6 @@ export default function Product({ product }) {
     const handleCardClick = () => {
         navigate('/details/' + product.productId)
     }
-
     useEffect(() => {
         const renderedImages = product.imageList.map((image, key) => {
             return <img className="product-image" src={'data:image/jpeg;base64,' + image} key={key} width="100px" height="100px" />
@@ -18,7 +17,6 @@ export default function Product({ product }) {
     }, [])
     const handleAddToCart = (product) => {
         const addedProduct = {...product, quantity: 1}
-        console.log('clicked', addedProduct)
         addToCart(addedProduct)
     }
     return <div className="card-container">
