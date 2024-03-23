@@ -1,7 +1,7 @@
 package com.finefoods.ordermicroservice.model;
 
 import com.finefoods.ordermicroservice.dto.Product;
-import com.finefoods.ordermicroservice.dto.ProductResponse;
+//import com.finefoods.ordermicroservice.dto.ProductResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

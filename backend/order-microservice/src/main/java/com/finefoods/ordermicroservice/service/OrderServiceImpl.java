@@ -1,37 +1,51 @@
 package com.finefoods.ordermicroservice.service;
 
-import com.finefoods.ordermicroservice.communicationConfig.WebClientConfig;
 import com.finefoods.ordermicroservice.dto.*;
 import com.finefoods.ordermicroservice.model.Order;
 import com.finefoods.ordermicroservice.repository.OrderRepository;
-import lombok.Data;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
 
     @Value("${inventory.microservice.url}")
     private String inventoryUri;
+
+    @Value("${points.microservice.url}")
+    private String pointsUri;
+
+
+    @Value("${api.stripe.key}")
+    private String stripeKey;
     @Override
     public String placeOrder(OrderRequest orderRequest) {
         Boolean inStock = areProductInStock(orderRequest.getProducts());
         if (!inStock){
             return "Not all items are in stock";
         }
-        Boolean isPaid =payForOrder(orderRequest.getOrderTotal());
+        Boolean isPaid = null;
+        try {
+            isPaid = payForOrder(orderRequest.getOrderTotal(), orderRequest.getToken());
+        } catch (StripeException e) {
+            throw new RuntimeException(e);
+        }
         if (!isPaid){
             return "order is not paid for";
         }
@@ -46,11 +60,22 @@ public class OrderServiceImpl implements OrderService{
                 .build();
 
         orderRepository.save(order);
+
+        //sendToOrderHistory(order);
+        addPointsForUser(orderRequest.getNumOfPoints(), orderRequest.getUserId());
         return "order was placed successfully";
 
     }
-    public Boolean payForOrder(float total){
-        return false;
+    public Boolean payForOrder(float total, String token) throws StripeException {
+        Stripe.apiKey = stripeKey;
+        Map<String,Object> chargeParams = new HashMap<>();
+        chargeParams.put("amount", (int)total * 100);
+        chargeParams.put("currency","CAD");
+        chargeParams.put("source","tok_visa");
+        Charge charge = Charge.create(chargeParams);
+//        System.out.println("Charge" + charge);
+
+        return true;
     }
     public String cancelOrder(String orderId){return null;}
     public void updateOrderStatus(String orderId){
@@ -79,5 +104,21 @@ public class OrderServiceImpl implements OrderService{
         return true;
     }
 
-    private void sendToOrderHistory(){}
+    private void sendToOrderHistory(Order order){}
+    private void addPointsForUser(double numOfPoints, Long userId) {
+
+        webClientBuilder.build()
+                .post()
+                .uri(pointsUri+ "/add/" + userId + "/" + numOfPoints)
+                .retrieve()
+                .bodyToMono(Void.class) 
+                .subscribe(
+                        response -> {
+                            System.out.println("Points added successfully");
+                        },
+                        error -> {
+                            System.err.println("Error adding points: " + error.getMessage());
+                        }
+                );
+    }
 }

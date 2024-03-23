@@ -17,5 +17,6 @@ public class OrderRequest {
     private long userId;
     private float orderTotal;
     private List<Product> products;
-
+    private String token;
+    private double numOfPoints;
 }

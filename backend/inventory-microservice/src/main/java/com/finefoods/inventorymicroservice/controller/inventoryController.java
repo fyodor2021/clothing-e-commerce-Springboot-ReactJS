@@ -49,7 +49,7 @@ public class inventoryController {
         inventoryService.deleteInventory(productId);
     }
 
-    @GetMapping("/stock")
+    @PostMapping("/stock")
     public List<ProductAvailability> areProductsInStock(@RequestBody List<InventoryRequest> inventoryRequests){
         return inventoryService.areProductsInStock(inventoryRequests);
     }
