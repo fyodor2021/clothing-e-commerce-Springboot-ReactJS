@@ -8,6 +8,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 @RequiredArgsConstructor
 public class InventoryServiceImpl {
-    private final InventoryRepository inventoryRepository;
+//    private final InventoryRepository inventoryRepository;
     private final WebClient.Builder webClientBuilder;
 }
