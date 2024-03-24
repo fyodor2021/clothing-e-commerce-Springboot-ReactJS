@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
 import axios from 'axios'
 import { useState } from 'react'
 import { useCookies } from "react-cookie";
@@ -11,7 +11,7 @@ function AuthProvider({ children }) {
     const navigate = useNavigate();
     const {valMessage, setValMessage} = useGeneralContext();
     const [cookies, setCookie, removeCookie] = useCookies(['SESSION']);
-    const token = window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
+    const [token,setToken] = useState('');    
     const fetchUser = (userId) => {
         const res = axios.get("api/user/" + userId)
         .then((response) => {
@@ -27,17 +27,15 @@ function AuthProvider({ children }) {
                     return "User Exists"
                 }
                 })
-            
-
     }
     const login = (user) => {
         const res = axios.post("/api/auth/authenticate", user)
         .then(res => {
             if(res){
-                console.log(res.data.token)
                 window.localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL, res.data.token)
                 removeCookie('SESSION')
-                navigate('/')
+                setToken(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL))
+                window.location.reload();
             }else{
                     setValMessage("User Not Found!")
                 }
@@ -46,7 +44,7 @@ function AuthProvider({ children }) {
         )
     }
     const valueProvided = {
-        fetchUser,user,register,login,token
+        fetchUser,user,register,login,token,setToken
     }
     return <AuthContext.Provider value={valueProvided}>
                 {children}

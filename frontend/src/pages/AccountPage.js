@@ -9,7 +9,7 @@ export default function AccountPage() {
 
     }
     const handleSignOut = () => {
-        navigate('/login')
+        
     }
     return (
         <div>

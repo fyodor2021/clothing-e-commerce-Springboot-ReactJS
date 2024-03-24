@@ -8,18 +8,18 @@ import useGeneralContext from '../hooks/useGeneralContext';
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    useEffect(() => {
+        if(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)){
+            navigate("/")
+        }
+    },[])
     const {login,token} = useAuthContext();
-
         const {valMessage,setValMessage} = useGeneralContext();
-        useEffect(() => {
-            if(token){
-                navigate("/")
-            }
-        },[])
     const navigate = useNavigate();
     const handleRegisterNavigate = () => {
         navigate('/register')
     }
+
     const onFormSubmit = async (event) => {
         event.preventDefault();
         if (!username || !password) {

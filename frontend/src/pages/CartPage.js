@@ -17,7 +17,7 @@ export default function CartPage() {
         return () => {
             window.removeEventListener('scroll', handleScrollEvent);
         };
-    }, [window.location.pathname])
+    }, [])
 
     const subTotal = cartProducts.reduce((acc, product) => {
         return acc + (product.currentPrice * product.quantity)

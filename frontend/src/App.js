@@ -15,14 +15,23 @@ import useProductContext from "./hooks/useProductContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useAuthContext from "./hooks/useAuthContext";
-export default function App() {
+export default function App({indexToken}) {
     const {fetchProducts} = useProductContext()
+    const {token, setToken} = useAuthContext();
     const navigate = useNavigate();
-    const {token} = useAuthContext();
+    useEffect(() => {
+        fetchProducts();
+    },[])
+    // console.log("this is the auth token: ", token)
+    // console.log("this is the index toke: ", indexToken)
+    // console.log(token)
     axios.interceptors.request.use((request) => {
-            axios.defaults.withCredentials = true
+    axios.defaults.withCredentials = true
+    const token = window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
         if(token){
             request.headers.Authorization = `Bearer ${token}`
+        }else{
+            return request;
         }
         return request;
     })
@@ -30,13 +39,11 @@ export default function App() {
     axios.interceptors.response.use(response => {
         return response;
     },error => {
-        if(error.response && error.response.status === 403){
-            navigate("/login")
-        }
+        // if(error.response && error.response.status == 403){
+        //     navigate("/login")
+        // }
     })
-    useEffect(() => {
-         fetchProducts();
-    },[])
+
     return <>
         <NavBar />
         <DepartNav />

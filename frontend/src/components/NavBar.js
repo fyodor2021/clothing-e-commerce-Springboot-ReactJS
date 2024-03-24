@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import OrdersPage from '../pages/OrdersPage';
@@ -15,24 +15,18 @@ import userAvatar from '../statics/user-avatar.png'
 import useAuthContext from '../hooks/useAuthContext';
 export default function NavBar() {
     const [menu, setMenu] = useState(false)
-    const {token,setToken} = useAuthContext();
     const [notificationPanel, setNotificationPanel] = useState(false);
     const navigate = useNavigate();
     const handleMenuToggle = () => {
         setMenu(!menu)
     }
-    console.log(token)
     const handleNotificationExpand = () => {
         setNotificationPanel(!notificationPanel)
     }
     const handleSignout = () => {
         window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
-        token = ''
-        // navigate('/')
-        // window.location.reload()
-
+        window.location.replace('/')
     }
-
     const notiItem = <div>
         <div className='noti-user-avatar'>
             <img src={userAvatar} />
@@ -69,8 +63,8 @@ export default function NavBar() {
             <div className='nav-item-container' >
                 <MdOutlineNotifications className='nav-bar-item' onClick={handleNotificationExpand} />
 {
-    token ? 
-    <Link className=' nav-bar-item-signout nav-bar-item' onClick={handleSignout} to={'/login'} element={<LoginPage />}>Sign-out</Link> :
+    window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL) ? 
+    <Link className=' nav-bar-item-signout nav-bar-item' onClick={handleSignout}>Sign-out</Link> :
     <Link className='nav-bar-item' to={'/login'} element={<LoginPage />}>Login</Link>
 }
                 <Link className='nav-bar-item' to={'/orders'} element={<OrdersPage />}>My Orders</Link>

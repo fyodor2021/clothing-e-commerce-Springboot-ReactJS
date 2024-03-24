@@ -44,7 +44,7 @@ function CartProvider({ children }) {
     }
     const getCartProducts = () => {
         axios.get(`api/cart/products`,{withCredentials: true})
-        .then(res => setCartProducts(res.data))
+        .then(res => {if(res){setCartProducts(res.data)}})
     }
     const valueProvided = {
         addToCart,
