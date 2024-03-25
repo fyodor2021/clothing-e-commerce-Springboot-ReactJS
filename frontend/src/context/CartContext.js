@@ -40,17 +40,27 @@ function CartProvider({ children }) {
 // }).then(res => console.log(res.data));
 //     }
     const addToCart = (product) => {
-        axios.post("api/cart/add", {product}).then(res => console.log(res))
+        axios.post("api/cart/add", {product}).then(res => getCartProducts())
     }
     const getCartProducts = () => {
         axios.get(`api/cart/products`,{withCredentials: true})
         .then(res => {if(res){setCartProducts(res.data)}})
     }
+    const productCountDecrement = (incDecRequest) => {
+        axios.post("api/cart/product/dec",incDecRequest).then(res => getCartProducts())
+    }
+    const productCountIncrement = (incDecRequest) => {
+        axios.post("api/cart/product/inc",incDecRequest).then(res => getCartProducts())
+    }
     const valueProvided = {
         addToCart,
         getCartProducts,
         cartProducts,
-    }
+        productCountDecrement,
+        productCountIncrement
+    }   
+
+    
     return <CartContext.Provider value={valueProvided}>
                 {children}
         </CartContext.Provider>

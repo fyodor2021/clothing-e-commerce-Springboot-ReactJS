@@ -105,3 +105,29 @@ Sales department Pov:
    - creating a product add page to 
 
 Admin Pov:
+
+
+
+
+
+
+what is left to finish customer:
+ 1- adding cards to wallet;
+ 2- adding points to product;
+ 3- adding notifications and emails (low priority);
+ 4- adding checkout page and payment page and order details confirmation page;
+    - payment;
+    - cart items;
+ 5- guest checkout (low priority);
+ 6- placing an order;
+    - 
+ 7- account related crud operations;
+ 8- dispalying active orders;
+ 9- searching througth the website;
+ 10-filters;
+ 11-seeding the databases;
+ 12-category bar;
+ 13-implementing sliders in the cart and checkout page;
+ 14-paying with points
+ 15-displaying the points in the checkout;
+ 16-flyer microservice and page;

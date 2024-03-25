@@ -34,5 +34,4 @@ public class Product {
     private String skuCode;
     private String upcCode;
     private String vendor;
-
 }

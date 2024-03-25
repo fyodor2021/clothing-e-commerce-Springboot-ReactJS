@@ -7,17 +7,11 @@ import useGeneralContext from "../hooks/useGeneralContext";
 
 const AuthContext = createContext();
 function AuthProvider({ children }) {
-    const [user, setUser] = useState();
     const navigate = useNavigate();
-    const {valMessage, setValMessage} = useGeneralContext();
-    const [cookies, setCookie, removeCookie] = useCookies(['SESSION']);
+    const {setValMessage} = useGeneralContext();
+    const [cookie, setCookie, removeCookie] = useCookies(['SESSION']);
+    const [loggedUser, setLoggedUser] = useState();
     const [token,setToken] = useState('');    
-    const fetchUser = (userId) => {
-        const res = axios.get("api/user/" + userId)
-        .then((response) => {
-            setUser(response.data)
-        })
-    }
     const register =(user) => {
         const res = axios.post("api/auth/register", user)
                 .then(res => {
@@ -43,8 +37,12 @@ function AuthProvider({ children }) {
             
         )
     }
-    const valueProvided = {
-        fetchUser,user,register,login,token,setToken
+    const signout = () => {
+        window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
+        window.location.replace('/')
+    }
+    const valueProvided = { 
+        register,login,token,setToken,signout, setLoggedUser,loggedUser
     }
     return <AuthContext.Provider value={valueProvided}>
                 {children}

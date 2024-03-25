@@ -13,9 +13,12 @@ import { useEffect, useState } from 'react'
 import arzBrand from '../statics/arz-brand.png'
 import userAvatar from '../statics/user-avatar.png'
 import useAuthContext from '../hooks/useAuthContext';
+import useCartContext from '../hooks/useCartContext';
 export default function NavBar() {
     const [menu, setMenu] = useState(false)
     const [notificationPanel, setNotificationPanel] = useState(false);
+    const {cartProducts} = useCartContext();
+    const {signout} = useAuthContext();
     const navigate = useNavigate();
     const handleMenuToggle = () => {
         setMenu(!menu)
@@ -24,8 +27,7 @@ export default function NavBar() {
         setNotificationPanel(!notificationPanel)
     }
     const handleSignout = () => {
-        window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
-        window.location.replace('/')
+        signout();
     }
     const notiItem = <div>
         <div className='noti-user-avatar'>
@@ -41,6 +43,12 @@ export default function NavBar() {
             </div>
         </div>
     </div>
+    let productCount;
+        if(cartProducts){
+            productCount  = cartProducts.reduce((acc, curr) => {
+                return parseInt(acc,10) + parseInt(curr.quantity,10)
+            },[0])
+        }
     return (
         <div className='nav-container'>
             <div>
@@ -68,9 +76,12 @@ export default function NavBar() {
     <Link className='nav-bar-item' to={'/login'} element={<LoginPage />}>Login</Link>
 }
                 <Link className='nav-bar-item' to={'/orders'} element={<OrdersPage />}>My Orders</Link>
-                <Link className='nav-bar-item' to={'/account'} element={<AccountPage />}>Account</Link>
+                {window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL) ? <Link className='nav-bar-item' to={'/account'} element={<AccountPage />}>Account</Link> : ''}
                 <Link className='nav-bar-item' to={'/about'} element={<AboutPage />}>About</Link>
-                <Link className='nav-bar-item' to={'/cart'} element={<CartPage />}><BsCart4 /></Link>
+                <Link className='nav-bar-item' to={'/cart'} element={<CartPage />}>
+                    {productCount != 0 ? <span className='cart-product-count' style={{backgroundColor: "red"}} >{productCount}</span> : ''}
+                    <span className='cart-icon'><BsCart4 /></span>
+                    </Link>
             </div>
             {notificationPanel ?
                 <div className='notification-panel'>

@@ -3,6 +3,7 @@ package com.finefoods.cartmicroservice.service;
 import com.finefoods.cartmicroservice.dto.AddToCartRequest;
 import com.finefoods.cartmicroservice.dto.CartRequest;
 import com.finefoods.cartmicroservice.dto.CartResponse;
+import com.finefoods.cartmicroservice.dto.IncDecRequest;
 import com.finefoods.cartmicroservice.model.Cart;
 import com.finefoods.cartmicroservice.model.Product;
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +20,8 @@ public interface CartService {
 //    void deleteProductInCart(Long productId, String cartId);
 //    void deleteAllProductsInCart(String cartId);
 //
+void decrementProductCount(IncDecRequest incDecRequest);
+    void incrementProductCount(IncDecRequest incDecRequest);
     List<Product> getProductsInCart(String headerValue);
 //    CartResponse getCartBySessionId(String sessionId);
 //    CartResponse getCartByUserId(Long id);

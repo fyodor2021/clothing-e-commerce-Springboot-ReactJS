@@ -17,6 +17,8 @@ public class RouteValidator {
             "/api/review/product/",
             "/api/cart/add",
             "/api/cart/products",
+            "/api/cart/product/inc",
+            "/api/cart/product/dec",
             "/eureka"
     );
 

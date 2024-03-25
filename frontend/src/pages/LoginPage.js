@@ -31,7 +31,7 @@ export default function Login() {
                 setValMessage('Not a valid password');
             } else {
                 const user = {
-                    email:username,
+                    email:username.toLowerCase(),
                     password,
                 }
                 const res = login(user)

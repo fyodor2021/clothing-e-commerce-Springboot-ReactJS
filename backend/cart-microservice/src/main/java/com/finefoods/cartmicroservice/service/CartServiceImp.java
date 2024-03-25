@@ -4,6 +4,7 @@ package com.finefoods.cartmicroservice.service;
 import com.finefoods.cartmicroservice.dto.AddToCartRequest;
 import com.finefoods.cartmicroservice.dto.CartRequest;
 import com.finefoods.cartmicroservice.dto.CartResponse;
+import com.finefoods.cartmicroservice.dto.IncDecRequest;
 import com.finefoods.cartmicroservice.model.Cart;
 import com.finefoods.cartmicroservice.model.Product;
 import com.finefoods.cartmicroservice.repository.CartRepository;
@@ -104,7 +105,38 @@ public class CartServiceImp implements CartService {
 
     }
 
-//    public void deleteCart(String cartId){
+    @Override
+    public void decrementProductCount(IncDecRequest incDecRequest) {
+        Cart cart = cartRepository.findCartByHeaderValue(incDecRequest.getHeaderValue());
+
+        if(cart != null){
+            for(Product product: cart.getProducts()){
+                if(product.getProductId().equals(incDecRequest.getProductId())){
+
+                    product.setQuantity(product.getQuantity() - 1);
+                    if(product.getQuantity() == 0){
+                        cart.getProducts().remove(product);
+                    }
+                    cartRepository.save(cart);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void incrementProductCount(IncDecRequest incDecRequest) {
+        Cart cart = cartRepository.findCartByHeaderValue(incDecRequest.getHeaderValue());
+        if(cart != null){
+            for(Product product: cart.getProducts()){
+                if(product.getProductId().equals(incDecRequest.getProductId())){
+                    product.setQuantity(product.getQuantity() + 1);
+                    cartRepository.save(cart);
+                }
+            }
+        }
+    }
+
+    //    public void deleteCart(String cartId){
 //        Cart doesExist  = cartRepository.findCartByCartId(cartId);
 //        if (doesExist != null ){
 //            cartRepository.deleteCartByCartId(cartId);

@@ -15,12 +15,19 @@ import useProductContext from "./hooks/useProductContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useAuthContext from "./hooks/useAuthContext";
+import useCartContext from "./hooks/useCartContext";
 export default function App({indexToken}) {
     const {fetchProducts} = useProductContext()
-    const {token, setToken} = useAuthContext();
+    const {getCartProducts} = useCartContext();
+    const {setLoggedUser} = useAuthContext();
     const navigate = useNavigate();
     useEffect(() => {
+        getCartProducts();
         fetchProducts();
+        if(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)){
+            axios.get('/api/auth/user').then(res => setLoggedUser(res.data))
+
+        }
     },[])
     // console.log("this is the auth token: ", token)
     // console.log("this is the index toke: ", indexToken)

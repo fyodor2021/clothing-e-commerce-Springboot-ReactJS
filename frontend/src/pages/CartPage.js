@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import useCartContext from "../hooks/useCartContext"
+import CartProduct from "../components/CartProduct";
 export default function CartPage() {
     const { getCartProducts, cartProducts } = useCartContext();
     const checkoutPanel = document.getElementsByClassName('right-container');
@@ -27,24 +28,7 @@ export default function CartPage() {
     console.log(total)
 
     const renderedProducts = cartProducts.map((product, key) => {
-        console.log(cartProducts)
-
-        return <div key={key}>
-            <div className="cart-product-fields">
-                <img className="cart-product-image" src={'data:image/jpeg;base64,' + product.imageList[0]} />
-            </div>
-            <div>
-                <p>{product.description}</p>
-                <p>{product.size} {product.unit}</p>
-                <p>${product.currentPrice}</p>
-                <div className="qty-field">
-                    <p>-</p>
-                    <p>{product.quantity}</p>
-                    <p>+</p>
-                </div>
-            </div>
-
-        </div>
+        return <CartProduct key={key} product={product}/>
     })
 
     console.log(subTotal)

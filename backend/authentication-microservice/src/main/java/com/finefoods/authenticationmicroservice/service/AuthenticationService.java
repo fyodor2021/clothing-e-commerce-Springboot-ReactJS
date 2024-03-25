@@ -4,6 +4,7 @@ import com.finefoods.authenticationmicroservice.Repository.UserRepository;
 import com.finefoods.authenticationmicroservice.dto.AuthenticationRequest;
 import com.finefoods.authenticationmicroservice.dto.AuthenticationResponse;
 import com.finefoods.authenticationmicroservice.dto.RegisterRequest;
+import com.finefoods.authenticationmicroservice.dto.UserResponse;
 import com.finefoods.authenticationmicroservice.model.Role;
 import com.finefoods.authenticationmicroservice.model.User;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -80,5 +82,15 @@ public class AuthenticationService {
         }else{
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
+    }
+    public UserResponse getLoggedInUser(String authHeader){
+        String username = jwtService.extractUsername(authHeader);
+        User user = userRepository.findUserByEmail(username);
+        return UserResponse.builder()
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .email(user.getEmail())
+                .address(user.getAddress())
+                .build();
     }
 }
