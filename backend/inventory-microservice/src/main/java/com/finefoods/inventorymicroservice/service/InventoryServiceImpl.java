@@ -27,6 +27,7 @@ public class InventoryServiceImpl implements InventoryService {
         }
     }
     public void updateInventory(InventoryRequest inventoryRequest){
+
         Inventory inventoryExists = inventoryRepository.findByProductId(inventoryRequest.getProductId());
         if (inventoryExists != null){
             inventoryExists.setStock(inventoryRequest.getStock());
@@ -34,21 +35,25 @@ public class InventoryServiceImpl implements InventoryService {
         }
     }
 
-    public void updateInventoryAfterPurchase(InventoryRequest inventoryRequest){
-        Inventory inventoryExists = inventoryRepository.findByProductId(inventoryRequest.getProductId());
-        if (inventoryExists != null){
-            float newStock = inventoryExists.getStock() - inventoryRequest.getStock();
-            inventoryExists.setStock(newStock);
-            inventoryRepository.save(inventoryExists);
-        }
+    public void updateInventoryAfterPurchase(List<InventoryRequest> inventoryRequests){
+        for (InventoryRequest inventoryRequest : inventoryRequests){
+            Inventory inventoryExists = inventoryRepository.findByProductId(inventoryRequest.getProductId());
+            if (inventoryExists != null){
+                float newStock = inventoryExists.getStock() - inventoryRequest.getStock();
+                inventoryExists.setStock(newStock);
+                inventoryRepository.save(inventoryExists);
+            }
 
+        }
     }
-    public void updateInventoryAfterCancellation(InventoryRequest inventoryRequest){
-        Inventory inventoryExists = inventoryRepository.findByProductId(inventoryRequest.getProductId());
+    public void updateInventoryAfterCancellation(List<InventoryRequest> inventoryRequests){
+        for (InventoryRequest inventoryRequest : inventoryRequests){
+            Inventory inventoryExists = inventoryRepository.findByProductId(inventoryRequest.getProductId());
         if (inventoryExists != null){
             float newStock = inventoryExists.getStock() + inventoryRequest.getStock();
             inventoryExists.setStock(newStock);
             inventoryRepository.save(inventoryExists);
+        }
         }
     }
 

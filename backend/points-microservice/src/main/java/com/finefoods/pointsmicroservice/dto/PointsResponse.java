@@ -12,7 +12,7 @@ import java.math.BigInteger;
 @NoArgsConstructor
 public class PointsResponse {
     private Long pointsId;
-    private Long userId;
+    private String userEmail;
     private double numberOfPoints;
 
 }

@@ -28,12 +28,12 @@ public class inventoryController {
     }
 
     @PutMapping("/purchase")
-    public void updateInventoryAfterPurchase(@RequestBody InventoryRequest inventoryRequest){
-        inventoryService.updateInventoryAfterPurchase(inventoryRequest);
+    public void updateInventoryAfterPurchase(@RequestBody List<InventoryRequest> inventoryRequests){
+        inventoryService.updateInventoryAfterPurchase(inventoryRequests);
     }
     @PutMapping("/cancel")
-    public void updateInventoryAfterCancellation(@RequestBody InventoryRequest inventoryRequest){
-        inventoryService.updateInventoryAfterCancellation(inventoryRequest);
+    public void updateInventoryAfterCancellation(@RequestBody List<InventoryRequest> inventoryRequests){
+        inventoryService.updateInventoryAfterCancellation(inventoryRequests);
     }
     @GetMapping("/{productId}")
     public InventoryResponse getInventoryByProductId(@PathVariable long productId){

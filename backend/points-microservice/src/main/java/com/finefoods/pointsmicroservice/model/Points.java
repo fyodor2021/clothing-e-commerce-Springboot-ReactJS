@@ -21,6 +21,6 @@ public class Points {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pointsId;
-    private Long userId;
+    private String userEmail;
     private double numberOfPoints;
 }

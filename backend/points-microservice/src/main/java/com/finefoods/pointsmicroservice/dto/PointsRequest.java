@@ -14,7 +14,8 @@ import java.math.BigInteger;
 @NoArgsConstructor
 public class PointsRequest {
         private Long pointsId;
-        private Long userId;
+        private String userEmail;
         private double numberOfPoints;
+        private String method;
 
 }
