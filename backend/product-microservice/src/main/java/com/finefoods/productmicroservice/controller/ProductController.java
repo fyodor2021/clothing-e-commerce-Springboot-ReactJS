@@ -25,11 +25,8 @@ import java.util.Optional;
 @RestController
 @Slf4j
 @RequestMapping("/api/product")
-
 public class ProductController {
-
     private final ProductServiceImp productService;
-
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public String creatProduct (@RequestParam("files") MultipartFile[] files,

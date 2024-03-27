@@ -2,6 +2,7 @@ package com.finefoods.cartmicroservice.controller;
 
 
 import com.finefoods.cartmicroservice.dto.AddToCartRequest;
+import com.finefoods.cartmicroservice.dto.IncDecRequest;
 import com.finefoods.cartmicroservice.model.Cart;
 import com.finefoods.cartmicroservice.model.Product;
 import com.finefoods.cartmicroservice.service.CartServiceImp;
@@ -29,7 +30,8 @@ public class CartController {
     @PostMapping("/add")
     public void addToCart(@RequestBody AddToCartRequest addToCartRequest,
                           @RequestHeader(value = "Authorization", defaultValue = "") String authHeader,
-                          @RequestHeader(value = "Cookie",defaultValue = "") String cookieHeader){
+                          @RequestHeader(value = "Cookie",defaultValue = "") String cookieHeader)
+    {
 
         if(!cookieHeader.isEmpty() && !cookieHeader.contains(";")){
             String cookie = cookieHeader.substring(8);
@@ -73,7 +75,22 @@ public class CartController {
         }
         return null;
     }
-
+    @PostMapping("/product/inc")
+    public void incrementProductCount(@RequestBody IncDecRequest incDecRequest){
+        String username = jwtService.extractUsername(incDecRequest.getHeaderValue());
+        if(!username.equals("guest")){
+            incDecRequest.setHeaderValue(username);
+        }
+    cartService.incrementProductCount(incDecRequest);
+    }
+    @PostMapping("/product/dec")
+    public void decrementProductCount(@RequestBody IncDecRequest incDecRequest){
+        String username = jwtService.extractUsername(incDecRequest.getHeaderValue());
+        if(!username.equals("guest")){
+            incDecRequest.setHeaderValue(username);
+        }
+    cartService.decrementProductCount(incDecRequest);
+    }
 //    @GetMapping("/{sessionId}")
 //    public CartResponse getCartBySessionId(@PathVariable String sessionId){
 //        return cartService.getCartBySessionId(sessionId);

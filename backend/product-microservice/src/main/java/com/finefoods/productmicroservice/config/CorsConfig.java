@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.time.Duration;
+
 @Configuration
 public class CorsConfig {
     @Bean
@@ -17,7 +19,7 @@ public class CorsConfig {
                         .allowedMethods("GET")
                         .allowCredentials(true)
                         .allowedHeaders("Origin", "X-Requested-With", "Content-Type", "Accept")
-                        .maxAge(3600);
+                        .maxAge(System.currentTimeMillis() + 1000 * 60 * 60 * 24);
             }
         };
     }

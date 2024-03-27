@@ -56,8 +56,25 @@ body {
     text-decoration: none;
     font-size: 15px;
 }
-
-
+.cart-product-count{
+    background-color: red;
+    position: absolute;
+    top: 21px;
+    z-index: 9999;
+    right: 31px;
+    border-radius: 50%;
+    padding: 3px;
+    display: flex;
+    font-size: 10px;
+    justify-content: center;
+    align-items: center;
+    height: 19px;
+    width: 19px;
+}
+.cart-icon{
+    position: relative;
+    font-size: 23px;
+}
 
 .nav-item-container> :first-child {
     font-size: 1.5rem;
@@ -296,6 +313,16 @@ body {
     border: none;
     border-radius: 10px;
 }
+.button:active {
+    position: relative;
+    overflow: hidden;
+    width: 100px;
+    height: 50px;
+    margin: 10px;
+    background-color: #f7eacc;
+    border: none;
+    border-radius: 10px;
+}
 
 input[type="file"] {
     position: absolute;
@@ -433,7 +460,7 @@ input[type="file"] {
     flex-wrap: wrap;
 }
 
-.card-container:first-child:hover {
+.card-container:hover {
     transform: translate3D(0, -1px, 0) scale(1.10);
     cursor: pointer;
 }
@@ -865,18 +892,19 @@ input[type="file"] {
     align-items: center;
     width: 99vw;
     padding: var(--page-padding);
+    height: 67vh;
 
 }
 
 .account-page-wrapper {
     display: flex;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
     height: 70rem;
     width: 80vw;
-    background-color: rgba(199, 199, 199, .3);
+    background-color: rgb(43 42 42 / 30%);
     border-radius: 2rem;
-    box-shadow: 1px 0rem 3rem -0.75rem black;
+    box-shadow: 0px 0rem 1.5rem 0rem black;
     flex: 1 0 100%
 }
 
@@ -885,23 +913,24 @@ input[type="file"] {
 }
 
 .account-page-item {
-    margin: 1.5rem 2rem;
-    padding: .15rem 4rem;
-    background-color: rgb(224, 224, 224);
+    margin: 1rem 2rem;
+    padding: 1rem 2rem;
+    background-color: rgb(255 255 255);
     border-radius: 2rem;
 }
 
 .account-page-item:not(:last-child) {
     border-right: 1px solid rgba(199, 199, 199, .7);
-    box-shadow: 0 .5rem 1rem -0.75rem black;
-
 }
 
 .account-page-item>* {
     padding: .5rem;
-    border-radius: .75rem;
     margin: .05rem;
 
+}
+.account-page-headers{
+    font-weight: bold;
+    font-size: 1.5rem;
 }
 
 .fix-detail-panel {
@@ -915,23 +944,19 @@ input[type="file"] {
 
 .account-page-item>h1:last-child:hover {
     cursor: pointer;
-    box-shadow: 0 1.5rem 3rem -0.75rem black;
-    background-color: rgba(255, 0, 0, 0.5);
+    background-color: rgba(255, 0, 0, 0.767);
     border-radius: .75rem;
-    transition: .3s ease;
 
 }
 
 .account-page-item>div>h1:hover {
     cursor: pointer;
-    box-shadow: 0 1.5rem 3rem -0.75rem black;
-    background-color: rgba(255, 177, 0, .5);
+    background-color: rgb(43 42 42 / 30%);
     border-radius: .75rem;
-    transition: .3s ease;
 }
 
 .account-page-item>div>* {
-    padding: .25rem;
+    font-size: 1.25rem;
 }
 
 .review-wrapper {
@@ -976,6 +1001,16 @@ input[type="file"] {
 }
 .review-box:focus-visible{
     outline: 1px solid gray;
+}
+.account-info-label{
+    color: gray;
+    font-size: 15px;
+}
+.account-info-item{
+    padding: 2rem;
+}
+.account-info-item:not(:last-child){
+    border-bottom: 1px solid gray;
 }
 /* height: 5rem;
     width: 10rem;

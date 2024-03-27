@@ -35,5 +35,4 @@ public class Product {
     private String upcCode;
     private String vendor;
     private double points;
-
 }

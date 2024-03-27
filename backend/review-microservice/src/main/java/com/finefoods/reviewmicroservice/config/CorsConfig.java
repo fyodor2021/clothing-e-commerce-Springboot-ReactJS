@@ -17,7 +17,8 @@ public class CorsConfig {
                         .allowedMethods("GET","POST")
                         .allowCredentials(true)
                         .allowedHeaders("Origin", "X-Requested-With", "Content-Type", "Accept")
-                        .maxAge(3600);
+                        .maxAge(System.currentTimeMillis() + 1000 * 60 * 60 * 24);
+
             }
         };
     }

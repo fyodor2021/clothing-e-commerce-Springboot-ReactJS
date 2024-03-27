@@ -7,9 +7,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface WalletRepository extends JpaRepository<Wallet, Long> {
-
     Wallet findByCardNumber(String cardNumber);
     List<Wallet> findWalletByUserId(Long userId);
     Wallet findWalletByWalletId(Long walletId);
-
 }

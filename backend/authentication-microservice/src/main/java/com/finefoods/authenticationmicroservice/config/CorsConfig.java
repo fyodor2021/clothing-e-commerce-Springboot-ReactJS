@@ -16,7 +16,8 @@ public class CorsConfig {
                         .allowedOrigins("*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowCredentials(true)
-                        .allowedHeaders("Origin", "X-Requested-With", "Content-Type", "Accept");
+                        .allowedHeaders("Origin", "X-Requested-With", "Content-Type", "Accept")
+                        .maxAge(System.currentTimeMillis() + 1000 * 60 *60 * 24);
             }
         };
     }

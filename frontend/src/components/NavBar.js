@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import OrdersPage from '../pages/OrdersPage';
@@ -13,26 +13,22 @@ import { useEffect, useState } from 'react'
 import arzBrand from '../statics/arz-brand.png'
 import userAvatar from '../statics/user-avatar.png'
 import useAuthContext from '../hooks/useAuthContext';
+import useCartContext from '../hooks/useCartContext';
 export default function NavBar() {
     const [menu, setMenu] = useState(false)
-    const {token,setToken} = useAuthContext();
     const [notificationPanel, setNotificationPanel] = useState(false);
+    const {cartProducts} = useCartContext();
+    const {signout} = useAuthContext();
     const navigate = useNavigate();
     const handleMenuToggle = () => {
         setMenu(!menu)
     }
-    console.log(token)
     const handleNotificationExpand = () => {
         setNotificationPanel(!notificationPanel)
     }
     const handleSignout = () => {
-        window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
-        token = ''
-        // navigate('/')
-        // window.location.reload()
-
+        signout();
     }
-
     const notiItem = <div>
         <div className='noti-user-avatar'>
             <img src={userAvatar} />
@@ -47,6 +43,12 @@ export default function NavBar() {
             </div>
         </div>
     </div>
+    let productCount;
+        if(cartProducts){
+            productCount  = cartProducts.reduce((acc, curr) => {
+                return parseInt(acc,10) + parseInt(curr.quantity,10)
+            },[0])
+        }
     return (
         <div className='nav-container'>
             <div>
@@ -69,14 +71,17 @@ export default function NavBar() {
             <div className='nav-item-container' >
                 <MdOutlineNotifications className='nav-bar-item' onClick={handleNotificationExpand} />
 {
-    token ? 
-    <Link className=' nav-bar-item-signout nav-bar-item' onClick={handleSignout} to={'/login'} element={<LoginPage />}>Sign-out</Link> :
+    window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL) ? 
+    <Link className=' nav-bar-item-signout nav-bar-item' onClick={handleSignout}>Sign-out</Link> :
     <Link className='nav-bar-item' to={'/login'} element={<LoginPage />}>Login</Link>
 }
                 <Link className='nav-bar-item' to={'/orders'} element={<OrdersPage />}>My Orders</Link>
-                <Link className='nav-bar-item' to={'/account'} element={<AccountPage />}>Account</Link>
+                {window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL) ? <Link className='nav-bar-item' to={'/account'} element={<AccountPage />}>Account</Link> : ''}
                 <Link className='nav-bar-item' to={'/about'} element={<AboutPage />}>About</Link>
-                <Link className='nav-bar-item' to={'/cart'} element={<CartPage />}><BsCart4 /></Link>
+                <Link className='nav-bar-item' to={'/cart'} element={<CartPage />}>
+                    {productCount != 0 ? <span className='cart-product-count' style={{backgroundColor: "red"}} >{productCount}</span> : ''}
+                    <span className='cart-icon'><BsCart4 /></span>
+                    </Link>
             </div>
             {notificationPanel ?
                 <div className='notification-panel'>
