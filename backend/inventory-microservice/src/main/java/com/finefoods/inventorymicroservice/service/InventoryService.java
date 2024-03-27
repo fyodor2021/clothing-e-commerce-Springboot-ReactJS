@@ -10,8 +10,8 @@ public interface InventoryService {
     void createInventory(InventoryRequest inventoryRequest);
     void updateInventory(InventoryRequest inventoryRequest);
 
-    void updateInventoryAfterPurchase(InventoryRequest inventoryRequest);
-    void updateInventoryAfterCancellation(InventoryRequest inventoryRequest);
+    void updateInventoryAfterPurchase(List<InventoryRequest> inventoryRequests);
+    void updateInventoryAfterCancellation(List<InventoryRequest> inventoryRequests);
     InventoryResponse getInventoryByProductId(long productId);
 
     Boolean checkInventory(long productId, int quantity);

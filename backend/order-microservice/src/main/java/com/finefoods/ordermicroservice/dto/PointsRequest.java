@@ -1,12 +1,9 @@
-package com.finefoods.pointsmicroservice.dto;
+package com.finefoods.ordermicroservice.dto;
 
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigInteger;
 
 @Data
 @Builder

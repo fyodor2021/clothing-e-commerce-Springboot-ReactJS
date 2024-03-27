@@ -1,7 +1,7 @@
 package com.finefoods.ordermicroservice.model;
 
-import com.finefoods.ordermicroservice.dto.Product;
 //import com.finefoods.ordermicroservice.dto.ProductResponse;
+import com.finefoods.ordermicroservice.dto.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.lang.annotation.Documented;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,11 +20,14 @@ import java.util.List;
 public class Order {
     @Id
     private String orderId;
-    private long userId;
+    private String userEmail;
     private LocalDate datePlaced;
     private String status;
-    private float orderTotal;
-    private boolean paid;
+    private double orderTotal;
+    private double totalPaidOnCard;
+    private String cardBrand;
+    private double totalPaidInPoints;
+    private String chargeId;
     private String orderNumber;
     private LocalDate pickedUpDate;
     private List<Product> products;

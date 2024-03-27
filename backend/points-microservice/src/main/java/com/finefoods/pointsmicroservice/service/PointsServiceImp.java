@@ -1,5 +1,6 @@
 package com.finefoods.pointsmicroservice.service;
 
+import com.finefoods.pointsmicroservice.dto.PointsRequest;
 import com.finefoods.pointsmicroservice.dto.PointsResponse;
 import com.finefoods.pointsmicroservice.model.Points;
 import com.finefoods.pointsmicroservice.repository.PointsRepository;
@@ -17,9 +18,9 @@ public class PointsServiceImp implements PointsService{
 
     private final PointsRepository pointsRepository;
     @Override
-    public Long creatPointsByUserId(Long userId){
+    public Long creatPointsByUserId(String userEmail){
         Points points = Points.builder().
-                userId(userId)
+                userEmail(userEmail)
                 .numberOfPoints(0.0).build();
         System.out.println(points);
         pointsRepository.save(points);
@@ -28,86 +29,71 @@ public class PointsServiceImp implements PointsService{
         return points.getPointsId();
     }
     @Override
-    public PointsResponse getPointsByUserId(Long userId){
-        Points storedPoints = pointsRepository.findPointsByUserId(userId);
+    public double getPointsByUserId(String userEmail){
+        Points storedPoints = pointsRepository.findPointsByUserEmail(userEmail);
         if (storedPoints != null){
-            return mapToPointsResponse(storedPoints);
+            return storedPoints.getNumberOfPoints();
         }
-        return PointsResponse.builder().build();
-    }
-    @Override
-    public PointsResponse getPointsByPointsId(Long pointsId){
-        Points storedPoints = pointsRepository.findPointsByPointsId(pointsId);
-        if (storedPoints != null){
-            return mapToPointsResponse(storedPoints);
-        }
-        return PointsResponse.builder().build();
+        return 0.0;
     }
 
     @Override
-    public void addPointsForUser(double numPointsToAdd, Long userId) {
-        Points storedPoints = pointsRepository.findPointsByUserId(userId);
+    public void updatePointsForUser(PointsRequest pointsRequest) {
+        Points storedPoints = pointsRepository.findPointsByUserEmail(pointsRequest.getUserEmail());
         if (storedPoints != null){
-            double totalPoints = numPointsToAdd + storedPoints.getNumberOfPoints();
-            storedPoints.setNumberOfPoints(totalPoints);
-            pointsRepository.save(storedPoints);
+            if (pointsRequest.getMethod().equals("add")){
+                    double totalPoints = pointsRequest.getNumberOfPoints() + storedPoints.getNumberOfPoints();
+                    storedPoints.setNumberOfPoints(totalPoints);
+                    pointsRepository.save(storedPoints);
+
+            }
+            else {
+                double totalPoints =  storedPoints.getNumberOfPoints() - pointsRequest.getNumberOfPoints();
+                storedPoints.setNumberOfPoints(totalPoints);
+                pointsRepository.save(storedPoints);
+            }
 
         }
+
+
+
     }
 
-    @Override
-    public double getPointsValueInDollars(double numOfPoints){
+
+    private double getPointsValueInDollars(double numOfPoints){
         double pointsValue = numOfPoints / 1000;
         return Math.round(pointsValue * 100.0) / 100.0;
 
     }
 
-    @Override
-    public Boolean isRedeemable(double numOfDollarToRedeem, Long userId){
-        Points points = pointsRepository.findPointsByUserId(userId);
-        double moneyValueEarnedByUser =getPointsValueInDollars(points.getNumberOfPoints());
-        return !(moneyValueEarnedByUser < numOfDollarToRedeem);
-
-    }
-
-
-
-
 
     @Override
-    public void redeemPoints(double numOfDollarsToRedeem , Long userId){
-        Points points = pointsRepository.findPointsByUserId(userId);
-        if(isRedeemable(numOfDollarsToRedeem,userId)){
-            double numOfPointsToDeduct = numOfDollarsToRedeem * 1000 ;
-            points.setNumberOfPoints(points.getNumberOfPoints() - numOfPointsToDeduct);
-            pointsRepository.save(points);
+    public double payForOrderWithPoints( double orderTotal,  String userEmail){
+        Points points = pointsRepository.findPointsByUserEmail(userEmail);
+        if (points != null){
+            double dollars = getPointsValueInDollars(points.getNumberOfPoints());
+
+            if (dollars >= orderTotal){
+
+                double numOfPointsToDeduct = dollars * 1000 ;
+                points.setNumberOfPoints(points.getNumberOfPoints() - numOfPointsToDeduct);
+                pointsRepository.save(points);
+
+                return 0.0;
+            }
+
+            if (dollars < orderTotal){
+
+                points.setNumberOfPoints(0.00);
+                pointsRepository.save(points);
+
+                return (orderTotal - dollars);
+            }
+
         }
-
-    }
-    @Override
-    public double redeemAllPoints(Long userId){
-        Points points = pointsRepository.findPointsByUserId(userId);
-        if (points.getNumberOfPoints() > 0){
-            double numberOfDollars = points.getNumberOfPoints() / 1000;
-            points.setNumberOfPoints(0.00);
-            pointsRepository.save(points);
-            return (double) Math.round(numberOfDollars * 100) / 100;
-        }
-        else return 0.0;
-
-
+        throw new RuntimeException();
     }
 
-
-
-
-
-    private PointsResponse mapToPointsResponse(Points points){
-        return PointsResponse.builder().
-                pointsId(points.getPointsId())
-                .userId(points.getUserId())
-                .numberOfPoints(points.getNumberOfPoints()).build();
-    }
 
 
 }

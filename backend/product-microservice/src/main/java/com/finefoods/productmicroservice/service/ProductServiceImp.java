@@ -61,6 +61,7 @@ public class ProductServiceImp implements ProductService{
                 .skuCode(productRequest.getSkuCode())
                 .upcCode(productRequest.getUpcCode())
                 .vendor(productRequest.getVendor())
+                .points(productRequest.getPoints())
                 .build();
 
         Product savedProduct  = productRepository.save(product);
@@ -110,6 +111,7 @@ public class ProductServiceImp implements ProductService{
                 .skuCode(product.getSkuCode())
                 .upcCode(product.getUpcCode())
                 .vendor(product.getVendor())
+                .points(product.getPoints())
                 .build();
     }
 
@@ -228,6 +230,7 @@ public class ProductServiceImp implements ProductService{
                 .skuCode(product.getSkuCode())
                 .upcCode(product.getUpcCode())
                 .vendor(product.getVendor())
+                .points(product.getPoints())
                 .build();
     }
     private void uploadImages(MultipartFile[] files, Product product){
