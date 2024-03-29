@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,7 +23,6 @@ import java.util.*;
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
-    private final MongoTemplate mongoTemplate;
 
 
     @Value("${inventory.microservice.url}")
@@ -39,7 +36,7 @@ public class OrderServiceImpl implements OrderService{
     private String stripeKey;
     @Override
     public String placeOrder(OrderRequest orderRequest) {
-        //make a call to cart microservice
+        //MAYBE -> make a call to cart microservice
 
 
         List<InventoryRequest>  inventoryRequestList = new ArrayList<>();
@@ -47,6 +44,9 @@ public class OrderServiceImpl implements OrderService{
             InventoryRequest inventoryRequest = InventoryRequest.builder().stock(product.getQuantity()).productId(product.getProductId()).build();
             inventoryRequestList.add(inventoryRequest);
         }
+
+
+
 
         List<ProductAvailability> inStock = areProductInStock(inventoryRequestList);
 //        if (!inStock){
@@ -70,16 +70,14 @@ public class OrderServiceImpl implements OrderService{
         }
 
 
-
-
-
         Order order = Order.builder()
                 .orderNumber(UUID.randomUUID().toString())
                 .orderTotal(orderRequest.getOrderTotal())
                 .totalPaidOnCard(orderRequest.getMoneyToPay())
                 .chargeId(chargeId)
                 .cardBrand(orderRequest.getCardBrand())
-                .totalPaidInPoints(((orderRequest.getPointsToPay() / 1000) * 100)/100 )
+                .totalPaidInPoints(orderRequest.getPointsToPay() )
+                .totalPointsGained(orderRequest.getPointsToAdd())
                 .status("placed")
                 .datePlaced(LocalDate.now())
                 .userEmail(orderRequest.getUserEmail())
@@ -89,14 +87,14 @@ public class OrderServiceImpl implements OrderService{
         orderRepository.save(order);
 
 
-
         //Add points for user
         if (orderRequest.getPointsToAdd() > orderRequest.getPointsToPay()){
-
             PointsRequest pointsRequest = PointsRequest.builder()
                     .numberOfPoints(orderRequest.getPointsToAdd() - orderRequest.getPointsToPay())
                     .method("add")
                     .userEmail(orderRequest.getUserEmail()).build();
+
+
 
             updatePointsForUser(pointsRequest);
 
@@ -113,8 +111,6 @@ public class OrderServiceImpl implements OrderService{
             updatePointsForUser(pointsRequest);
 
         }
-
-
 
         //update inventory
         updateInventory(inventoryRequestList, "purchase");
@@ -150,10 +146,10 @@ public class OrderServiceImpl implements OrderService{
         chargeParams.put("source",cardToken);
         Charge charge = Charge.create(chargeParams);
 
-    if (charge.getStatus().equals("succeeded")){
-        System.out.println("Charge" + charge.getId());
+        if (charge.getStatus().equals("succeeded")){
+            System.out.println("Charge" + charge.getId());
 
-        return charge.getId().toString();
+            return charge.getId().toString();
         }
         return "";
 
@@ -161,15 +157,25 @@ public class OrderServiceImpl implements OrderService{
     }
     public String cancelOrder(String orderId) {
         Order order = orderRepository.findOrderByOrderId(orderId);
-        if (order != null){
+        if (order != null && !order.getStatus().equals("cancelled")){
 
-            //refund the points for user
-            if (order.getTotalPaidInPoints() != 0.0) {
-                double numOfPointToRefund = order.getTotalPaidInPoints() * 1000;
+
+            //Update the points for user
+            if (order.getTotalPaidInPoints() > order.getTotalPointsGained() ){
+                //refund redeemed points
                 PointsRequest pointsRequest = PointsRequest.builder()
                         .userEmail(order.getUserEmail())
-                        .numberOfPoints(numOfPointToRefund)
+                        .numberOfPoints(order.getTotalPaidInPoints() - order.getTotalPointsGained())
                         .method("add").build();
+                updatePointsForUser(pointsRequest);
+
+            }else{
+                //deduct gained points
+                PointsRequest pointsRequest = PointsRequest.builder()
+                        .userEmail(order.getUserEmail())
+                        .numberOfPoints(order.getTotalPointsGained() - order.getTotalPaidInPoints())
+                        .method("deduct").build();
+
                 updatePointsForUser(pointsRequest);
 
             }
@@ -211,7 +217,7 @@ public class OrderServiceImpl implements OrderService{
             return "order was cancelled";
 
         }
-        return "order does not exist";
+        return "Error cancelling the order";
 
     }
     public void updateOrderStatus(String orderId){
