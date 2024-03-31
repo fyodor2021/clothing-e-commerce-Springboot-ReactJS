@@ -135,17 +135,9 @@ public class ProductServiceImp implements ProductService{
     @Override
     public List<ProductResponse> getAllProducts() throws IOException {
         List<Product> products = productRepository.findAll();
-        List<ProductResponse> productResponses = new ArrayList<>();
-        for(Product product: products){
-            List<Image> imageList = imageRepository.getImageByProductId(product.getProductId());
-            List<byte[]> imagesInBytes = new ArrayList<>();
-            for(Image image: imageList){
-                imagesInBytes.add(getImage(image.getImageFileName()));
-            }
-            productResponses.add(productToProductResponse(product, imagesInBytes));
-        }
-        return productResponses;
+        return mapToProductImageResponse(products);
     }
+
 //    @Override
 //    public List<ProductResponse> getProductsByCategory(String category){
 //        List<Product> products = productRepository.findProductByCategory(category);
@@ -153,12 +145,19 @@ public class ProductServiceImp implements ProductService{
 //
 //    }
 //
-//    @Override
-//    public List<ProductResponse> getProductsBySearchTerm(String word){
-//        List<Product> products = productRepository.findByProductNameContainingIgnoreCase(word);
-//        return products.stream().map(this::productToProductResponse).toList();
-//
-//    }
+    @Override
+    public List<ProductResponse> getProductsBySearchTerm(String word) throws IOException {
+        List<Product> products = productRepository.findByProductNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(word, word);
+        return mapToProductImageResponse(products);
+    }
+
+    @Override
+    public List<ProductResponse> getProductByCategory(String category) throws IOException {
+        List<Product> products = productRepository.findAllByCategory(category);
+        return mapToProductImageResponse(products);
+    }
+
+
 //    @Override
 //    public List<ProductResponse> validateProductList(List<ProductRequest> products ){
 //        return products.stream().map(this::doesExist).toList();
@@ -213,6 +212,16 @@ public class ProductServiceImp implements ProductService{
        return false;
     }
 
+    @Override
+    public List<String> searchPrediction(String search) {
+       List<Product> products = productRepository.findDistinctFirstByProductNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(search,search);
+        List<String> productNames = new ArrayList<>();
+        for(Product product : products){
+            productNames.add(product.getProductName());
+        }
+        return productNames;
+    }
+
     private ProductResponse productToProductResponse(Product product, List<byte[]> imageList){
         return ProductResponse.builder()
                 .productId(product.getProductId())
@@ -232,6 +241,18 @@ public class ProductServiceImp implements ProductService{
                 .vendor(product.getVendor())
                 .points(product.getPoints())
                 .build();
+    }
+    public List<ProductResponse> mapToProductImageResponse(List<Product> products) throws IOException {
+        List<ProductResponse> productResponses = new ArrayList<>();
+        for(Product product: products){
+            List<Image> imageList = imageRepository.getImageByProductId(product.getProductId());
+            List<byte[]> imagesInBytes = new ArrayList<>();
+            for(Image image: imageList){
+                imagesInBytes.add(getImage(image.getImageFileName()));
+            }
+            productResponses.add(productToProductResponse(product, imagesInBytes));
+        }
+        return productResponses;
     }
     private void uploadImages(MultipartFile[] files, Product product){
         for(MultipartFile file : files){
@@ -253,7 +274,6 @@ public class ProductServiceImp implements ProductService{
         return convertedFile;
     }
     public byte[] getImage(String fileName) throws IOException {
-
         S3Object s3Object = amazonS3Client.getObject(bucketName,fileName);
         S3ObjectInputStream inputStream = s3Object.getObjectContent();
         return IOUtils.toByteArray(inputStream);

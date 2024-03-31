@@ -52,6 +52,10 @@ public class ProductController {
     public List<ProductResponse> getAllProducts() throws IOException {
         return productService.getAllProducts();
     }
+    @GetMapping("/search/{input}")
+    public List<String> searchPrediction(@PathVariable String input){
+        return productService.searchPrediction(input);
+    }
 
 //
 //
@@ -59,10 +63,15 @@ public class ProductController {
 //    public List<ProductResponse> getProductsByCategory(@PathVariable("category") String category){
 //        return productService.getProductsByCategory(category);
 //    }
-//    @GetMapping({"search/{search}"})
-//    public List<ProductResponse> getProductsBySearchTerm(@RequestParam("search") String word){
-//        return productService.getProductsBySearchTerm(word);
-//    }
+    @GetMapping({"search/submit/{search}"})
+    public List<ProductResponse> getProductsBySearchTerm(@PathVariable("search") String search) throws IOException {
+        return productService.getProductsBySearchTerm(search);
+    }
+
+    @GetMapping({"search/category/{search}"})
+    public List<ProductResponse> getProductByCategory(@PathVariable("search") String search) throws IOException {
+        return productService.getProductByCategory(search);
+    }
 //
 //
 //    @GetMapping({"validate"})

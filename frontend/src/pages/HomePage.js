@@ -10,10 +10,15 @@ import Skeleton from '../components/Skeleton'
 import { useEffect } from "react";
 import FilterSkeleton from "../components/FilterSkeleton";
 import useCartContext from "../hooks/useCartContext";
+import Product from "../components/Product";
 export default function HomePage({ category }) {
-  const { products, isLoading } = useProductContext();
+  const { products, isLoading, fetchProducts } = useProductContext();
+ 
   const {createCart} = useCartContext();
   const filterPanel = document.getElementsByClassName('filter-panel-container');
+  // useEffect(() => {
+  //   fetchProducts();
+  // },[])
   const handleScrollEvent = () => {
     if (window.scrollY > 560) {
       filterPanel[0].classList.add('fix-panel');
@@ -47,12 +52,15 @@ export default function HomePage({ category }) {
       <Skeleton />
     </div>)
   }
+  console.log(products)
   return (
     <div>
       <div className="home-page-container">
         <div className="slider-container">
-          
+              {!isLoading ? <Product product={products[0]}/> : ""}
+              
           <div className="slider">
+
             <div className="slides">
               <input type="radio" name="radio-btn" id="radio1" />
               <input type="radio" name="radio-btn" id="radio2" />
@@ -72,14 +80,12 @@ export default function HomePage({ category }) {
                 <img src={slide4} alt="Slide 4" />
               </div>
 
-              <div className="navigation-auto">
-                <div className="auto-btn1"></div>
-                <div className="auto-btn2"></div>
-                <div className="auto-btn3"></div>
-                <div className="auto-btn4"></div>
-              </div>
+
             </div>
           </div>
+          {!isLoading ? <Product product={products[0]}/> : ""}
+          
+
         </div>
 
         {isLoading ? (

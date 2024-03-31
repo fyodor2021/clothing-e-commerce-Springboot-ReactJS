@@ -14,8 +14,10 @@ public interface ProductService {
     List<ProductResponse> getAllProducts() throws IOException;
     ProductResponse validateProduct(Long id);
 //    List<ProductResponse> getProductsByCategory(String category);
-//    List<ProductResponse> getProductsBySearchTerm(String word);
+    List<ProductResponse> getProductsBySearchTerm(String word) throws IOException;
+    List<ProductResponse> getProductByCategory(String category) throws IOException;
 //    List<ProductResponse> validateProductList(List<ProductRequest> products );
 //    Boolean updateProduct(Long id, ProductRequest productRequest);
     Boolean deleteProduct(Long id) throws IOException;
+    List<String> searchPrediction(String Search);
 }

@@ -18,6 +18,8 @@ public class RouteValidator {
             "/api/cart/add",
             "/api/cart/products",
             "/api/cart/product/inc",
+            "/api/product/search/submit",
+            "/api/product/search/category",
             "/api/cart/product/dec",
             "/eureka"
     );

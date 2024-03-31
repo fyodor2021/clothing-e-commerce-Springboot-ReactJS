@@ -1,9 +1,6 @@
 package com.finefoods.authenticationmicroservice.controller;
 
-import com.finefoods.authenticationmicroservice.dto.AuthenticationRequest;
-import com.finefoods.authenticationmicroservice.dto.AuthenticationResponse;
-import com.finefoods.authenticationmicroservice.dto.RegisterRequest;
-import com.finefoods.authenticationmicroservice.dto.UserResponse;
+import com.finefoods.authenticationmicroservice.dto.*;
 import com.finefoods.authenticationmicroservice.service.AuthenticationService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.Path;
@@ -38,5 +35,9 @@ public class AuthenticationController {
     public UserResponse getLoggedInUser(@RequestHeader(value = "Authorization", defaultValue = "") String authHeader){
         String token = authHeader.substring(7);
         return authenticationService.getLoggedInUser(token);
+    }
+    @PutMapping("/user/update")
+    public String updateUser(@RequestBody UserRequest userRequest) throws Exception{
+        return authenticationService.updateUser(userRequest);
     }
 }

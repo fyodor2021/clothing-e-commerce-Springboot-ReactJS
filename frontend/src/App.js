@@ -16,19 +16,25 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useAuthContext from "./hooks/useAuthContext";
 import useCartContext from "./hooks/useCartContext";
+import usePaymentContext from "./hooks/usePaymentContext";
 export default function App({indexToken}) {
     const {fetchProducts} = useProductContext()
     const {getCartProducts} = useCartContext();
-    const {setLoggedUser} = useAuthContext();
+    const {setLoggedUser,loggedUser,userChanged} = useAuthContext();
+    const {getCardsInfo} = usePaymentContext();
     const navigate = useNavigate();
     useEffect(() => {
         getCartProducts();
         fetchProducts();
+        // if(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)){
+        //     getCardsInfo();
+        // }
+    },[])
+    useEffect(() => {
         if(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)){
             axios.get('/api/auth/user').then(res => setLoggedUser(res.data))
-
         }
-    },[])
+    },[userChanged])
     // console.log("this is the auth token: ", token)
     // console.log("this is the index toke: ", indexToken)
     // console.log(token)
@@ -36,6 +42,10 @@ export default function App({indexToken}) {
     axios.defaults.withCredentials = true
     const token = window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
         if(token){
+            if(Date.parse(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL_EXPIRATION)) < new Date()){
+                window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
+                window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL_EXPIRATION)
+            }
             request.headers.Authorization = `Bearer ${token}`
         }else{
             return request;
@@ -46,9 +56,10 @@ export default function App({indexToken}) {
     axios.interceptors.response.use(response => {
         return response;
     },error => {
-        // if(error.response && error.response.status == 403){
-        //     navigate("/login")
-        // }
+        console.log("im here, here is your error ", error.response.status)
+        if(error.response && error.response.status == 403){
+            navigate("/login")
+        }
     })
 
     return <>
