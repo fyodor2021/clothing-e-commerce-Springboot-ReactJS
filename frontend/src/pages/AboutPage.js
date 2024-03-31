@@ -9,15 +9,15 @@ import freshPic from "../statics/fresh.jpg"
 export default function AboutPage() {
 
     return <div >
-        <div  >
+        <div  className="about-page">
             <div className="flex items-center justify-center"  >
                 <img className="image-cover" src={coverPic}></img>
             </div>
             <div >
-                <div>
+                <div className="about-header">
                     <p className="about-text">Arz Fine Foods</p>
                 </div>
-                <div>
+                <div className="about-header">
                     <p className="about-text">The Essence of Mediterranean Gourmet</p>
                 </div>
                 <div className="about-container">

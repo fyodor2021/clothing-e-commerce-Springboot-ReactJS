@@ -1,4 +1,4 @@
-package com.finefoods.apigateway.config;
+package com.finefoods.walletmicroservice.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 
 @Service
@@ -29,7 +27,7 @@ public class JwtService {
     {
         return extractExpiration(token).before(new Date());
     }
-    private String extractUsername(String token) {
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
     private Date extractExpiration(String token) {
@@ -39,7 +37,7 @@ public class JwtService {
         final Claims claims = extractAllGuestTokenClaims(token);
         return claimsResolver.apply(claims);
     }
-    private Claims extractAllGuestTokenClaims(String token){
+    public Claims extractAllGuestTokenClaims(String token){
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignKey())
@@ -53,7 +51,7 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(guest)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24 * 4))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

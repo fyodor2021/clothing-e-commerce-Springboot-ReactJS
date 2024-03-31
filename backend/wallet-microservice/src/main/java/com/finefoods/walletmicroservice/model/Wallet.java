@@ -21,12 +21,11 @@ public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long walletId;
-    private Long userId;
+    private String userEmail;
     private String cardHolderFirstName;
     private String cardHolderLastName;
     private String cardNumber;
-    private String expiryMonth;
-    private String expiryYear;
+    private String expiryDate;
     private String cvv;
 
 

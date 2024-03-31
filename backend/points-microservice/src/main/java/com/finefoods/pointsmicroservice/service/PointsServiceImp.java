@@ -17,17 +17,18 @@ import java.text.DecimalFormat;
 public class PointsServiceImp implements PointsService{
 
     private final PointsRepository pointsRepository;
+
     @Override
+
     public Long creatPointsByUserId(String userEmail){
         Points points = Points.builder().
                 userEmail(userEmail)
                 .numberOfPoints(0.0).build();
         System.out.println(points);
         pointsRepository.save(points);
-
-
         return points.getPointsId();
     }
+
     @Override
     public double getPointsByUserId(String userEmail){
         Points storedPoints = pointsRepository.findPointsByUserEmail(userEmail);

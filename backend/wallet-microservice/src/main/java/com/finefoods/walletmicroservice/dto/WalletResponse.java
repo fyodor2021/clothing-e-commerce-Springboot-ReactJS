@@ -11,11 +11,10 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @Builder
 public class WalletResponse {
-    private Long userId;
+    private String userEmail;
     private String cardHolderFirstName;
     private String cardHolderLastName;
     private String cardNumber;
-    private String expiryMonth;
-    private String expiryYear;
+    private String expiryDate;
     private String cvv;
 }
