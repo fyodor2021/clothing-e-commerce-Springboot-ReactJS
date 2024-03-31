@@ -1,22 +1,18 @@
 package com.finefoods.pointsmicroservice.service;
 
+import com.finefoods.pointsmicroservice.dto.PointsRequest;
 import com.finefoods.pointsmicroservice.dto.PointsResponse;
+import org.springframework.web.bind.annotation.PathVariable;
 
 public interface PointsService {
-    Long creatPointsByUserId(Long userId);
+    Long creatPointsByUserId(String userEmail);
 
-    PointsResponse getPointsByUserId(Long userId);
-    PointsResponse getPointsByPointsId(Long pointsId);
+    double getPointsByUserId(String userEmail);
 
-    void addPointsForUser(double numPointsToAdd, Long userId);
+    void updatePointsForUser(PointsRequest pointsRequest);
 
-    double getPointsValueInDollars(double numOfPoints);
 
-    Boolean isRedeemable(double numOfDollarsToRedeem , Long userId);
-
-    void redeemPoints(double numOfDollarsToRedeem , Long userId);
-
-    double redeemAllPoints(Long userId);
+    double payForOrderWithPoints( double orderTotal,  String userEmail);
 
 
 

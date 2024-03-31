@@ -14,9 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class OrderRequest {
-    private long userId;
-    private float orderTotal;
+    private String orderId;
+    private String userEmail;
+    private double orderTotal;
     private List<Product> products;
-    private String token;
-    private double numOfPoints;
+    private String cardBrand;
+    private double pointsToAdd;
+    private double pointsToPay;
+    private double moneyToPay;
+
 }

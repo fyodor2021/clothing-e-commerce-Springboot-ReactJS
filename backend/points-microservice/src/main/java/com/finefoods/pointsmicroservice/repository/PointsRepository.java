@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PointsRepository extends JpaRepository<Points, Long> {
     Points findPointsByPointsId(Long pointsId);
-    Points findPointsByUserId(Long userId);
+    Points findPointsByUserEmail(String userEmail);
+
+
 
 
 }
