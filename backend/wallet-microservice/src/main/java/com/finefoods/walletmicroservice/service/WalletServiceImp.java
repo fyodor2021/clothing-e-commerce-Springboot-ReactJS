@@ -21,17 +21,16 @@ public class WalletServiceImp implements WalletService{
     private final Helper helper;
 
     @Override
-    public void addWallet(WalletRequest walletRequest) {
+    public void addCard(WalletRequest walletRequest) {
         Wallet doesExist = walletRepository.findByCardNumber(walletRequest.getCardNumber());
         if (doesExist == null) {
             if (helper.varifyCard(walletRequest.getCardNumber())){
                 Wallet wallet = Wallet.builder()
-                        .userId(walletRequest.getUserId())
+                        .userEmail(walletRequest.getUserEmail())
                         .cardHolderFirstName(walletRequest.getCardHolderFirstName())
                         .cardHolderLastName(walletRequest.getCardHolderLastName())
                         .cardNumber(helper.encrypt(walletRequest.getCardNumber(), "secret"))
-                        .expiryMonth(walletRequest.getExpiryMonth())
-                        .expiryYear(walletRequest.getExpiryYear())
+                        .expiryDate(walletRequest.getExpiryDate())
                         .cvv(helper.encrypt(walletRequest.getCvv(), "secret"))
                         .build();
 
@@ -40,22 +39,19 @@ public class WalletServiceImp implements WalletService{
             }else {
                 throw new RuntimeException("It is invalid card");
             }
-
-
-
         }
     }
-    public List<Wallet> getAllWallets(){
-        List<Wallet> wallet = walletRepository.findAll();
-        return wallet;
-    }
+//    public List<Wallet> getAllWallets(){
+//        List<Wallet> wallet = walletRepository.findAll();
+//        return wallet;
+//    }
 
-    public List<WalletResponse> getWalletsByUserId(Long userId){
-        List<Wallet> cards = walletRepository.findWalletByUserId(userId);
+    public List<WalletResponse> getCardsByUserEmail(String userEmail){
+        List<Wallet> cards = walletRepository.findWalletByUserEmail(userEmail);
         return cards.stream().map(wallet -> walletToWalletResponse(wallet)).toList();
     }
-    public List<CardInfo> getCardsInfoByUserId(Long userId){
-        List<Wallet> cards = walletRepository.findWalletByUserId(userId);
+    public List<CardInfo> getCardsInfoByUserEmail(String userEmail){
+        List<Wallet> cards = walletRepository.findWalletByUserEmail(userEmail);
         if(cards != null){
             return cards.stream()
                     .map(wallet -> {
@@ -86,12 +82,11 @@ public class WalletServiceImp implements WalletService{
 
     private WalletResponse walletToWalletResponse(Wallet wallet){
         return WalletResponse.builder()
-                .userId(wallet.getUserId())
+                .userEmail(wallet.getUserEmail())
                 .cardHolderFirstName(wallet.getCardHolderFirstName())
                 .cardHolderLastName(wallet.getCardHolderLastName())
                 .cardNumber(wallet.getCardNumber())
-                .expiryMonth(wallet.getExpiryMonth())
-                .expiryYear(wallet.getExpiryYear())
+                .expiryDate(wallet.getExpiryDate())
                 .cvv(wallet.getCvv())
                 .build();
     }

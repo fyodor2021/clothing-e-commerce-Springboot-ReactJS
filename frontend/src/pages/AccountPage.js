@@ -3,6 +3,10 @@ import Footer from "../components/Footer";
 import { useEffect, useState, useRef } from 'react'
 import useAuthContext from "../hooks/useAuthContext";
 import { hasSelectionSupport } from "@testing-library/user-event/dist/utils";
+import arzFineFoodsStore from '../statics/arz-fine-foods-store.jpg'
+
+import Wallet from "../components/Wallet";
+import PersonalInfo from "../components/PersonalInfo";
 export default function AccountPage() {
     const [selected, setSelected] = useState('My Account');
     const { signout, loggedUser } = useAuthContext();
@@ -24,35 +28,18 @@ export default function AccountPage() {
         lastname = loggedUser.lastname;
         email = loggedUser.email;
         address = loggedUser.address;
+        const user = {
+            firstname,
+            lastname,
+            email,
+            address
+        }
         switch (selected) {
             case 'My Account':
-                content =
-                    <div>
-                        <div className="account-info-item">
-                            <div className="account-info-label">Full name</div>
-                            <div>{firstname} {lastname}</div>
-                        </div>
-                        <div className="account-info-item">
-                            <div className="account-info-label">Email</div>
-                            <div>{email}</div>
-                        </div>
-                        <div className="account-info-item">
-                            <div className="account-info-label">Address</div>
-                            <div>{address}</div>
-                        </div>
-                        <div className="account-info-item">
-                            <div className="account-info-label">Password</div>
-                            <div>*******************</div>
-                        </div>
-
-                    </div>
-
+                content = <PersonalInfo />
                 break;
             case 'My Wallet':
-                content = <div>My Wallet</div>
-                break;
-            case 'My Points':
-                content = <div>My Points</div>
+                content = <Wallet />
                 break;
             case 'Re-order':
                 content = <div>Order Again</div>
@@ -61,15 +48,31 @@ export default function AccountPage() {
                 content = <div>Purchase History</div>
                 break;
             case 'Contact Us':
-                content = <div>Contact Us</div>
+                content =
+                    <div>
+                        <h1 className="account-page-headers">Tell us how we did!</h1>
+                        <img src={arzFineFoodsStore} width="800" />
+                        <div className="account-info-item">
+                            <div className="account-info-label">Contact Us at</div>
+                            <div>444-444-3309</div>
+                        </div>
+                        <div className="account-info-item">
+                            <div className="account-info-label">Email</div>
+                            <div>arzfinefoods@arz-support.com</div>
+                        </div>
+
+
+                    </div>
+
                 break;
         }
     }
     return (
-        <div>
+        <div className="account-page">
             <div className="account-page-container">
                 <div className="account-page-wrapper">
                     <div className="account-page-item">
+
                         <h1 className="account-page-headers">
                             {firstname} {lastname}
                         </h1>
@@ -83,10 +86,6 @@ export default function AccountPage() {
                             <h1 onClick={() => handleMenuSelect('My Wallet')}>
                                 My Wallet
                             </h1>
-                            <h1 onClick={() => handleMenuSelect('My Points')}>
-                                My Points
-                            </h1>
-
                         </div>
                         <h1 className="account-page-headers">
                             My Items
@@ -112,7 +111,6 @@ export default function AccountPage() {
                         </h1>
                     </div>
                     <div className="account-page-item">
-                        <h1 className="account-page-headers">Your Personal Information</h1>
                         {
                             content
                         }

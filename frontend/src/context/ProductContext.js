@@ -45,6 +45,7 @@ function ProductProvider({ children }) {
         fetchProductDetails,
         product,
         fetchProductReviews,
+        setProducts,
         reviews
     }
     return <ProductContext.Provider value={valueProvided}>

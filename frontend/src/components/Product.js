@@ -19,22 +19,23 @@ export default function Product({ product }) {
         const addedProduct = {...product, quantity: 1}
         addToCart(addedProduct)
     }
-    return <div className="card-container">
+    if(product){
+        return <div className="card-container">
         <div  onClick={handleCardClick}>
             <div className="card-image-container">
                 {images[0]}
                 {product.brand === 'Arz' ? <img style={{ position: 'absolute' }} src={logo} width="100px" height="100px" /> : ''}
             </div>
-            <div className="card-content">
+            <div className="card-ccd ontent">
                 <h4>
                     ${product.currentPrice}
                 </h4>
-                <div>
+                <div style={{textOverflow: 'ellipsis', height: '63px'}}>
                     {product.productName + ',' + product.description + ',' + product.size + 'g'}
                 </div>
                 <div>
                     {product.vendor}
-                </div>
+            </div>
             </div>
         </div>
         <div>
@@ -44,4 +45,5 @@ export default function Product({ product }) {
         </div>
 
     </div>
+    }
 }

@@ -4,7 +4,7 @@ import arzPic from '../statics/arz-fine-foods-mis.png'
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer'
 import useAuthContext from '../hooks/useAuthContext';
-import useGeneralContext from '../hooks/useGeneralContext';
+import useValidationContext from '../hooks/useValidationContext';
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -14,7 +14,7 @@ export default function Login() {
         }
     },[])
     const {login,token} = useAuthContext();
-        const {valMessage,setValMessage} = useGeneralContext();
+        const {valMessage,setValMessage} = useValidationContext();
     const navigate = useNavigate();
     const handleRegisterNavigate = () => {
         navigate('/register')
