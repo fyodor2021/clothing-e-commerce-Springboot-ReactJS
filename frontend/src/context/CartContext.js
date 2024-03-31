@@ -1,10 +1,9 @@
 import { createContext, useState } from "react";
 import axios from "axios";
-import useGeneralContext from "../hooks/useGeneralContext";
+import useValidationContext from "../hooks/useValidationContext";
 import { useCookies } from "react-cookie";
 const CartContext = createContext();
 function CartProvider({ children }) {
-    const {setCookie,getCookie} = useGeneralContext();
     const [cartProducts, setCartProducts] = useState([]);
     const [cookies] = useCookies()
 //     const createCart = async () => {

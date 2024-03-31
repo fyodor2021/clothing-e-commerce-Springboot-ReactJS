@@ -1,7 +1,8 @@
 :root {
     --arzColor: #ffb100;
-    --navArzColor: #5f1f00;
-    --page-padding: 1rem
+    --navArzColor: hsl(20, 100%, 19%);
+    --page-padding: 1rem;
+    --page-padding-bottom: 10rem
 }
 
 .image-cover {
@@ -41,6 +42,13 @@
 .about-container {
     display: flex;
     justify-content: space-around;
+}
+.about-page{
+    padding-bottom: var(--page-padding-bottom);
+    padding-top: 2rem;
+}
+.about-header{
+    text-shadow: 0 0 4px black;
 }
 
 .image-about {
@@ -102,6 +110,7 @@
     align-items: flex-start;
     position: relative;
     padding: 3rem ;
+    padding-bottom: var(--page-padding-bottom)
 }
 
 .left-container {

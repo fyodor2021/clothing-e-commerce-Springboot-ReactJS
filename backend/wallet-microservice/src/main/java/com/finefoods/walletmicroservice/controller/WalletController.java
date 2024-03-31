@@ -4,6 +4,7 @@ import com.finefoods.walletmicroservice.dto.WalletRequest;
 import com.finefoods.walletmicroservice.dto.WalletResponse;
 import com.finefoods.walletmicroservice.model.Wallet;
 import com.finefoods.walletmicroservice.model.CardInfo;
+import com.finefoods.walletmicroservice.service.JwtService;
 import com.finefoods.walletmicroservice.service.WalletServiceImp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,26 +19,29 @@ import java.util.List;
 @Slf4j
 public class WalletController {
     private final WalletServiceImp walletServiceImp;
+    private final JwtService jwtService;
 
-
-    @PostMapping
+    @PostMapping("/add")
     public void addCard(@RequestBody WalletRequest walletRequest){
-        walletServiceImp.addWallet(walletRequest);
+        walletServiceImp.addCard(walletRequest);
     }
 
-    @GetMapping
-    public List<Wallet> getAllWallets(){
-       return walletServiceImp.getAllWallets();
-    }
-    @GetMapping("/{userId}")
-    public List<WalletResponse> getWalletsByUserId(@PathVariable  Long userId){
-        return walletServiceImp.getWalletsByUserId(userId);
+//    @GetMapping
+//    public List<Wallet> getAllWallets(){
+//       return walletServiceImp.getAllWallets();
+//    }
+    @GetMapping()
+    public List<WalletResponse> getCardsByUserEmail(@RequestHeader(value = "Authorization", defaultValue = "") String authHeader){
+        String token = authHeader.substring(7);
+        String email = jwtService.extractUsername(token);
+        return walletServiceImp.getCardsByUserEmail(email);
 
     }
-
-    @GetMapping("/cards/{userId}")
-    public List<CardInfo> getCardsInfoByUserId(@PathVariable  Long userId){
-        return walletServiceImp.getCardsInfoByUserId(userId);
+    @GetMapping("/cards")
+    public List<CardInfo> getCardsInfoByUserEmail(@RequestHeader(value = "Authorization", defaultValue = "") String authHeader){
+        String token = authHeader.substring(7);
+        String email = jwtService.extractUsername(token);
+        return walletServiceImp.getCardsInfoByUserEmail(email);
     }
 
 }

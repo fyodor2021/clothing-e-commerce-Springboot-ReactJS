@@ -39,7 +39,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     }
                     try {
                         jwtService.validateToken(authHeader);
-
                     } catch (Exception e) {
                         exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                         return exchange.getResponse().setComplete();
@@ -58,9 +57,9 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                             String cookie = exchange.getRequest().getHeaders().get("Cookie").get(0);
                             if (!cookie.contains(";")) {
                                 String token = cookie.substring(8);
-                                if (jwtService.validateGuestToken(token)) {
-                                    return chain.filter(exchange);
-                                } else {
+                                try{
+                                    jwtService.validateGuestToken(token);
+                                }catch (Exception e){
                                     String guestToken = jwtService.generateGuestToken("guest");
                                     exchange.getResponse().addCookie(ResponseCookie.from("SESSION", guestToken)
                                             .httpOnly(false)
@@ -71,7 +70,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                         }
                     }
                 }
-
             }else{
                 if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                     exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
