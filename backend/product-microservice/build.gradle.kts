@@ -35,7 +35,12 @@ dependencies {
     implementation("org.apache.httpcomponents.client5:httpclient5:5.2")
     implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.1")
     implementation("com.amazonaws:aws-java-sdk-s3:1.12.656")
+
+
+    testImplementation("org.springframework:spring-test")
+
 }
+
 
 tasks.withType<Test> {
     useJUnitPlatform()
