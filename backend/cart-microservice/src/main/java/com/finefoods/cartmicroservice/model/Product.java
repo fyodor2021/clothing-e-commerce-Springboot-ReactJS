@@ -22,9 +22,9 @@ public class Product {
     private String tags;
     private String size;
     private String unit;
-    private Integer cost;
-    private Integer price;
-    private Integer currentPrice;
+    private double cost;
+    private double price;
+    private double currentPrice;
     private Boolean isTaxed;
     private String skuCode;
     private String upcCode;

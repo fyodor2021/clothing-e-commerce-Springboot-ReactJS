@@ -281,4 +281,15 @@ public class ProductServiceImp implements ProductService{
     public void deleteImage(String filename) throws IOException{
         amazonS3Client.deleteObject(bucketName, filename);
     }
+
+
+
+    public void imageLoader(File file, Product product){
+            String fileName = product.getSkuCode() + "_" + System.currentTimeMillis() + "_" + file.getName();
+            Image image = Image.builder().imageFileName(fileName).productId(product.getProductId()).build();
+            Image savedImage = imageRepository.save(image);
+            amazonS3Client.putObject(new PutObjectRequest(bucketName,fileName, file));
+
+    }
+
 }

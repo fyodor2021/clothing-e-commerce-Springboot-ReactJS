@@ -23,6 +23,7 @@ public class ProductResponse {
     private String size;
     private String unit;
     private double cost;
+    private double price;
     private double currentPrice;
     private Boolean isTaxed;
     private String skuCode;
