@@ -977,12 +977,8 @@ public class ProductLoader implements CommandLineRunner {
 //                    .points(20)
 //                    .build();
 //            productRepository.save(product);
-//            File productImage = new File(fileDir+ "39.jpeg");
+//            File productImage = new File(fileDir+ "40.jpeg");
 //            productServiceImp.imageLoader(productImage,product);
-//            File productImage2 = new File(fileDir+ "39-1.jpeg");
-//            productServiceImp.imageLoader(productImage2,product);
-//            File productImage3 = new File(fileDir+ "39-2.jpeg");
-//            productServiceImp.imageLoader(productImage3,product);
 //        }
 
 
