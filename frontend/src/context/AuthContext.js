@@ -17,9 +17,11 @@ function AuthProvider({ children }) {
         const res = axios.post("api/auth/register", user)
                 .then(res => {
                 if(res.data){
-                    return "User was Successfully Registered"
+                    setValMessage("User was Successfully Registered")
+                    navigate('/login')    
+
                 }else{
-                    return "User Exists"
+                    setValMessage("User Exists")
                 }
                 })
     }

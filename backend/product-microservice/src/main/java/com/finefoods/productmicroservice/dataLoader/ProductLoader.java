@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Component
@@ -16,11 +19,15 @@ public class ProductLoader implements CommandLineRunner {
     private final ProductRepository productRepository;
     private final ProductServiceImp productServiceImp;
 
-    String fileDir = "./backend/product-microservice/src/main/java/com/finefoods/productmicroservice/dataLoader/productImages/";
-
+    public String getWorkingDir() throws IOException {
+        return new File(".").getCanonicalPath();
+    }
+    String fileDir = "/product-microservice/src/main/java/com/finefoods/productmicroservice/dataLoader/productImages/";
 
     @Override
     public void run(String... args) throws Exception {
+        String path = getWorkingDir();
+
         if (productRepository.findProductByProductId((long) 1) == null) {
             Product product = Product.builder()
                     .productId(1L)
@@ -41,7 +48,7 @@ public class ProductLoader implements CommandLineRunner {
                     .points(20.00)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "1.jpeg");
+            File productImage = new File(path + fileDir + "1.jpeg");
             productServiceImp.imageLoader(productImage,product);
 
         }
@@ -65,7 +72,7 @@ public class ProductLoader implements CommandLineRunner {
                     .points(20.00)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "2.jpeg");
+            File productImage = new File(path + fileDir+ "2.jpeg");
             productServiceImp.imageLoader(productImage,product);
 
 
@@ -90,7 +97,7 @@ public class ProductLoader implements CommandLineRunner {
                     .points(20)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "3.jpeg");
+            File productImage = new File(path + fileDir+ "3.jpeg");
             productServiceImp.imageLoader(productImage,product);
         }
         if (productRepository.findProductByProductId((long) 4) == null) {
@@ -113,7 +120,7 @@ public class ProductLoader implements CommandLineRunner {
                     .points(20)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "4.jpeg");
+            File productImage = new File(path + fileDir+ "4.jpeg");
             productServiceImp.imageLoader(productImage,product);
         }
         if (productRepository.findProductByProductId((long) 5) == null) {
@@ -136,7 +143,7 @@ public class ProductLoader implements CommandLineRunner {
                     .points(20)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "5.jpeg");
+            File productImage = new File(path + fileDir+ "5.jpeg");
             productServiceImp.imageLoader(productImage,product);
         }
         if (productRepository.findProductByProductId((long) 6) == null) {
@@ -159,9 +166,9 @@ public class ProductLoader implements CommandLineRunner {
                     .points(20)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "6.jpeg");
+            File productImage = new File(path + fileDir+ "6.jpeg");
             productServiceImp.imageLoader(productImage,product);
-            File productImage2 = new File(fileDir+ "6-1.jpeg");
+            File productImage2 = new File(path + fileDir+ "6-1.jpeg");
             productServiceImp.imageLoader(productImage2,product);
         }
 //        if (productRepository.findProductByProductId((long) 7) == null) {

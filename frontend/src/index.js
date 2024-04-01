@@ -10,10 +10,12 @@ import { CartProvider } from './context/CartContext.js'
 import { ValidationProvider } from './context/ValidationContext.js'
 import { PaymentProvider } from './context/PaymentContext.js'
 import { FilterProvider } from './context/FilterContext.js'
+import { useCookies } from 'react-cookie'
 import axios from 'axios'
 const el = document.getElementById('root')
 const root = ReactDOM.createRoot(el)
 axios.defaults.baseURL = "http://localhost:8181/";
+
 let indextoken
 indextoken = window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
 root.render(

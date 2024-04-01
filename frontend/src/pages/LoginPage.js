@@ -82,7 +82,7 @@ export default function Login() {
                     </form>
                     <div style={{ margin: '10px' }}>
                         <span>Or </span>
-                        <span style={{ color: 'red' }} onClick={handleRegisterNavigate}>
+                        <span style={{ color: 'red',cursor:'pointer' }} onClick={handleRegisterNavigate}>
                             Register
                         </span>
                     </div>

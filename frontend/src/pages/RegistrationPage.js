@@ -15,10 +15,9 @@ export default function RegistrationPage() {
     const [valMessage, setValMessage] = useState('');
     const navigate = useNavigate()
     const {register} = useAuthContext();
-    const {        validateEmail,
+    const {validateEmail,
         validateAddress,
-        validateFirstName,
-        validateLastName,
+        validateName,
         validatePassword,
         validatePasswordRetype} = useValidationContext();
     const autoCompleteRef = useRef();
@@ -49,7 +48,7 @@ export default function RegistrationPage() {
             setValMessage('None of the fields can be empty');
         
         };
-        if(validateAddress(address) && validateEmail(email) && validateFirstName(fname) && validateLastName(lname) && validatePassword(password) && validatePasswordRetype(password, passwordRetype))
+        if(validateAddress(address) && validateEmail(email) && validateName(fname) && validateName(lname) && validatePassword(password) && validatePasswordRetype(password, passwordRetype))
         {
             const user = {
                 email,address,
@@ -57,11 +56,7 @@ export default function RegistrationPage() {
                 lastname: lname,
                 password
             }
-            const res = register(user)
-            res.then(res => {
-                navigate('/login')    
-                setValMessage(res)
-            })
+            register(user)
         }
 
 
@@ -156,7 +151,7 @@ export default function RegistrationPage() {
                         </form>
                         <div style={{ margin: '10px' }}>
                             <span>Or </span>
-                            <span style={{ color: 'red' }} onClick={handleLoginNavigate}>
+                            <span style={{ color: 'red', cursor: 'pointer' }} onClick={handleLoginNavigate}>
                                 Login
                             </span>
                         </div>
