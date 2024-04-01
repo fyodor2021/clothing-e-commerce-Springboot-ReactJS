@@ -41,7 +41,8 @@ public class WalletServiceImp implements WalletService{
 
                 String lastFourDigits = walletRequest.getCardNumber().substring(walletRequest.getCardNumber().length() - 4);
                 cardInfo.setLastFourDigit(lastFourDigits);
-
+                cardInfo.setFirstname(walletRequest.getCardHolderFirstName());
+                cardInfo.setLastname(walletRequest.getCardHolderLastName());
                 cardInfo.setUserEmail(wallet.getUserEmail());
                 cardInfoRepository.save(cardInfo);
 

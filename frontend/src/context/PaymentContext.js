@@ -5,12 +5,17 @@ const PaymentContext = createContext();
 function PaymentProvider({ children }) {
     const [userCardsInfo, setUserCardsInfo] = useState();
     const addPaymentMethod = async (addPaymentRequest) => {
+        if(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)){
+
         await axios.post('/api/wallet/add', addPaymentRequest)
             .then(res => console.log(res.data))
+        }
     }
     const getCardsInfo = async () => {
-        await axios.get('/api/wallet/cards')
-            .then(res => setUserCardsInfo(res.data))
+        if(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)){
+            await axios.get('/api/wallet/cards')
+                .then(res => setUserCardsInfo(res.data))
+        }
     }
     const valueProvided = {
         addPaymentMethod,

@@ -52,6 +52,12 @@ function AuthProvider({ children }) {
             }
         })
     }
+    const getLoggedUser = async() => {
+        console.log('im in the getloggeduser boss')
+        if(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)){
+            await axios.get('/api/auth/user').then(res => setLoggedUser(res.data))
+        }
+    }
     const signout = () => {
         window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
         window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL_EXPIRATION)
@@ -67,7 +73,8 @@ function AuthProvider({ children }) {
         loggedUser,
         updateUser,
         userChanged,
-        setUserChanged
+        setUserChanged,
+        getLoggedUser
     }
     return <AuthContext.Provider value={valueProvided}>
                 {children}

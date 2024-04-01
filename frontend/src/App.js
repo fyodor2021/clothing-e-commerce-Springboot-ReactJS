@@ -22,7 +22,7 @@ import { useCookies } from "react-cookie";
 export default function App({indexToken}) {
     const {fetchProducts} = useProductContext()
     const {getCartProducts} = useCartContext();
-    const {setLoggedUser,loggedUser,userChanged} = useAuthContext();
+    const {setLoggedUser,loggedUser,userChanged,getLoggedUser} = useAuthContext();
     const {getCardsInfo} = usePaymentContext();
     const navigate = useNavigate();
     const [cookies, setCookie,removeCookie] = useCookies()
@@ -35,9 +35,10 @@ export default function App({indexToken}) {
     useEffect(() => {
         getCartProducts();
         fetchProducts();
-        // if(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)){
-        //     getCardsInfo();
-        // }
+        if(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)){
+            getLoggedUser();
+            getCardsInfo();
+        }
     },[])
     useEffect(() => {
         if(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)){
@@ -63,10 +64,8 @@ export default function App({indexToken}) {
     })
     
     axios.interceptors.response.use(response => {
-        console.log(response)
         return response;
     },error => {
-        console.log("im here, here is your error ", error.response.status)
         if(error.response && error.response.status == 403){
             navigate("/login")
         }

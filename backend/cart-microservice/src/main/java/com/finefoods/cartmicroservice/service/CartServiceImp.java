@@ -166,16 +166,15 @@ public class CartServiceImp implements CartService {
 //    }
 //
 //
-//    public void deleteAllProductsInCart(String cartId){
-//        Cart doesExist  = cartRepository.findCartByCartId(cartId);
-//        if(doesExist != null){
-//          doesExist.setProducts(new ArrayList<>());
-//          cartRepository.save(doesExist);
-//        }
-//
-//    }
-    public List<Product> getProductsInCart(String headerValue){
+    public void emptyCart(String headerValue){
+        Cart doesExist  = cartRepository.findCartByHeaderValue(headerValue);
+        if(doesExist != null){
+          doesExist.setProducts(new ArrayList<>());
+          cartRepository.save(doesExist);
+        }
 
+    }
+    public List<Product> getProductsInCart(String headerValue){
         List<InventoryRequest>  inventoryRequestList = new ArrayList<>();
         Cart cartLookup = cartRepository.findCartByHeaderValue(headerValue);
         if (cartLookup != null){

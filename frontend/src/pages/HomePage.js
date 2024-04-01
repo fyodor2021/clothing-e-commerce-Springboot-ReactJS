@@ -17,11 +17,8 @@ export default function HomePage({ category }) {
   const { createCart } = useCartContext();
   const [filter, setFilter] = useState('');
   const filterPanel = document.getElementsByClassName('filter-panel-container');
-  // useEffect(() => {
-  //   fetchProducts();
-  // },[])
   const handleScrollEvent = () => {
-    if (window.scrollY > 560) {
+    if (window.scrollY > 580) {
       filterPanel[0].classList.add('fix-panel');
     } else {
       filterPanel[0].classList.remove('fix-panel');
@@ -51,9 +48,8 @@ export default function HomePage({ category }) {
   for (let i = 0; i < 20; i++) {
     skeletons.push(<div key={i} className="m-5">
       <Skeleton />
-      gray </div>)
+     </div>)
   }
-  console.log(products)
   return (
     <div>
       <div className="home-page-container">

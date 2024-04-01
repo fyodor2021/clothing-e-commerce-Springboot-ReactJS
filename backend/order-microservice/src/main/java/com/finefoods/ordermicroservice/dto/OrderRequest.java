@@ -22,5 +22,4 @@ public class OrderRequest {
     private double pointsToAdd;
     private double pointsToPay;
     private double moneyToPay;
-
 }

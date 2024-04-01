@@ -6,38 +6,6 @@ const CartContext = createContext();
 function CartProvider({ children }) {
     const [cartProducts, setCartProducts] = useState([]);
     const [cookies] = useCookies()
-//     const createCart = async () => {
-//         axios.post("http://localhost:3003/api/cart/add", {
-//     userId: null,
-//     products: []
-// }, {
-
-//     withCredentials: true
-// }).then(res => console.log(res.data));
-//     }
-//     }
-//     const testCart = () => {
-//         // axios.post("http://localhost:3003/api/cart/add",{
-//         // Headers:{
-//         //     'Content-Type':'application/json'
-//         // },
-//         // withCredentials:'included'
-
-//         // })
-//         // .then(res => console.log(res.data))
-//         // axios.get("http://localhost:3003/api/cart/add",{
-//         //     // userId: 0,
-//         //     // products: []
-//         //     withCredentials: true
-//         // }).then(res => console.log(res.data))
-//         axios.post("http://localhost:3003/api/cart/add", {
-//     // userId: 0,
-//     // products: []
-// }, {
-
-//     withCredentials: true
-// }).then(res => console.log(res.data));
-//     }
     const addToCart = (product) => {
         axios.post("api/cart/add", {product}).then(res => getCartProducts())
     }
@@ -51,12 +19,22 @@ function CartProvider({ children }) {
     const productCountIncrement = (incDecRequest) => {
         axios.post("api/cart/product/inc",incDecRequest).then(res => getCartProducts())
     }
+    const placeOrder = async(orderRequest) => {
+        console.log("im here boss")
+        await axios.post("/api/order", orderRequest).then(res => console.log(res))
+        .catch(err => console.log(err))
+    }
+    const emptyCart = async() => {
+        await axios.put('api/cart/all')
+    }
     const valueProvided = {
         addToCart,
         getCartProducts,
         cartProducts,
         productCountDecrement,
-        productCountIncrement
+        productCountIncrement,
+        placeOrder,
+        emptyCart
     }   
 
     

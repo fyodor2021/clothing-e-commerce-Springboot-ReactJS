@@ -25,6 +25,7 @@ public class Product {
     private double cost;
     private double price;
     private double currentPrice;
+    private double points;
     private Boolean isTaxed;
     private String skuCode;
     private String upcCode;

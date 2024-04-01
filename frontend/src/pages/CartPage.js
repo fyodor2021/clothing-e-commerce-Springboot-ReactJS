@@ -21,7 +21,6 @@ export default function CartPage() {
             }
         }
     }
-    console.log(cartProducts)
     useEffect(() => {
         getCartProducts()
         window.addEventListener('scroll', handleScrollEvent);
@@ -36,10 +35,13 @@ export default function CartPage() {
         };
     }, [subTotal])
     const tax = subTotal * .13
-    const total = (subTotal + tax + 2)
+    const total = (subTotal + tax)
     const handleCheckout = () => {
         navigate('/checkout')
     }
+    const pointsGainedByPurchase = cartProducts.reduce((acc,item) => {
+        return acc = parseInt(acc) + parseInt(item.points * item.quantity)
+    },[0])
     return <div>
         {subTotal != 0 ?
             <div className="cart-main-container">
@@ -52,15 +54,19 @@ export default function CartPage() {
                     <div className="right-container">
                         <div className="cart-checkout-container">
                             <div className="cart-checkout-small-containers">
-                                <p>Subtotal: </p>
+                                <p>Total before tax: </p>
                                 <p>${subTotal.toFixed(2)}</p>
                             </div>
                             <div className="cart-checkout-small-containers">
-                                <p>Tax: </p>
+                                <p>Estimated tax: </p>
                                 <p>${tax.toFixed(2)}</p>
                             </div>
+                            <div className="cart-checkout-small-containers" style={{color:'green'}}>
+                                <p>Points gained: </p>
+                                <p>{pointsGainedByPurchase} Points</p>
+                            </div>
                             <div className="cart-checkout-small-containers">
-                                <p>Total: </p>
+                                <p>Estimated total: </p>
                                 <p>${total.toFixed(2)}</p>
                             </div>
                             <div>
