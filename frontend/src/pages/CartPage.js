@@ -3,9 +3,12 @@ import useCartContext from "../hooks/useCartContext"
 import CartProduct from "../components/CartProduct";
 import Footer from "../components/Footer";
 import emptyCartImage from '../statics/emptyCart.png'
+import { useNavigate } from "react-router-dom";
+import CartProductList from "../components/CartProductList";
 export default function CartPage() {
     const { getCartProducts, cartProducts } = useCartContext();
     const checkoutPanel = document.getElementsByClassName('right-container');
+    const navigate = useNavigate();
     const subTotal = cartProducts.reduce((acc, product) => {
         return acc + (product.currentPrice * product.quantity)
     }, 0)
@@ -18,6 +21,7 @@ export default function CartPage() {
             }
         }
     }
+    console.log(cartProducts)
     useEffect(() => {
         getCartProducts()
         window.addEventListener('scroll', handleScrollEvent);
@@ -32,24 +36,24 @@ export default function CartPage() {
         };
     }, [subTotal])
     const tax = subTotal * .13
-    const total = (subTotal + tax)
-    console.log(total)
-
-    const renderedProducts = cartProducts.map((product, key) => {
-        return <CartProduct key={key} product={product} />
-    })
+    const total = (subTotal + tax + 2)
+    const handleCheckout = () => {
+        navigate('/checkout')
+    }
     return <div>
         {subTotal != 0 ?
             <div className="cart-main-container">
-                <div className="cart-product-cards">
-                    {renderedProducts}
+                <div>
+                    <div className="cart-product-cards">
+                        <CartProductList checkout={false} products={cartProducts} />
+                    </div>
                 </div>
                 <div>
                     <div className="right-container">
                         <div className="cart-checkout-container">
                             <div className="cart-checkout-small-containers">
                                 <p>Subtotal: </p>
-                                <p>${subTotal}</p>
+                                <p>${subTotal.toFixed(2)}</p>
                             </div>
                             <div className="cart-checkout-small-containers">
                                 <p>Tax: </p>
@@ -60,11 +64,11 @@ export default function CartPage() {
                                 <p>${total.toFixed(2)}</p>
                             </div>
                             <div>
-                                <button className="button">Checkout</button>
+                                <button onClick={handleCheckout} className="button">Checkout</button>
                             </div>
                         </div>
                     </div>
-                    <div className="right-container hidden">
+                    <div className="right-container" style={{ visibility: 'hidden' }}>
                         <div className="cart-checkout-container">
                             <div className="cart-checkout-small-containers">
                                 <p>Subtotal: </p>
@@ -84,7 +88,6 @@ export default function CartPage() {
                         </div>
                     </div>
                 </div>
-
             </div> :
             <div className="empty-cart-image">
                 <div>

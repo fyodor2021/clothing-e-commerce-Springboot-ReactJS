@@ -83,6 +83,10 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     jwtService.validateToken(authHeader);
 
                 } catch (Exception e) {
+                    exchange.getResponse().addCookie(ResponseCookie.from("SIGNOUT", "123")
+                            .httpOnly(false)
+                            .path("/")
+                            .maxAge(Duration.ofHours(2).toMillis()).build());
                     exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                     return exchange.getResponse().setComplete();
                 }

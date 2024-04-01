@@ -5,6 +5,7 @@ const FilterContext = createContext();
 function FilterProvider({children}){
     const [predictions, setPredictions] = useState();
     const {setProducts} = useProductContext();
+    const [filter,setFilter] = useState();
     const searchPrediction = (term) => {
         axios.get("api/product/search/" + term)
         .then(res => setPredictions(res.data))
@@ -22,7 +23,9 @@ function FilterProvider({children}){
         predictions,
         setPredictions,
         filterProductsBySearchTerm,
-        filterProductByCategory
+        filterProductByCategory,
+        filter,
+        setFilter
     }
     return <FilterContext.Provider value={valueProvided}>
         {children}

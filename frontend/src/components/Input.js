@@ -7,7 +7,7 @@ export default function Input({
     required,
     type
 }) {
-        const [inputState, setInputState] = state;
+    const [inputState, setInputState] = state;
     const handleInputChange = (event) => {
         setInputState(event.target.value)
 

@@ -17,12 +17,21 @@ import { useNavigate } from "react-router-dom";
 import useAuthContext from "./hooks/useAuthContext";
 import useCartContext from "./hooks/useCartContext";
 import usePaymentContext from "./hooks/usePaymentContext";
+import CheckoutPage from "./pages/CheckoutPage";
+import { useCookies } from "react-cookie";
 export default function App({indexToken}) {
     const {fetchProducts} = useProductContext()
     const {getCartProducts} = useCartContext();
     const {setLoggedUser,loggedUser,userChanged} = useAuthContext();
     const {getCardsInfo} = usePaymentContext();
     const navigate = useNavigate();
+    const [cookies, setCookie,removeCookie] = useCookies()
+
+    if(cookies['SIGNOUT']){
+        window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
+        window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL_EXPIRATION)
+        removeCookie(['SIGNOUT'])
+    }
     useEffect(() => {
         getCartProducts();
         fetchProducts();
@@ -54,6 +63,7 @@ export default function App({indexToken}) {
     })
     
     axios.interceptors.response.use(response => {
+        console.log(response)
         return response;
     },error => {
         console.log("im here, here is your error ", error.response.status)
@@ -74,6 +84,7 @@ export default function App({indexToken}) {
             <Route path='/account' element={<AccountPage />} />
             <Route path='/details/:productId' element={<DetailsPage />} />
             <Route path='/add-product' element={<AddProductPage />} />
+            <Route path='/checkout' element={<CheckoutPage />} />
             <Route path='/cart' element={<CartPage />} />
             <Route path='/meat' element={<HomePage />}>Meat</Route>
             <Route path='/cafe' element={<HomePage />}>Cafe</Route>

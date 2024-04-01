@@ -92,9 +92,26 @@ services:
     ports:
       - "5435:5432"
     restart: unless-stopped
+    container_name: postgres-inventory
     volumes:
       - ./data/postgres/inventory-microservice:/data/postgres
       - ./init/postgres/inventory-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - spring
+
+  postgres-authentication:
+    image: postgres:latest
+    restart: unless-stopped
+    container_name: postgres-authentication
+    ports:
+      - "5436:5432"
+    environment:
+      POSTGRES_DB: authentication-microservice
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - ./data/postgres/authentication-microservice:/data/postgres
+      - ./init/postgres/authentication-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - spring
 
@@ -133,28 +150,7 @@ services:
     networks:
       - spring
 
-  redis:
-    image: "redis:alpine"
-    ports:
-      - "6379:6379"
-    container_name: redis-session
-    networks:
-      - spring
 
-  postgres-authentication:
-    image: postgres:latest
-    container_name: postgres-authentication
-    ports:
-      - "5436:5432"
-    environment:
-      POSTGRES_DB: authentication-microservice
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-    volumes:
-      - ./data/postgres/authentication-microservice:/data/postgres
-      - ./init/postgres/authentication-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - spring
 
   mongo-shift:
     image: mongo:latest

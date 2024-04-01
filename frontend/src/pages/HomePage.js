@@ -7,14 +7,15 @@ import slide4 from '../statics/slide4.jpg'
 import Footer from '../components/Footer';
 import FilterPanel from '../components/FilterPanel';
 import Skeleton from '../components/Skeleton'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import FilterSkeleton from "../components/FilterSkeleton";
 import useCartContext from "../hooks/useCartContext";
 import Product from "../components/Product";
 export default function HomePage({ category }) {
   const { products, isLoading, fetchProducts } = useProductContext();
- 
-  const {createCart} = useCartContext();
+
+  const { createCart } = useCartContext();
+  const [filter, setFilter] = useState('');
   const filterPanel = document.getElementsByClassName('filter-panel-container');
   // useEffect(() => {
   //   fetchProducts();
@@ -40,27 +41,24 @@ export default function HomePage({ category }) {
 
       window.addEventListener('scroll', handleScrollEvent);
     }
-    
+
     return () => {
       clearInterval(interval);
       window.removeEventListener('scroll', handleScrollEvent);
     };
-  }, [isLoading,window.location.pathname]);
+  }, [isLoading, window.location.pathname]);
   let skeletons = [];
   for (let i = 0; i < 20; i++) {
     skeletons.push(<div key={i} className="m-5">
       <Skeleton />
-    </div>)
+      gray </div>)
   }
   console.log(products)
   return (
     <div>
       <div className="home-page-container">
         <div className="slider-container">
-              {!isLoading ? <Product product={products[0]}/> : ""}
-              
           <div className="slider">
-
             <div className="slides">
               <input type="radio" name="radio-btn" id="radio1" />
               <input type="radio" name="radio-btn" id="radio2" />
@@ -79,15 +77,9 @@ export default function HomePage({ category }) {
               <div className="slide">
                 <img src={slide4} alt="Slide 4" />
               </div>
-
-
             </div>
           </div>
-          {!isLoading ? <Product product={products[0]}/> : ""}
-          
-
         </div>
-
         {isLoading ? (
           <div className="flex flex-row justify-center w-screen flex-wrap">
             <div className="m-5">
@@ -103,7 +95,7 @@ export default function HomePage({ category }) {
           <div>
             <div className="home-page-cards-filter-container">
               <div>
-                <FilterPanel />
+                <FilterPanel/>
                 <FilterPanel hidden={true} className={'hidden-filter-panel'} />
               </div>
               <div>

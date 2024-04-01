@@ -106,7 +106,9 @@ public class ProductServiceImp implements ProductService{
                 .size(product.getSize())
                 .unit(product.getUnit())
                 .cost(product.getCost())
+                .price(product.getPrice())
                 .currentPrice(product.getCurrentPrice())
+                .points(product.getPoints())
                 .isTaxed(product.getIsTaxed())
                 .skuCode(product.getSkuCode())
                 .upcCode(product.getUpcCode())
@@ -234,6 +236,8 @@ public class ProductServiceImp implements ProductService{
                 .size(product.getSize())
                 .unit(product.getUnit())
                 .cost(product.getCost())
+                .price(product.getPrice())
+                .points(product.getPoints())
                 .currentPrice(product.getCurrentPrice())
                 .isTaxed(product.getIsTaxed())
                 .skuCode(product.getSkuCode())
@@ -285,11 +289,8 @@ public class ProductServiceImp implements ProductService{
 
 
     public void imageLoader(File file, Product product){
-            String fileName = product.getSkuCode() + "_" + System.currentTimeMillis() + "_" + file.getName();
+            String fileName = file.getName();
             Image image = Image.builder().imageFileName(fileName).productId(product.getProductId()).build();
             Image savedImage = imageRepository.save(image);
-            amazonS3Client.putObject(new PutObjectRequest(bucketName,fileName, file));
-
     }
-
 }

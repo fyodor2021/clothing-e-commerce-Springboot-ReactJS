@@ -30,4 +30,5 @@ public class Product {
     private String upcCode;
     private String vendor;
     private int quantity;
+    private Boolean inStock;
 }

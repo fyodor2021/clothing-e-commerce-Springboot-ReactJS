@@ -44,7 +44,11 @@ public class OrderServiceImpl implements OrderService{
 
         List<InventoryRequest>  inventoryRequestList = new ArrayList<>();
         for (Product product : orderRequest.getProducts()){
-            InventoryRequest inventoryRequest = InventoryRequest.builder().stock(product.getQuantity()).productId(product.getProductId()).build();
+            InventoryRequest inventoryRequest = InventoryRequest
+                    .builder()
+                    .stock(product.getQuantity())
+                    .productId(product.getProductId())
+                    .build();
             inventoryRequestList.add(inventoryRequest);
         }
 

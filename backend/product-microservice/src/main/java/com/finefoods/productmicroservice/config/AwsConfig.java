@@ -15,12 +15,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AwsConfig {
 //    @Value("${aws.accessKey.value}")
-    private String accessKey = "AKIAYVQ53JMHRF2DCYLK";
+    private String accessKey = "AKIA4J3CD4ESYTROYX3T";
 //    @Value("${aws.secretKey.value")
-    private String secretKey = "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";
+    private String secretKey = "QbbYsrUwzHTGjvPr49KmAsctcSweacE6kBeTSHNy";
     public AWSCredentials credentials(){
         return new BasicAWSCredentials(
-                "AKIAYVQ53JMHYWBRSSPI","t6QABSYkAxnb2mu6OZZcwjAAvNOaZo2sidtd2x04"
+                accessKey,secretKey
         );
     }
     @Bean
