@@ -6,9 +6,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.finefoods.productmicroservice.dto.InventoryRequest;
-import com.finefoods.productmicroservice.dto.ProductRequest;
-import com.finefoods.productmicroservice.dto.ProductResponse;
+import com.finefoods.productmicroservice.dto.*;
 import com.finefoods.productmicroservice.model.Image;
 import com.finefoods.productmicroservice.model.Product;
 import com.finefoods.productmicroservice.repository.ImageRepository;
@@ -32,7 +30,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ProductServiceImp implements ProductService{
+public class ProductServiceImp implements ProductService {
 
     private final ProductRepository productRepository;
     private final ImageRepository imageRepository;
@@ -45,6 +43,7 @@ public class ProductServiceImp implements ProductService{
     private final WebClient.Builder webClient;
     @Value("${inventory.service.url}")
     private String inventoryUri;
+
     @Override
     public Boolean creatProduct(MultipartFile[] files, ProductRequest productRequest) {
         Product product = Product.builder()
@@ -64,7 +63,7 @@ public class ProductServiceImp implements ProductService{
                 .points(productRequest.getPoints())
                 .build();
 
-        Product savedProduct  = productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
         uploadImages(files, savedProduct);
 
         // Creating Inventory for the product that was created
@@ -72,30 +71,32 @@ public class ProductServiceImp implements ProductService{
                 .productId(product.getProductId())
                 .stockUnit(product.getUnit()).build();
 
-                webClient.build().post()
-                        .uri(inventoryUri)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(inventoryRequest)
-                        .retrieve()
-                        .bodyToMono(String.class)
-                        .subscribe(responseBody -> {
-                            System.out.println("Response: " + responseBody);
-                        }, error -> {
-                            System.err.println("Error: " + error.getMessage());
-                        });
+        webClient.build().post()
+                .uri(inventoryUri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(inventoryRequest)
+                .retrieve()
+                .bodyToMono(String.class)
+                .subscribe(responseBody -> {
+                    System.out.println("Response: " + responseBody);
+                }, error -> {
+                    System.err.println("Error: " + error.getMessage());
+                });
 
 
         return Boolean.TRUE;
     }
+
     @Override
-    public ProductResponse validateProduct(Long id){
+    public ProductResponse validateProduct(Long id) {
         Product product = productRepository.findProductByProductId(id);
-        if(product != null ){
+        if (product != null) {
             return mapToProductResponseValidate(product);
         }
         return ProductResponse.builder().build();
     }
-    private ProductResponse mapToProductResponseValidate(Product product){
+
+    private ProductResponse mapToProductResponseValidate(Product product) {
         return ProductResponse.builder()
                 .productId(product.getProductId())
                 .brand(product.getBrand())
@@ -121,26 +122,27 @@ public class ProductServiceImp implements ProductService{
     public ResponseEntity<ProductResponse> getProduct(Long id) throws IOException {
         List<Image> imageList = imageRepository.getImageByProductId(id);
         List<byte[]> imagesInBytes = new ArrayList<>();
-        for(Image image: imageList){
+        for (Image image : imageList) {
             imagesInBytes.add(getImage(image.getImageFileName()));
         }
 
         Product product = productRepository.findProductByProductId(id);
-        if(product != null ){
-            ProductResponse productResponse = productToProductResponse(product,imagesInBytes);
+        if (product != null) {
+            ProductResponse productResponse = productToProductResponse(product, imagesInBytes);
             return ResponseEntity.ok(productResponse);
         }
         ProductResponse emptyObject = ProductResponse.builder().build();
         return ResponseEntity.ok(emptyObject);
 
     }
+
     @Override
     public List<ProductResponse> getAllProducts() throws IOException {
         List<Product> products = productRepository.findAll();
         return mapToProductImageResponse(products);
     }
 
-//    @Override
+    //    @Override
 //    public List<ProductResponse> getProductsByCategory(String category){
 //        List<Product> products = productRepository.findProductByCategory(category);
 //        return products.stream().map(this::productToProductResponse).toList();
@@ -204,27 +206,32 @@ public class ProductServiceImp implements ProductService{
     public Boolean deleteProduct(Long id) throws IOException {
         Product p = productRepository.findProductByProductId(id);
         List<Image> imageList = imageRepository.getImageByProductId(id);
-        for(Image image: imageList){
+        for (Image image : imageList) {
             deleteImage(image.getImageFileName());
         }
-        if (p != null){
+        if (p != null) {
             productRepository.deleteById(id);
             return true;
         }
-       return false;
+        return false;
     }
 
     @Override
-    public List<String> searchPrediction(String search) {
-       List<Product> products = productRepository.findDistinctFirstByProductNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(search,search);
-        List<String> productNames = new ArrayList<>();
-        for(Product product : products){
-            productNames.add(product.getProductName());
+    public List<ProductFilterResponse> searchPrediction(String search) {
+        List<Product> products = productRepository.findByProductNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(search, search);
+        List<ProductFilterResponse> productFilterResponses = new ArrayList<>();
+        for (Product product : products) {
+            productFilterResponses.add(
+                    ProductFilterResponse
+                            .builder()
+                            .productName(product.getProductName())
+                            .productId(product.getProductId())
+                            .build());
         }
-        return productNames;
+        return productFilterResponses;
     }
 
-    private ProductResponse productToProductResponse(Product product, List<byte[]> imageList){
+    private ProductResponse productToProductResponse(Product product, List<byte[]> imageList) {
         return ProductResponse.builder()
                 .productId(product.getProductId())
                 .imageList(imageList)
@@ -246,51 +253,85 @@ public class ProductServiceImp implements ProductService{
                 .points(product.getPoints())
                 .build();
     }
+
     public List<ProductResponse> mapToProductImageResponse(List<Product> products) throws IOException {
         List<ProductResponse> productResponses = new ArrayList<>();
-        for(Product product: products){
+        for (Product product : products) {
             List<Image> imageList = imageRepository.getImageByProductId(product.getProductId());
             List<byte[]> imagesInBytes = new ArrayList<>();
-            for(Image image: imageList){
+            for (Image image : imageList) {
                 imagesInBytes.add(getImage(image.getImageFileName()));
             }
             productResponses.add(productToProductResponse(product, imagesInBytes));
         }
         return productResponses;
     }
-    private void uploadImages(MultipartFile[] files, Product product){
-        for(MultipartFile file : files){
-            File fileObj=convertMultiToFile(file);
+
+    private void uploadImages(MultipartFile[] files, Product product) {
+        for (MultipartFile file : files) {
+            File fileObj = convertMultiToFile(file);
             String fileName = product.getSkuCode() + "_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
             Image image = Image.builder().imageFileName(fileName).productId(product.getProductId()).build();
             Image savedImage = imageRepository.save(image);
-            amazonS3Client.putObject(new PutObjectRequest(bucketName,fileName, fileObj));
+            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, fileObj));
             fileObj.delete();
         }
     }
-    private File convertMultiToFile(MultipartFile file){
+
+    private File convertMultiToFile(MultipartFile file) {
         File convertedFile = new File(file.getOriginalFilename());
-        try(FileOutputStream fos = new FileOutputStream(convertedFile)) {
+        try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
             fos.write(file.getBytes());
-        }catch (IOException e){
+        } catch (IOException e) {
             log.error("Error Converting file", e);
         }
         return convertedFile;
     }
+
+
     public byte[] getImage(String fileName) throws IOException {
-        S3Object s3Object = amazonS3Client.getObject(bucketName,fileName);
+        S3Object s3Object = amazonS3Client.getObject(bucketName, fileName);
         S3ObjectInputStream inputStream = s3Object.getObjectContent();
         return IOUtils.toByteArray(inputStream);
     }
-    public void deleteImage(String filename) throws IOException{
+
+    public void deleteImage(String filename) throws IOException {
         amazonS3Client.deleteObject(bucketName, filename);
     }
 
 
-
-    public void imageLoader(File file, Product product){
-            String fileName = file.getName();
-            Image image = Image.builder().imageFileName(fileName).productId(product.getProductId()).build();
-            Image savedImage = imageRepository.save(image);
+    public void imageLoader(File file, Product product) {
+        String fileName = file.getName();
+        Image image = Image.builder().imageFileName(fileName).productId(product.getProductId()).build();
+        Image savedImage = imageRepository.save(image);
     }
+
+
+    public List<OrderProductResponse> getProductsByProductIdList(List<Long> productIds) throws IOException {
+        List<OrderProductResponse> orderProductResponses = new ArrayList<>();
+        List<String> imagesNames = new ArrayList<>();
+        for (Long productId : productIds) {
+            Product product = productRepository.findProductByProductId(productId);
+            List<Image> imageList = imageRepository.getImageByProductId(productId);
+            for (Image image : imageList) {
+                imagesNames.add(image.getImageFileName());
+            }
+            orderProductResponses.add(OrderProductResponse.builder().productId(product.getProductId())
+                    .productName(product.getProductName())
+                    .description(product.getDescription())
+                    .imageFileNames(imagesNames)
+                    .size(product.getSize())
+                    .unit(product.getUnit())
+                    .currentPrice(product.getCurrentPrice())
+                    .build());
+            imagesNames = new ArrayList<>();
+        }
+        return orderProductResponses;
+    }
+//private List<String> imageFileNames;
+//private String productName;
+//private String description;
+//private String size;
+//private String unit;
+//private double currentPrice;
 }

@@ -2,8 +2,7 @@ package com.finefoods.productmicroservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.finefoods.productmicroservice.dto.ProductRequest;
-import com.finefoods.productmicroservice.dto.ProductResponse;
+import com.finefoods.productmicroservice.dto.*;
 import com.finefoods.productmicroservice.model.Image;
 import com.finefoods.productmicroservice.repository.ImageRepository;
 import com.finefoods.productmicroservice.service.ProductServiceImp;
@@ -53,12 +52,10 @@ public class ProductController {
         return productService.getAllProducts();
     }
     @GetMapping("/search/{input}")
-    public List<String> searchPrediction(@PathVariable String input){
+    public List<ProductFilterResponse> searchPrediction(@PathVariable String input){
         return productService.searchPrediction(input);
     }
 
-//
-//
 //    @GetMapping({"category/{category}"})
 //    public List<ProductResponse> getProductsByCategory(@PathVariable("category") String category){
 //        return productService.getProductsByCategory(category);
@@ -67,12 +64,14 @@ public class ProductController {
     public List<ProductResponse> getProductsBySearchTerm(@PathVariable("search") String search) throws IOException {
         return productService.getProductsBySearchTerm(search);
     }
-
+    @PostMapping("/order/products")
+    List<OrderProductResponse> getProductsByProductIdList(@RequestBody List<Long> productIds) throws IOException{
+        return productService.getProductsByProductIdList(productIds);
+    }
     @GetMapping({"search/category/{search}"})
     public List<ProductResponse> getProductByCategory(@PathVariable("search") String search) throws IOException {
         return productService.getProductByCategory(search);
     }
-//
 //
 //    @GetMapping({"validate"})
 //    public List<ProductResponse> validateProductList(@RequestBody List<ProductRequest> products ){

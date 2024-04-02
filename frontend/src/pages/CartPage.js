@@ -12,6 +12,7 @@ export default function CartPage() {
     const subTotal = cartProducts.reduce((acc, product) => {
         return acc + (product.currentPrice * product.quantity)
     }, 0)
+    console.log(cartProducts)
     const handleScrollEvent = () => {
         if (subTotal != 0) {
             if (window.scrollY > 100) {
@@ -34,7 +35,11 @@ export default function CartPage() {
             window.removeEventListener('scroll', handleScrollEvent);
         };
     }, [subTotal])
-    const tax = subTotal * .13
+
+    let tax = cartProducts.reduce((acc,item) => {
+            return  parseFloat(acc) + parseFloat(item.currentPrice * .13)
+    },[0])
+
     const total = (subTotal + tax)
     const handleCheckout = () => {
         navigate('/checkout')

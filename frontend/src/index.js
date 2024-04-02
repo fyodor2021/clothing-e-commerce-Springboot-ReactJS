@@ -11,6 +11,7 @@ import { ValidationProvider } from './context/ValidationContext.js'
 import { PaymentProvider } from './context/PaymentContext.js'
 import { FilterProvider } from './context/FilterContext.js'
 import { useCookies } from 'react-cookie'
+import { OrderProvider } from './context/OrderContext.js'
 import axios from 'axios'
 const el = document.getElementById('root')
 const root = ReactDOM.createRoot(el)
@@ -23,15 +24,17 @@ root.render(
         <ValidationProvider>
             <AuthProvider>
                 <CartProvider>
-                        <ProductProvider>
-                            <ReviewProvider>
-                                <PaymentProvider>
+                    <ProductProvider>
+                        <ReviewProvider>
+                            <PaymentProvider>
+                                <OrderProvider>
                                     <FilterProvider>
                                         <App indexToken={indextoken} />
                                     </FilterProvider>
-                                </PaymentProvider>
-                            </ReviewProvider>
-                        </ProductProvider>
+                                </OrderProvider>
+                            </PaymentProvider>
+                        </ReviewProvider>
+                    </ProductProvider>
                 </CartProvider>
             </AuthProvider>
         </ValidationProvider>
