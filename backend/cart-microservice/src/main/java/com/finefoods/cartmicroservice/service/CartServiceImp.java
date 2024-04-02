@@ -1,17 +1,17 @@
 package com.finefoods.cartmicroservice.service;
 
 
-import com.finefoods.cartmicroservice.dto.AddToCartRequest;
-import com.finefoods.cartmicroservice.dto.CartRequest;
-import com.finefoods.cartmicroservice.dto.CartResponse;
-import com.finefoods.cartmicroservice.dto.IncDecRequest;
+import com.finefoods.cartmicroservice.dto.*;
 import com.finefoods.cartmicroservice.model.Cart;
 import com.finefoods.cartmicroservice.model.Product;
 import com.finefoods.cartmicroservice.repository.CartRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,8 +23,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class CartServiceImp implements CartService {
     final CartRepository cartRepository;
-
-
+    private final WebClient.Builder webClientBuilder;
+    @Value("${inventory.microservice.url}")
+    private String inventoryUri;
     public Cart createCart(String headerValue){
                     Cart cart = Cart.builder()
                     .headerValue(headerValue)
@@ -112,7 +113,6 @@ public class CartServiceImp implements CartService {
         if(cart != null){
             for(Product product: cart.getProducts()){
                 if(product.getProductId().equals(incDecRequest.getProductId())){
-
                     product.setQuantity(product.getQuantity() - 1);
                     if(product.getQuantity() == 0){
                         cart.getProducts().remove(product);
@@ -166,17 +166,32 @@ public class CartServiceImp implements CartService {
 //    }
 //
 //
-//    public void deleteAllProductsInCart(String cartId){
-//        Cart doesExist  = cartRepository.findCartByCartId(cartId);
-//        if(doesExist != null){
-//          doesExist.setProducts(new ArrayList<>());
-//          cartRepository.save(doesExist);
-//        }
-//
-//    }
+    public void emptyCart(String headerValue){
+        Cart doesExist  = cartRepository.findCartByHeaderValue(headerValue);
+        if(doesExist != null){
+          doesExist.setProducts(new ArrayList<>());
+          cartRepository.save(doesExist);
+        }
+
+    }
     public List<Product> getProductsInCart(String headerValue){
+        List<InventoryRequest>  inventoryRequestList = new ArrayList<>();
         Cart cartLookup = cartRepository.findCartByHeaderValue(headerValue);
         if (cartLookup != null){
+            for (Product product : cartLookup.getProducts()){
+                InventoryRequest inventoryRequest = InventoryRequest
+                        .builder()
+                        .stock(product.getQuantity())
+                        .productId(product.getProductId())
+                        .build();
+                inventoryRequestList.add(inventoryRequest);
+            }
+            List<ProductAvailability> inStock = areProductInStock(inventoryRequestList);
+            for (int i = 0; i < inStock.size(); i++) {
+                if(cartLookup.getProducts().get(i).getProductId() == inStock.get(i).getProductId()){
+                    cartLookup.getProducts().get(i).setInStock(inStock.get(i).isInStock());
+                }
+            }
             return cartLookup.getProducts();
         }
         return new ArrayList<>();
@@ -233,6 +248,16 @@ public class CartServiceImp implements CartService {
 //
 //    }
 
+    private List<ProductAvailability> areProductInStock(List<InventoryRequest> inventoryRequestList){
+        return webClientBuilder.build()
+                .post()
+                .uri(inventoryUri + "/stock")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(inventoryRequestList).retrieve()
+                .bodyToFlux(ProductAvailability.class)
+                .collectList().block();
+
+    }
 
 }
 

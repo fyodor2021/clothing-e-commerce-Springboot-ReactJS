@@ -8,6 +8,7 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -39,17 +40,17 @@ public class OrderController {
 
 
     @GetMapping("/{userEmail}")
-    public List<OrderResponse> getOrderByUserEmail(@PathVariable String userEmail){
+    public List<OrderResponse> getOrderByUserEmail(@PathVariable String userEmail) throws IOException {
         return orderService.getOrdersByUserEmail(userEmail);
     }
 
-    @GetMapping("/active/{userEmail}")
-    public List<OrderResponse> getActiveOrdersByUserEmail(@PathVariable String userEmail){
-        return orderService.getActiveOrders(userEmail);
-    }
-    @GetMapping("/inactive/{userEmail}")
-    public List<OrderResponse> getInActiveOrdersByUserEmail(@PathVariable String userEmail){
-        return orderService.getInActiveOrders(userEmail);
-    }
+//    @GetMapping("/active/{userEmail}")
+//    public List<OrderResponse> getActiveOrdersByUserEmail(@PathVariable String userEmail){
+//        return orderService.getActiveOrders(userEmail);
+//    }
+//    @GetMapping("/inactive/{userEmail}")
+//    public List<OrderResponse> getInActiveOrdersByUserEmail(@PathVariable String userEmail){
+//        return orderService.getInActiveOrders(userEmail);
+//    }
 }
 

@@ -3,6 +3,10 @@ import Footer from "../components/Footer";
 import { useEffect, useState, useRef } from 'react'
 import useAuthContext from "../hooks/useAuthContext";
 import { hasSelectionSupport } from "@testing-library/user-event/dist/utils";
+import arzFineFoodsStore from '../statics/arz-fine-foods-store.jpg'
+
+import Wallet from "../components/Wallet";
+import PersonalInfo from "../components/PersonalInfo";
 export default function AccountPage() {
     const [selected, setSelected] = useState('My Account');
     const { signout, loggedUser } = useAuthContext();
@@ -24,52 +28,51 @@ export default function AccountPage() {
         lastname = loggedUser.lastname;
         email = loggedUser.email;
         address = loggedUser.address;
+        const user = {
+            firstname,
+            lastname,
+            email,
+            address
+        }
         switch (selected) {
             case 'My Account':
+                content = <PersonalInfo />
+                break;
+            case 'My Wallet':
+                content = <Wallet />
+                break;
+            case 'Active Orders':
+                content = <div>Active Orders</div>
+                break;
+            case 'Order Again':
+                content = <div>Order Again</div>
+                break;
+            case 'Contact Us':
                 content =
                     <div>
+                        <h1 className="account-page-headers">Tell us how we did!</h1>
+                        <img src={arzFineFoodsStore} width="800" />
                         <div className="account-info-item">
-                            <div className="account-info-label">Full name</div>
-                            <div>{firstname} {lastname}</div>
+                            <div className="account-info-label">Contact Us at</div>
+                            <div>444-444-3309</div>
                         </div>
                         <div className="account-info-item">
                             <div className="account-info-label">Email</div>
-                            <div>{email}</div>
+                            <div>arzfinefoods@arz-support.com</div>
                         </div>
-                        <div className="account-info-item">
-                            <div className="account-info-label">Address</div>
-                            <div>{address}</div>
-                        </div>
-                        <div className="account-info-item">
-                            <div className="account-info-label">Password</div>
-                            <div>*******************</div>
-                        </div>
+
 
                     </div>
 
                 break;
-            case 'My Wallet':
-                content = <div>My Wallet</div>
-                break;
-            case 'My Points':
-                content = <div>My Points</div>
-                break;
-            case 'Re-order':
-                content = <div>Order Again</div>
-                break;
-            case 'Purchase History':
-                content = <div>Purchase History</div>
-                break;
-            case 'Contact Us':
-                content = <div>Contact Us</div>
-                break;
         }
     }
     return (
-        <div>
+        <div className="account-page">
             <div className="account-page-container">
                 <div className="account-page-wrapper">
                     <div className="account-page-item">
+
                         <h1 className="account-page-headers">
                             {firstname} {lastname}
                         </h1>
@@ -83,20 +86,16 @@ export default function AccountPage() {
                             <h1 onClick={() => handleMenuSelect('My Wallet')}>
                                 My Wallet
                             </h1>
-                            <h1 onClick={() => handleMenuSelect('My Points')}>
-                                My Points
-                            </h1>
-
                         </div>
                         <h1 className="account-page-headers">
                             My Items
                         </h1>
                         <div>
-                            <h1 onClick={() => handleMenuSelect('Re-order')}>
-                                Re-order
+                            <h1 onClick={() => handleMenuSelect('Active Orders')}>
+                                Active Orders
                             </h1>
-                            <h1 onClick={() => handleMenuSelect('Purchase History')}>
-                                Purchase History
+                            <h1 onClick={() => handleMenuSelect('Order Again')}>
+                                Order Again
                             </h1>
                         </div>
                         <h1 className="account-page-headers">
@@ -112,7 +111,6 @@ export default function AccountPage() {
                         </h1>
                     </div>
                     <div className="account-page-item">
-                        <h1 className="account-page-headers">Your Personal Information</h1>
                         {
                             content
                         }

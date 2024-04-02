@@ -4,6 +4,7 @@ import com.finefoods.walletmicroservice.dto.WalletRequest;
 import com.finefoods.walletmicroservice.dto.WalletResponse;
 import com.finefoods.walletmicroservice.model.CardInfo;
 import com.finefoods.walletmicroservice.model.Wallet;
+import com.finefoods.walletmicroservice.repository.CardInfoRepository;
 import com.finefoods.walletmicroservice.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,60 +18,61 @@ import java.util.*;
 public class WalletServiceImp implements WalletService{
 
     private final  WalletRepository walletRepository;
+    private final CardInfoRepository cardInfoRepository;
 
     private final Helper helper;
 
     @Override
-    public void addWallet(WalletRequest walletRequest) {
+    public void addCard(WalletRequest walletRequest) {
         Wallet doesExist = walletRepository.findByCardNumber(walletRequest.getCardNumber());
         if (doesExist == null) {
             if (helper.varifyCard(walletRequest.getCardNumber())){
                 Wallet wallet = Wallet.builder()
-                        .userId(walletRequest.getUserId())
+                        .userEmail(walletRequest.getUserEmail())
                         .cardHolderFirstName(walletRequest.getCardHolderFirstName())
                         .cardHolderLastName(walletRequest.getCardHolderLastName())
                         .cardNumber(helper.encrypt(walletRequest.getCardNumber(), "secret"))
-                        .expiryMonth(walletRequest.getExpiryMonth())
-                        .expiryYear(walletRequest.getExpiryYear())
+                        .expiryDate(walletRequest.getExpiryDate())
                         .cvv(helper.encrypt(walletRequest.getCvv(), "secret"))
                         .build();
+
+                String firstSixDigits = walletRequest.getCardNumber().substring(0,6 );
+                CardInfo cardInfo = helper.getCardInfo(firstSixDigits);
+
+                String lastFourDigits = walletRequest.getCardNumber().substring(walletRequest.getCardNumber().length() - 4);
+                cardInfo.setLastFourDigit(lastFourDigits);
+                cardInfo.setFirstname(walletRequest.getCardHolderFirstName());
+                cardInfo.setLastname(walletRequest.getCardHolderLastName());
+                cardInfo.setUserEmail(wallet.getUserEmail());
+                cardInfoRepository.save(cardInfo);
+
+
+
+
 
                 System.out.println(wallet.getCardNumber());
                 walletRepository.save(wallet);
             }else {
                 throw new RuntimeException("It is invalid card");
             }
-
-
-
         }
     }
-    public List<Wallet> getAllWallets(){
-        List<Wallet> wallet = walletRepository.findAll();
-        return wallet;
-    }
+//    public List<Wallet> getAllWallets(){
+//        List<Wallet> wallet = walletRepository.findAll();
+//        return wallet;
+//    }
 
-    public List<WalletResponse> getWalletsByUserId(Long userId){
-        List<Wallet> cards = walletRepository.findWalletByUserId(userId);
+    public List<WalletResponse> getCardsByUserEmail(String userEmail){
+        List<Wallet> cards = walletRepository.findWalletByUserEmail(userEmail);
         return cards.stream().map(wallet -> walletToWalletResponse(wallet)).toList();
     }
-    public List<CardInfo> getCardsInfoByUserId(Long userId){
-        List<Wallet> cards = walletRepository.findWalletByUserId(userId);
-        if(cards != null){
-            return cards.stream()
-                    .map(wallet -> {
-                        String decryptedCardNumber = helper.decrypt(wallet.getCardNumber(), "secret");
-                        String firstSixDigits = decryptedCardNumber.substring(0,6 );
-                        CardInfo cardInfo = helper.getCardInfo(firstSixDigits);
-                        String lastFourDigits = decryptedCardNumber.substring(decryptedCardNumber.length() - 4);
-                        cardInfo.setLastFourDigit(lastFourDigits);
-                        return cardInfo;
-                    })
-                    .toList();
-
-
+    public List<CardInfo> getCardsInfoByUserEmail(String userEmail){
+        List<CardInfo> userCardInfo = cardInfoRepository.findByUserEmail(userEmail);
+        if (userCardInfo != null){
+            return userCardInfo;
         }
         return null;
+
     }
 
     public void updateWallet(Long walletId, WalletRequest walletRequest){
@@ -86,12 +88,11 @@ public class WalletServiceImp implements WalletService{
 
     private WalletResponse walletToWalletResponse(Wallet wallet){
         return WalletResponse.builder()
-                .userId(wallet.getUserId())
+                .userEmail(wallet.getUserEmail())
                 .cardHolderFirstName(wallet.getCardHolderFirstName())
                 .cardHolderLastName(wallet.getCardHolderLastName())
                 .cardNumber(wallet.getCardNumber())
-                .expiryMonth(wallet.getExpiryMonth())
-                .expiryYear(wallet.getExpiryYear())
+                .expiryDate(wallet.getExpiryDate())
                 .cvv(wallet.getCvv())
                 .build();
     }

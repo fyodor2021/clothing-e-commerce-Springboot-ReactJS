@@ -57,11 +57,18 @@ public class CartController {
 //    public void deleteProductInCart(@PathVariable  Long productId, @PathVariable String cartId){
 //        cartService.deleteProductInCart(productId,cartId);
 //    }
-//    @DeleteMapping("/all/{cartId}")
-//    public void deleteAllProductsInCart(@PathVariable String cartId){
-//        cartService.deleteAllProductsInCart(cartId);
-//    }
-//
+    @PutMapping("/all")
+    public void emptyCart(@RequestHeader(value = "Authorization", defaultValue = "") String authHeader,
+                          @RequestHeader(value = "Cookie",defaultValue = "") String cookieHeader){
+        if(!cookieHeader.isEmpty() && !cookieHeader.contains(";")){
+            String cookie = cookieHeader.substring(8);
+            cartService.emptyCart(cookie);
+        } else if (authHeader != null) {
+            String token = authHeader.substring(7);
+            Claims claims = jwtService.extractAllGuestTokenClaims(token);
+            cartService.emptyCart(claims.getSubject());
+        }
+    }
     @GetMapping("/products")
     public List<Product> getProductsInCart(@RequestHeader(value = "Authorization", defaultValue = "") String authHeader,
                                            @RequestHeader(value = "Cookie",defaultValue = "") String cookieHeader){

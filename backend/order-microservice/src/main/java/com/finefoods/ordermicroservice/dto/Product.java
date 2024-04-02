@@ -13,20 +13,29 @@ import java.util.List;
 @Data
 @Builder
 public class Product {
+//    private Long productId;
+//    private String brand;
+//    private byte[] imageList;
+//    private String productName;
+//    private String description;
+//    private String category;
+//    private String tags;
+//    private String size;
+//    private String unit;
+//    private double cost;
+//    private double price;
+//    private double currentPrice;
+//    private Boolean isTaxed;
+//    private String skuCode;
+//    private String upcCode;
+//    private String vendor;
+    private int quantity;
     private Long productId;
-    private String brand;
+    private List<String> imageFileNames;
+    private List<byte[]> imageList;
     private String productName;
     private String description;
-    private String category;
-    private String tags;
     private String size;
     private String unit;
-    private Integer cost;
-    private Integer price;
-    private Integer currentPrice;
-    private Boolean isTaxed;
-    private String skuCode;
-    private String upcCode;
-    private String vendor;
-    private int quantity;
+    private double currentPrice;
 }

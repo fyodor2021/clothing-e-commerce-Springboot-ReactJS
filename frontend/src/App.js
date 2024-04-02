@@ -8,7 +8,7 @@ import OrdersPage from "./pages/OrdersPage";
 import AccountPage from "./pages/AccountPage";
 import CartPage from "./pages/CartPage";
 import DetailsPage from './pages/DetailsPage'
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useMemo } from "react"
 import RegistrationPage from "./pages/RegistrationPage";
 import AddProductPage from "./pages/AddProductPage";
 import useProductContext from "./hooks/useProductContext";
@@ -16,39 +16,45 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useAuthContext from "./hooks/useAuthContext";
 import useCartContext from "./hooks/useCartContext";
-export default function App({indexToken}) {
-    const {fetchProducts} = useProductContext()
-    const {getCartProducts} = useCartContext();
-    const {setLoggedUser} = useAuthContext();
+import usePaymentContext from "./hooks/usePaymentContext";
+import CheckoutPage from "./pages/CheckoutPage";
+import { useCookies } from "react-cookie";
+import useOrderContext from "./hooks/useOrderContext";
+export default function App({ indexToken }) {
+    // const { fetchProducts } = useProductContext()
+    // const { getCartProducts } = useCartContext();
+    // const { setLoggedUser, loggedUser, userChanged, getLoggedUser } = useAuthContext();
+    // const { getCardsInfo } = usePaymentContext();
+    // const { getLoggedUserOrders } = useOrderContext();
     const navigate = useNavigate();
-    useEffect(() => {
-        getCartProducts();
-        fetchProducts();
-        if(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)){
-            axios.get('/api/auth/user').then(res => setLoggedUser(res.data))
+    const [cookies, setCookie, removeCookie] = useCookies()
 
-        }
-    },[])
-    // console.log("this is the auth token: ", token)
-    // console.log("this is the index toke: ", indexToken)
-    // console.log(token)
+    if (cookies['SIGNOUT']) {
+        window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
+        window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL_EXPIRATION)
+        removeCookie(['SIGNOUT'])
+    }
     axios.interceptors.request.use((request) => {
-    axios.defaults.withCredentials = true
-    const token = window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
-        if(token){
+        axios.defaults.withCredentials = true
+        const token = window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
+        if (token) {
+            if (Date.parse(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL_EXPIRATION)) < new Date()) {
+                window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
+                window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL_EXPIRATION)
+            }
             request.headers.Authorization = `Bearer ${token}`
-        }else{
+        } else {
             return request;
         }
         return request;
     })
-    
+
     axios.interceptors.response.use(response => {
         return response;
-    },error => {
-        // if(error.response && error.response.status == 403){
-        //     navigate("/login")
-        // }
+    }, error => {
+        if (error.response && error.response.status == 403) {
+            navigate("/login")
+        }
     })
 
     return <>
@@ -63,6 +69,7 @@ export default function App({indexToken}) {
             <Route path='/account' element={<AccountPage />} />
             <Route path='/details/:productId' element={<DetailsPage />} />
             <Route path='/add-product' element={<AddProductPage />} />
+            <Route path='/checkout' element={<CheckoutPage />} />
             <Route path='/cart' element={<CartPage />} />
             <Route path='/meat' element={<HomePage />}>Meat</Route>
             <Route path='/cafe' element={<HomePage />}>Cafe</Route>

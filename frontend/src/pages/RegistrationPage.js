@@ -4,6 +4,7 @@ import arzPic from '../statics/arz-fine-foods-mis.png'
 import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom';
 import useAuthContext from '../hooks/useAuthContext';
+import useValidationContext from '../hooks/useValidationContext';
 
 export default function RegistrationPage() {
     const [email, setEmail] = useState('');
@@ -14,6 +15,11 @@ export default function RegistrationPage() {
     const [valMessage, setValMessage] = useState('');
     const navigate = useNavigate()
     const {register} = useAuthContext();
+    const {validateEmail,
+        validateAddress,
+        validateName,
+        validatePassword,
+        validatePasswordRetype} = useValidationContext();
     const autoCompleteRef = useRef();
     const addressRef = useRef();
     const addressEl = document.getElementById('address')
@@ -38,49 +44,11 @@ export default function RegistrationPage() {
         event.preventDefault();
         const el = document.getElementById('address')
         const address = el.value
-        function validateEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-        function validateAddress(address) {
-            return address.trim() !== '';
-        }
-        function validateFirstName(firstName) {
-            return /^[a-zA-Z]+$/.test(firstName);
-        }
-        function validateLastName(lastName) {
-            return /^[a-zA-Z]+$/.test(lastName);
-        }
-        function validatePassword(password) {
-            return password.length >= 8;
-        }
-        function validatePasswordRetype(password, passwordRetype) {
-            return password === passwordRetype;
-        }
         if (!fname || !lname || !email || !address || !password || !passwordRetype) {
             setValMessage('None of the fields can be empty');
-        } else {
-           
-            if (!validateEmail(email)) {
-                setValMessage("invalid email")
-            }
-            if (!validateAddress(address)) {
-                setValMessage("invalid addess")
-            }
-            if (!validateFirstName(fname)) {
-                setValMessage("invalid firstname")
-            }
-            if (!validateLastName(lname)) {
-                setValMessage("invalid lastname")
-            }
-            if (!validatePassword(password)) {
-                setValMessage("invalid password")
-            }
-            if (!validatePasswordRetype(password,passwordRetype)) {
-                setValMessage("password doesn't match")
-            }
+        
         };
-        if(validateAddress(address) && validateEmail(email) && validateFirstName(fname) && validateLastName(lname) && validatePassword(password) && validatePasswordRetype(password, passwordRetype))
+        if(validateAddress(address) && validateEmail(email) && validateName(fname) && validateName(lname) && validatePassword(password) && validatePasswordRetype(password, passwordRetype))
         {
             const user = {
                 email,address,
@@ -88,11 +56,7 @@ export default function RegistrationPage() {
                 lastname: lname,
                 password
             }
-            const res = register(user)
-            res.then(res => {
-                navigate('/login')    
-                setValMessage(res)
-            })
+            register(user)
         }
 
 
@@ -187,7 +151,7 @@ export default function RegistrationPage() {
                         </form>
                         <div style={{ margin: '10px' }}>
                             <span>Or </span>
-                            <span style={{ color: 'red' }} onClick={handleLoginNavigate}>
+                            <span style={{ color: 'red', cursor: 'pointer' }} onClick={handleLoginNavigate}>
                                 Login
                             </span>
                         </div>

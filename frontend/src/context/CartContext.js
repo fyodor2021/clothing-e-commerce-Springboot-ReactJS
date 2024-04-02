@@ -1,44 +1,15 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-import useGeneralContext from "../hooks/useGeneralContext";
+import useValidationContext from "../hooks/useValidationContext";
 import { useCookies } from "react-cookie";
 const CartContext = createContext();
 function CartProvider({ children }) {
-    const {setCookie,getCookie} = useGeneralContext();
     const [cartProducts, setCartProducts] = useState([]);
     const [cookies] = useCookies()
-//     const createCart = async () => {
-//         axios.post("http://localhost:3003/api/cart/add", {
-//     userId: null,
-//     products: []
-// }, {
+    useEffect(() => {
+        getCartProducts();
 
-//     withCredentials: true
-// }).then(res => console.log(res.data));
-//     }
-//     }
-//     const testCart = () => {
-//         // axios.post("http://localhost:3003/api/cart/add",{
-//         // Headers:{
-//         //     'Content-Type':'application/json'
-//         // },
-//         // withCredentials:'included'
-
-//         // })
-//         // .then(res => console.log(res.data))
-//         // axios.get("http://localhost:3003/api/cart/add",{
-//         //     // userId: 0,
-//         //     // products: []
-//         //     withCredentials: true
-//         // }).then(res => console.log(res.data))
-//         axios.post("http://localhost:3003/api/cart/add", {
-//     // userId: 0,
-//     // products: []
-// }, {
-
-//     withCredentials: true
-// }).then(res => console.log(res.data));
-//     }
+    },[])
     const addToCart = (product) => {
         axios.post("api/cart/add", {product}).then(res => getCartProducts())
     }
@@ -52,12 +23,17 @@ function CartProvider({ children }) {
     const productCountIncrement = (incDecRequest) => {
         axios.post("api/cart/product/inc",incDecRequest).then(res => getCartProducts())
     }
+
+    const emptyCart = async() => {
+        await axios.put('api/cart/all')
+    }
     const valueProvided = {
         addToCart,
         getCartProducts,
         cartProducts,
         productCountDecrement,
-        productCountIncrement
+        productCountIncrement,
+        emptyCart
     }   
 
     
