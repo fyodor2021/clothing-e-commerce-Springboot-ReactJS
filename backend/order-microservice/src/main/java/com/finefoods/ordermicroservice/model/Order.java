@@ -27,6 +27,7 @@ public class Order {
     private double totalPaidOnCard;
     private String cardBrand;
     private double totalPaidInPoints;
+    private double totalPointsGained;
     private String chargeId;
     private String orderNumber;
     private LocalDate pickedUpDate;

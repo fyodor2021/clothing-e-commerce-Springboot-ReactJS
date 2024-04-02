@@ -32,6 +32,7 @@ import static org.bouncycastle.asn1.x500.style.BCStyle.T;
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
+
     private final AmazonS3 amazonS3Client;
 
 
@@ -50,7 +51,7 @@ public class OrderServiceImpl implements OrderService{
     private String bucketName;
     @Override
     public String placeOrder(OrderRequest orderRequest) {
-        //make a call to cart microservice
+        //MAYBE -> make a call to cart microservice
 
 
         List<InventoryRequest>  inventoryRequestList = new ArrayList<>();
@@ -64,6 +65,9 @@ public class OrderServiceImpl implements OrderService{
                     .build();
             inventoryRequestList.add(inventoryRequest);
         }
+
+
+
 
         List<ProductAvailability> inStock = areProductInStock(inventoryRequestList);
 //        if (!inStock){
@@ -87,9 +91,6 @@ public class OrderServiceImpl implements OrderService{
         }
 
 
-
-
-
         Order order = Order.builder()
                 .orderNumber(UUID.randomUUID().toString())
                 .orderTotal(orderRequest.getOrderTotal())
@@ -107,14 +108,14 @@ public class OrderServiceImpl implements OrderService{
         orderRepository.save(order);
 
 
-
         //Add points for user
         if (orderRequest.getPointsToAdd() > orderRequest.getPointsToPay()){
-
             PointsRequest pointsRequest = PointsRequest.builder()
                     .numberOfPoints(orderRequest.getPointsToAdd() - orderRequest.getPointsToPay())
                     .method("add")
                     .userEmail(orderRequest.getUserEmail()).build();
+
+
 
             updatePointsForUser(pointsRequest);
 
@@ -131,8 +132,6 @@ public class OrderServiceImpl implements OrderService{
             updatePointsForUser(pointsRequest);
 
         }
-
-
 
         //update inventory
         updateInventory(inventoryRequestList, "purchase");
@@ -171,10 +170,10 @@ public class OrderServiceImpl implements OrderService{
         chargeParams.put("source",cardToken);
         Charge charge = Charge.create(chargeParams);
 
-    if (charge.getStatus().equals("succeeded")){
-        System.out.println("Charge" + charge.getId());
+        if (charge.getStatus().equals("succeeded")){
+            System.out.println("Charge" + charge.getId());
 
-        return charge.getId().toString();
+            return charge.getId().toString();
         }
         return "";
 
@@ -183,8 +182,6 @@ public class OrderServiceImpl implements OrderService{
     public String cancelOrder(String orderId) {
         Order order = orderRepository.findOrderByOrderId(orderId);
         if (order != null && !order.getStatus().equals("cancelled")){
-
-
             //Update the points for user
             if (order.getTotalPaidInPoints() > order.getTotalPointsGained() ){
                 //refund redeemed points
