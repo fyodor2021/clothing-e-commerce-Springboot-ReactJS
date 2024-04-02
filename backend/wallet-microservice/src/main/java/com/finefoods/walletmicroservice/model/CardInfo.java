@@ -22,8 +22,11 @@ public class CardInfo {
     private Long cardInfoId;
     private String userEmail;
     private String bankName;
+    private String firstname;
+    private String lastname;
     private String brand;
     private String type;
+    private Boolean isDefault;
     @Builder.Default
     private String lastFourDigit="";
 

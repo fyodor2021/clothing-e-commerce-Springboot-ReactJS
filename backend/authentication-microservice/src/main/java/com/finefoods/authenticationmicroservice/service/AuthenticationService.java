@@ -19,6 +19,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,8 @@ public class AuthenticationService {
     private final WebClient.Builder webClientBuilder;
     @Value("${cart-microservice.url}")
     private String cartUri;
+    @Value("${points-microservice.url}")
+    private String pointsUri;
 
     public AuthenticationResponse register(RegisterRequest authRequest) {
         Optional<User> userLookup = userRepository.findByEmail(authRequest.getEmail());
@@ -52,6 +55,7 @@ public class AuthenticationService {
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
+            createPoints(savedUser.getEmail());
             var jwtToken = jwtService.generateToken(user);
             return AuthenticationResponse.builder()
                     .token(jwtToken).build();
@@ -71,6 +75,7 @@ public class AuthenticationService {
         claims.put("firstName", user.getFirstname());
         claims.put("firsName", user.getLastname());
         claims.put("ROLE", user.getRole());
+
         var jwtToken = jwtService.generateToken(claims, user);
         return AuthenticationResponse.builder()
                 .token(jwtToken).build();
@@ -92,6 +97,7 @@ public class AuthenticationService {
                 .lastname(user.getLastname())
                 .email(user.getEmail())
                 .address(user.getAddress())
+                .points(getUserPoints(user.getEmail()))
                 .build();
     }
 
@@ -117,6 +123,25 @@ public class AuthenticationService {
         }
         return "user was updated successfully";
     }
-
+    private double getUserPoints (String email) {
+        return CompletableFuture.supplyAsync(() ->
+                webClientBuilder.build()
+                        .get()
+                        .uri(pointsUri + "/" + email)
+                        .retrieve()
+                        .bodyToMono(Double.class)
+                        .block()
+        ).join();
+    }
+    private Long createPoints (String email) {
+        return CompletableFuture.supplyAsync(() ->
+                webClientBuilder.build()
+                        .post()
+                        .uri(pointsUri + "/" + email)
+                        .retrieve()
+                        .bodyToMono(Long.class)
+                        .block()
+        ).join();
+    }
 
 }

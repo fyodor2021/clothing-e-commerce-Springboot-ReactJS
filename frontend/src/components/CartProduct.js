@@ -12,7 +12,7 @@ export default function CartProduct(
             : cookie['SESSION']
     }
 
-    return product.inStock ? <div key={key} className="cart-product-container">
+    return product.inStock ? <div key={product.productId} className="cart-product-container">
         <div className="cart-product-fields">
             <img className="cart-product-image" src={'data:image/jpeg;base64,' + product.imageList[0]} />
         </div>

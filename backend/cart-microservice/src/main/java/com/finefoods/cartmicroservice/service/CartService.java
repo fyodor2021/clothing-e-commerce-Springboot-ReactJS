@@ -18,8 +18,7 @@ public interface CartService {
     void addToCart(AddToCartRequest addToCartRequest, String headerValue);
 //    void deleteCart(String cartId);
 //    void deleteProductInCart(Long productId, String cartId);
-//    void deleteAllProductsInCart(String cartId);
-//
+    void emptyCart(String cartId);
 void decrementProductCount(IncDecRequest incDecRequest);
     void incrementProductCount(IncDecRequest incDecRequest);
     List<Product> getProductsInCart(String headerValue);

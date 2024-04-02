@@ -38,6 +38,7 @@ function ProductProvider({ children }) {
         console.log(res)
         setIsLoading(false)
     }
+
     const valueProvided = {
         fetchProducts,
         products,
@@ -46,7 +47,7 @@ function ProductProvider({ children }) {
         product,
         fetchProductReviews,
         setProducts,
-        reviews
+        reviews,
     }
     return <ProductContext.Provider value={valueProvided}>
         {children}

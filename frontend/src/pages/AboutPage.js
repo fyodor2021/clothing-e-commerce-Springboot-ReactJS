@@ -1,6 +1,5 @@
 import Footer from "../components/Footer"
 import coverPic from "../statics/arz-about.jpg"
-import '../styling.css'
 import aboutPagePic from "../statics/about-page.jpg"
 import breadPic from "../statics/Bread-Selection.jpg"
 import missiPic from "../statics/missi.jpg"

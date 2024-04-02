@@ -1,6 +1,6 @@
 import { useState } from "react"
 import useFiltercontext from '../hooks/useFilterContext.js'
-export default function FilterPanel({ className, hidden,  }) {
+export default function FilterPanel({ className, hidden,  filterPanelRef}) {
     const {filter,setFilter}= useFiltercontext();
     const handleSorting = (filter) => {
             const trimedFilter = filter.replace(/\s/g,'');
