@@ -34,7 +34,7 @@ export default function HomePage({ category }) {
         counter = 1;
       }
     }, 2500);
-    if (!isLoading) {
+    if (!isLoading && products.length > 10) {
 
       window.addEventListener('scroll', handleScrollEvent);
     }
@@ -98,7 +98,6 @@ export default function HomePage({ category }) {
                 <ProductList products={products} />
               </div>
             </div>
-
           </div>
         )}
       </div>

@@ -13,6 +13,9 @@ function AuthProvider({ children }) {
     const [loggedUser, setLoggedUser] = useState();
     const [token,setToken] = useState('');    
     const [userChanged,setUserChanged] = useState(false);
+    useEffect(() => {
+        getLoggedUser()
+    },[userChanged])
     const register =(user) => {
         const res = axios.post("api/auth/register", user)
                 .then(res => {
@@ -53,7 +56,6 @@ function AuthProvider({ children }) {
         })
     }
     const getLoggedUser = async() => {
-        console.log('im in the getloggeduser boss')
         if(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)){
             await axios.get('/api/auth/user').then(res => setLoggedUser(res.data))
         }

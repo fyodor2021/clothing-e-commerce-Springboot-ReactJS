@@ -1,5 +1,9 @@
 package com.finefoods.ordermicroservice.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.util.IOUtils;
 import com.finefoods.ordermicroservice.dto.*;
 import com.finefoods.ordermicroservice.model.Order;
 import com.finefoods.ordermicroservice.repository.OrderRepository;
@@ -11,13 +15,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+
+import static org.bouncycastle.asn1.x500.style.BCStyle.T;
 
 @Service
 @RequiredArgsConstructor
@@ -25,11 +32,13 @@ import java.util.*;
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
-    private final MongoTemplate mongoTemplate;
+    private final AmazonS3 amazonS3Client;
 
 
     @Value("${inventory.microservice.url}")
     private String inventoryUri;
+    @Value("${product-microservice-url}")
+    private String productUri;
 
     @Value("${points.microservice.url}")
     private String pointsUri;
@@ -37,13 +46,17 @@ public class OrderServiceImpl implements OrderService{
 
     @Value("${api.stripe.key}")
     private String stripeKey;
+    @Value("${aws.bucket.name}")
+    private String bucketName;
     @Override
     public String placeOrder(OrderRequest orderRequest) {
         //make a call to cart microservice
 
 
         List<InventoryRequest>  inventoryRequestList = new ArrayList<>();
-        for (Product product : orderRequest.getProducts()){
+        List<Product> products = getProductList(orderRequest.getProductIds());
+        for (Product product : products){
+
             InventoryRequest inventoryRequest = InventoryRequest
                     .builder()
                     .stock(product.getQuantity())
@@ -83,11 +96,12 @@ public class OrderServiceImpl implements OrderService{
                 .totalPaidOnCard(orderRequest.getMoneyToPay())
                 .chargeId(chargeId)
                 .cardBrand(orderRequest.getCardBrand())
-                .totalPaidInPoints(((orderRequest.getPointsToPay() / 1000) * 100)/100 )
+                .totalPaidInPoints(orderRequest.getPointsToPay() )
+                .totalPointsGained(orderRequest.getPointsToAdd())
                 .status("placed")
                 .datePlaced(LocalDate.now())
                 .userEmail(orderRequest.getUserEmail())
-                .products(orderRequest.getProducts())
+                .products(products)
                 .build();
 
         orderRepository.save(order);
@@ -128,6 +142,9 @@ public class OrderServiceImpl implements OrderService{
         return "order was placed successfully";
 
     }
+
+
+
     private String payForOrder(double total, String cardBrand) throws StripeException {
         String cardToken = "";
 
@@ -165,15 +182,25 @@ public class OrderServiceImpl implements OrderService{
     }
     public String cancelOrder(String orderId) {
         Order order = orderRepository.findOrderByOrderId(orderId);
-        if (order != null){
+        if (order != null && !order.getStatus().equals("cancelled")){
 
-            //refund the points for user
-            if (order.getTotalPaidInPoints() != 0.0) {
-                double numOfPointToRefund = order.getTotalPaidInPoints() * 1000;
+
+            //Update the points for user
+            if (order.getTotalPaidInPoints() > order.getTotalPointsGained() ){
+                //refund redeemed points
                 PointsRequest pointsRequest = PointsRequest.builder()
                         .userEmail(order.getUserEmail())
-                        .numberOfPoints(numOfPointToRefund)
+                        .numberOfPoints(order.getTotalPaidInPoints() - order.getTotalPointsGained())
                         .method("add").build();
+                updatePointsForUser(pointsRequest);
+
+            }else{
+                //deduct gained points
+                PointsRequest pointsRequest = PointsRequest.builder()
+                        .userEmail(order.getUserEmail())
+                        .numberOfPoints(order.getTotalPointsGained() - order.getTotalPaidInPoints())
+                        .method("deduct").build();
+
                 updatePointsForUser(pointsRequest);
 
             }
@@ -215,7 +242,7 @@ public class OrderServiceImpl implements OrderService{
             return "order was cancelled";
 
         }
-        return "order does not exist";
+        return "Error cancelling the order";
 
     }
     public void updateOrderStatus(String orderId){
@@ -227,22 +254,22 @@ public class OrderServiceImpl implements OrderService{
         }
     }
 
-    public List<OrderResponse> getOrdersByUserEmail(String userEmail){
+    public List<OrderResponse> getOrdersByUserEmail(String userEmail) throws IOException {
         List<Order> orders = orderRepository.findOrdersByUserEmail(userEmail);
-        return orders.stream().map(this::orderToOrderResponse).toList();
+        return orderToOrderResponse(orders);
     }
 
 
-    public List<OrderResponse> getActiveOrders(String userEmail){
-        List<Order> orders = orderRepository.findOrdersByUserEmailAndStatus(userEmail, "placed");
-        return orders.stream().map(this::orderToOrderResponse).toList();
-
-    }
-
-    public List<OrderResponse> getInActiveOrders(String userEmail){
-        List<Order> orders = orderRepository.findOrdersByUserEmailAndStatusOrStatus(userEmail, "cancelled", "picked up");
-        return orders.stream().map(this::orderToOrderResponse).toList();
-    }
+//    public List<OrderResponse> getActiveOrders(String userEmail){
+//        List<Order> orders = orderRepository.findOrdersByUserEmailAndStatus(userEmail, "placed");
+//        return orders.stream().map(this::orderToOrderResponse).toList();
+//
+//    }
+//
+//    public List<OrderResponse> getInActiveOrders(String userEmail){
+//        List<Order> orders = orderRepository.findOrdersByUserEmailAndStatusOrStatus(userEmail, "cancelled", "picked up");
+//        return orders.stream().map(this::orderToOrderResponse).toList();
+//    }
 
     private List<ProductAvailability> areProductInStock(List<InventoryRequest> inventoryRequestList){
         return webClientBuilder.build()
@@ -305,24 +332,52 @@ public class OrderServiceImpl implements OrderService{
 //
 //    };
 
-    private OrderResponse orderToOrderResponse(Order order){
-        return OrderResponse.builder().
-                orderId(order.getOrderId())
-                .userEmail(order.getUserEmail())
-                .datePlaced(order.getDatePlaced())
-                .status(order.getStatus())
-                .orderTotal(order.getOrderTotal())
-                .totalPaidInPoints(order.getTotalPaidInPoints())
-                .totalPaidOnCard(order.getTotalPaidOnCard())
-                .chargeId(order.getChargeId())
-                .orderNumber(order.getOrderNumber())
-                .pickedUpDate(order.getPickedUpDate())
-                .products(order.getProducts()).build();
-
-
+    private List<OrderResponse> orderToOrderResponse(List<Order> orders) throws IOException {
+        List<OrderResponse> orderResponses = new ArrayList<>();
+        for(Order order: orders){
+            for(Product product: order.getProducts()){
+                List<byte[]> imagesInBytes = new ArrayList<>();
+                for (String imageFileName : product.getImageFileNames()) {
+                    imagesInBytes.add(getImage(imageFileName));
+                }
+                product.setImageList(imagesInBytes);
+            }
+            orderResponses.add(OrderResponse.builder().
+                    orderId(order.getOrderId())
+                    .userEmail(order.getUserEmail())
+                    .datePlaced(order.getDatePlaced())
+                    .status(order.getStatus())
+                    .orderTotal(order.getOrderTotal())
+                    .totalPaidInPoints(order.getTotalPaidInPoints())
+                    .totalPaidOnCard(order.getTotalPaidOnCard())
+                    .chargeId(order.getChargeId())
+                    .orderNumber(order.getOrderNumber())
+                    .pickedUpDate(order.getPickedUpDate())
+                    .products(order.getProducts())
+                    .build());
+        }
+        return orderResponses;
     }
 
+    private List<Product> getProductList (List<Long> productIds) {
+        return CompletableFuture.supplyAsync(() ->
+                webClientBuilder.build()
+                        .post()
+                        .uri(productUri + "/order/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(productIds)
+                        .retrieve()
+                        .bodyToFlux(Product.class)
+                        .collectList()
+                        .block()
+        ).join();
+    }
 
+    public byte[] getImage(String fileName) throws IOException {
+        S3Object s3Object = amazonS3Client.getObject(bucketName, fileName);
+        S3ObjectInputStream inputStream = s3Object.getObjectContent();
+        return IOUtils.toByteArray(inputStream);
+    }
 
 
 }

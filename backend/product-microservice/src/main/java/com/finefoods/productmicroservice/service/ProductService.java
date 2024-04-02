@@ -1,7 +1,6 @@
 package com.finefoods.productmicroservice.service;
 
-import com.finefoods.productmicroservice.dto.ProductRequest;
-import com.finefoods.productmicroservice.dto.ProductResponse;
+import com.finefoods.productmicroservice.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,5 +18,6 @@ public interface ProductService {
 //    List<ProductResponse> validateProductList(List<ProductRequest> products );
 //    Boolean updateProduct(Long id, ProductRequest productRequest);
     Boolean deleteProduct(Long id) throws IOException;
-    List<String> searchPrediction(String Search);
+    List<OrderProductResponse> getProductsByProductIdList(List<Long> productIds) throws IOException;
+    List<ProductFilterResponse> searchPrediction(String Search);
 }

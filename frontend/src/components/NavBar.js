@@ -23,7 +23,8 @@ export default function NavBar() {
     const { cartProducts } = useCartContext();
     const { signout } = useAuthContext();
     const [searchTerm, setSearchTerm] = useState();
-    const { fetchProducts } = useProductContext();
+    const {setFilter} = useFilterContext();
+    const { fetchProducts , setProducts} = useProductContext();
     const { searchPrediction, predictions, setPredictions, filterProductsBySearchTerm } = useFilterContext();
     const navigate = useNavigate();
     const searchResult = useRef();
@@ -62,7 +63,8 @@ export default function NavBar() {
     const handleSearchSubmit = async (event) => {
         event.preventDefault();
         setShowSearch(false)
-        await filterProductsBySearchTerm(searchTerm)
+        // await filterProductsBySearchTerm(searchTerm)
+        setFilter(searchTerm)
         navigate('/')
     }
     const handleHomeDirect = async () => {
@@ -78,6 +80,7 @@ export default function NavBar() {
 
     let renderedItems;
     const handleSearchBoxChange = (event) => {
+        setShowSearch(true)
         setSearchTerm(event.target.value)
         if (event.target.value) {
             searchPrediction(event.target.value)
@@ -87,12 +90,11 @@ export default function NavBar() {
     }
     const handleSearchTermClick = async (item) => {
         setShowSearch(false)
-        await filterProductsBySearchTerm(item)
-        navigate('/')
+        navigate('/details/' + item.productId)
     }
     if (predictions) {
         renderedItems = predictions.map((item, key) => {
-            const modedString = item.replace(new RegExp(searchTerm, "gi"), match => `<b>${match}</b>`);
+            const modedString = item.productName.replace(new RegExp(searchTerm, "gi"), match => `<b>${match}</b>`);
             return <div onClick={() => handleSearchTermClick(item)} className='search-rendered-item' key={key}>
                 <div dangerouslySetInnerHTML={{ __html: modedString }}></div>
             </div>

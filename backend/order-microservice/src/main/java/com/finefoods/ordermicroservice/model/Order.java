@@ -31,5 +31,6 @@ public class Order {
     private String orderNumber;
     private LocalDate pickedUpDate;
     private List<Product> products;
+    private double totalPointsGained;
 
 }

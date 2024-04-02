@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import useValidationContext from "../hooks/useValidationContext";
 import { useCookies } from "react-cookie";
@@ -6,6 +6,10 @@ const CartContext = createContext();
 function CartProvider({ children }) {
     const [cartProducts, setCartProducts] = useState([]);
     const [cookies] = useCookies()
+    useEffect(() => {
+        getCartProducts();
+
+    },[])
     const addToCart = (product) => {
         axios.post("api/cart/add", {product}).then(res => getCartProducts())
     }
@@ -19,11 +23,7 @@ function CartProvider({ children }) {
     const productCountIncrement = (incDecRequest) => {
         axios.post("api/cart/product/inc",incDecRequest).then(res => getCartProducts())
     }
-    const placeOrder = async(orderRequest) => {
-        console.log("im here boss")
-        await axios.post("/api/order", orderRequest).then(res => console.log(res))
-        .catch(err => console.log(err))
-    }
+
     const emptyCart = async() => {
         await axios.put('api/cart/all')
     }
@@ -33,7 +33,6 @@ function CartProvider({ children }) {
         cartProducts,
         productCountDecrement,
         productCountIncrement,
-        placeOrder,
         emptyCart
     }   
 

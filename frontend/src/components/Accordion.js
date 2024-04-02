@@ -19,7 +19,7 @@ export default function Accordion({items}) {
            { expanded ? <GoChevronDown/> : <GoChevronUp/>}
         </span>
         return (
-        <div key={item.id}>
+        <div key={index}>
             <div className='flex bg-gray-50 border-b items-center cursor-pointer' 
             onClick={() => handleClick(index)}>
                 <div>{item.label}{icon}</div>
@@ -47,63 +47,3 @@ export default function Accordion({items}) {
     })
     return <div className='border-x border-t rounded'>{renderedItems}</div>
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import {useState} from 'react'
-// export default function Accordion({items}) {
-//     const [expandedIndex, setExpandedIndex] = useState(0)
-//     const renderedItems = items.map((item, index) => {
-//         const isExpanded = index === expandedIndex;
-        
-//             return (
-//                 <div key={item.id}>
-//                     <div onClick={() => setExpandedIndex(index)}>{item.label}</div>
-//                     {isExpanded && <div>{item.content}</div>}
-//                 </div>
-//             )
-//     })
-//     return <div>{renderedItems}</div>
-// }

@@ -7,7 +7,6 @@ export default function FilterPanel({ className, hidden,  filterPanelRef}) {
             const modedFilterWord = trimedFilter.toLowerCase();
             setFilter(modedFilterWord)
     }
-    console.log(filter)
     return <div className={"filter-panel-container " + className}>
         {!hidden ?
             <div>

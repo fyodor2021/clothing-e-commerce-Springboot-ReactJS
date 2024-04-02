@@ -4,10 +4,12 @@ import useCartContext from '../hooks/useCartContext'
 import usePaymentContext from '../hooks/usePaymentContext';
 import useAuthContext from '../hooks/useAuthContext';
 import { useNavigate } from 'react-router-dom';
+import useOrderContext from '../hooks/useOrderContext';
 
 export default function CheckoutPage() {
     const { getCartProducts, cartProducts } = useCartContext();
-    const {placeOrder, emptyCart} = useCartContext();
+    const {emptyCart} = useCartContext();
+    const {placeOrder } = useOrderContext();
     const { userCardsInfo } = usePaymentContext();
     const [valMessage, setValMessage] = useState();
     const {loggedUser,getLoggedUser }  = useAuthContext();
@@ -70,11 +72,15 @@ export default function CheckoutPage() {
         if(!pickupLocation){
             setValMessage("Please select a payment method")
         }
+        let productIds = []
+        for(let i = 0; i < cartProducts.length; i ++){
+            productIds.push(cartProducts[i].productId)
+        }
         if(pickupLocation && paymentCard){
             const orderRequest = {
                 userEmail: loggedUser.email,
                 orderTotal: total,
-                products:cartProducts,
+                productIds,
                 cardBrand:paymentCard,
                 pointsToAdd:pointsGainedByPurchase,
                 pointsToPay: payWithPoints ? loggedUser.points : 0,

@@ -41,11 +41,11 @@ export default function AccountPage() {
             case 'My Wallet':
                 content = <Wallet />
                 break;
-            case 'Re-order':
-                content = <div>Order Again</div>
+            case 'Active Orders':
+                content = <div>Active Orders</div>
                 break;
-            case 'Purchase History':
-                content = <div>Purchase History</div>
+            case 'Order Again':
+                content = <div>Order Again</div>
                 break;
             case 'Contact Us':
                 content =
@@ -91,11 +91,11 @@ export default function AccountPage() {
                             My Items
                         </h1>
                         <div>
-                            <h1 onClick={() => handleMenuSelect('Re-order')}>
-                                Re-order
+                            <h1 onClick={() => handleMenuSelect('Active Orders')}>
+                                Active Orders
                             </h1>
-                            <h1 onClick={() => handleMenuSelect('Purchase History')}>
-                                Purchase History
+                            <h1 onClick={() => handleMenuSelect('Order Again')}>
+                                Order Again
                             </h1>
                         </div>
                         <h1 className="account-page-headers">
