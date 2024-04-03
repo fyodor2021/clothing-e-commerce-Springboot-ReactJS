@@ -12,9 +12,12 @@ export default function RegistrationPage() {
     const [lname, setLname] = useState('');
     const [password, setPassword] = useState('');
     const [passwordRetype, setPasswordRetype] = useState('');
-    const [valMessage, setValMessage] = useState('');
+    const {valMessage,setValMessage} = useValidationContext();
     const navigate = useNavigate()
     const {register} = useAuthContext();
+    useEffect(() => {
+        setValMessage('')
+    },[])
     const {validateEmail,
         validateAddress,
         validateName,
@@ -22,7 +25,6 @@ export default function RegistrationPage() {
         validatePasswordRetype} = useValidationContext();
     const autoCompleteRef = useRef();
     const addressRef = useRef();
-    const addressEl = document.getElementById('address')
     const options = {
         componentRestrictions: { country: 'CA' },
         fields: ["formatted_address"],

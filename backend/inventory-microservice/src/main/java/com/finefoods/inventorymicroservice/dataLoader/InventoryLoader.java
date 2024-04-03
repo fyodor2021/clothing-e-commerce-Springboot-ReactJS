@@ -413,8 +413,107 @@ public class InventoryLoader implements CommandLineRunner {
                     .build();
             inventoryRepository.save(inventory);
         }
+        if (inventoryRepository.findByInventoryId(41L) == null)
+        {
+            Inventory inventory = Inventory.builder()
+                    .inventoryId(41L)
+                    .productId(41)
+                    .stock(10.0f)
+                    .stockUnit("pieces")
+                    .build();
+            inventoryRepository.save(inventory);
+        }
+        if (inventoryRepository.findByInventoryId(42L) == null)
+        {
+            Inventory inventory = Inventory.builder()
+                    .inventoryId(42L)
+                    .productId(42)
+                    .stock(10.0f)
+                    .stockUnit("pieces")
+                    .build();
+            inventoryRepository.save(inventory);
+        }
+        if (inventoryRepository.findByInventoryId(43L) == null)
+        {
+            Inventory inventory = Inventory.builder()
+                    .inventoryId(43L)
+                    .productId(43)
+                    .stock(5.0f)
+                    .stockUnit("pieces")
+                    .build();
+            inventoryRepository.save(inventory);
+        }
+        if (inventoryRepository.findByInventoryId(44L) == null)
+        {
+            Inventory inventory = Inventory.builder()
+                    .inventoryId(44L)
+                    .productId(44)
+                    .stock(5.0f)
+                    .stockUnit("pieces")
+                    .build();
+            inventoryRepository.save(inventory);
+        }
+        if (inventoryRepository.findByInventoryId(45L) == null)
+        {
+            Inventory inventory = Inventory.builder()
+                    .inventoryId(45L)
+                    .productId(45)
+                    .stock(100.0f)
+                    .stockUnit("pieces")
+                    .build();
+            inventoryRepository.save(inventory);
+        }
+        if (inventoryRepository.findByInventoryId(46L) == null)
+        {
+            Inventory inventory = Inventory.builder()
+                    .inventoryId(46L)
+                    .productId(46)
+                    .stock(20.0f)
+                    .stockUnit("kilograms")
+                    .build();
+            inventoryRepository.save(inventory);
+        }
 
-
+        if (inventoryRepository.findByInventoryId(47L) == null)
+        {
+            Inventory inventory = Inventory.builder()
+                    .inventoryId(47L)
+                    .productId(47)
+                    .stock(20.0f)
+                    .stockUnit("kilograms")
+                    .build();
+            inventoryRepository.save(inventory);
+        }
+        if (inventoryRepository.findByInventoryId(48L) == null)
+        {
+            Inventory inventory = Inventory.builder()
+                    .inventoryId(48L)
+                    .productId(48)
+                    .stock(50.0f)
+                    .stockUnit("kilograms")
+                    .build();
+            inventoryRepository.save(inventory);
+        }
+        if (inventoryRepository.findByInventoryId(49L) == null)
+        {
+            Inventory inventory = Inventory.builder()
+                    .inventoryId(49L)
+                    .productId(49)
+                    .stock(50.0f)
+                    .stockUnit("kilograms")
+                    .build();
+            inventoryRepository.save(inventory);
+        }
+        if (inventoryRepository.findByInventoryId(50L) == null)
+        {
+            Inventory inventory = Inventory.builder()
+                    .inventoryId(50L)
+                    .productId(50)
+                    .stock(2.0f)
+                    .stockUnit("platters")
+                    .build();
+            inventoryRepository.save(inventory);
+        }
 
 
 

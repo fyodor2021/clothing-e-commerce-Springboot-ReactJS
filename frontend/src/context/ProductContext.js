@@ -1,4 +1,4 @@
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useMemo } from "react";
 import axios from 'axios'
 import { useState } from 'react'
 import useAuthContext from "../hooks/useAuthContext";
@@ -10,9 +10,7 @@ function ProductProvider({ children }) {
     const [reviews, setReviews] = useState([]);
     const [orderProductImages, setOrderProductImages] = useState();
     const {fetchUser} = useAuthContext();
-    useEffect(() => {
-        fetchProducts()
-    },[])
+
     const fetchProducts = () => {
         axios.get('/api/product',{
             withCredentials:true
@@ -24,6 +22,9 @@ function ProductProvider({ children }) {
                 console.log(err)
             })
     }
+    useMemo(() => {
+        fetchProducts()
+    },[products])
     const fetchProductDetails = (productId) => {
         setIsLoading(true)
         const res = axios.get("api/product/image/" + productId)

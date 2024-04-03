@@ -5,7 +5,9 @@ const PaymentContext = createContext();
 function PaymentProvider({ children }) {
     const [userCardsInfo, setUserCardsInfo] = useState();
     useEffect(() => {
-        getCardsInfo();
+        if (window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)) {
+            getCardsInfo();
+        }
     },[])
     const addPaymentMethod = async (addPaymentRequest) => {
         await axios.post('/api/wallet/add', addPaymentRequest)

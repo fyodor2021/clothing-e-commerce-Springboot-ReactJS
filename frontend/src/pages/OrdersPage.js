@@ -3,11 +3,30 @@ import { useEffect, useState } from "react";
 import axios from 'axios'
 import AuthContext from "../context/AuthContext";
 import useAuthContext from "../hooks/useAuthContext";
+import { FaLeaf } from "react-icons/fa";
+import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
 export default function OrdersPage() {
-    const { orders} = useOrderContext();
+    const { orders, cancelOrder } = useOrderContext();
+    const navigate = useNavigate();
     let renderedOrders;
     console.log(orders)
-    if (orders) {
+    const handleCancelOrder = (orderId) => {
+        cancelOrder(orderId)
+    }
+    const handleGoHome = () => {
+        navigate('/')
+    }
+    console.log(orders)
+    if (orders && orders.length > 0) {
+        orders.sort((a) => {
+            if (a.status == 'placed') {
+                return -1
+            } else {
+                return 1
+            }
+            return 0
+        })
         renderedOrders = orders.map((order, key) => {
             const renderedProducts = order.products.map((product, key) => {
                 return <div key={product.productId}>
@@ -48,9 +67,12 @@ export default function OrdersPage() {
                             </div>
                             <div>
                                 <div>status</div>
-                                <div>{order.status === "placed" ?
-                                 <span style={{color: 'green',fontSize:'1rem'}}>Active</span>: 
-                                 <span>Pickedup</span>}</div>
+                                <div style={{ fontSize: '1rem' }}>
+                                    {order.status === "placed" ?
+                                        <span style={{ color: 'green' }}>Active</span> :
+                                        order.status === "cancelled" ?
+                                            <span style={{ color: 'red' }}>{order.status}</span> : <span>{order.status}</span>}
+                                </div>
                             </div>
                         </div>
                         <div>{renderedProducts}</div>
@@ -92,16 +114,40 @@ export default function OrdersPage() {
                             <div>
                                 <h1>Order Total: </h1>
                                 <h1>{total} </h1>
-                            </div>
+                            </div >
+                            {order.status === "placed" ?
+                                <div width="100%">
+                                    <button onClick={() => handleCancelOrder(order.orderId)} className="button order-cancel-button">
+                                        Cancel order
+                                    </button>
+                                </div> : <></>}
+
                         </div>
                     </div>
                 </div>
 
             </div>
         })
+        return <div>
+            <div>{renderedOrders}</div>
+            <Footer />
+        </div>
+
+    } else {
+        return<div>
+            <div className="no-active-orders">
+                <div>
+                    No active orders can be found
+                </div>
+                <div onClick={handleGoHome}>
+                    Continue shopping
+                </div>
+            </div>
+            <Footer />
+        </div>
+
+
     }
 
 
-
-    return <div>{renderedOrders}</div>
 }

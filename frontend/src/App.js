@@ -8,24 +8,13 @@ import OrdersPage from "./pages/OrdersPage";
 import AccountPage from "./pages/AccountPage";
 import CartPage from "./pages/CartPage";
 import DetailsPage from './pages/DetailsPage'
-import { useContext, useEffect, useMemo } from "react"
 import RegistrationPage from "./pages/RegistrationPage";
 import AddProductPage from "./pages/AddProductPage";
-import useProductContext from "./hooks/useProductContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import useAuthContext from "./hooks/useAuthContext";
-import useCartContext from "./hooks/useCartContext";
-import usePaymentContext from "./hooks/usePaymentContext";
 import CheckoutPage from "./pages/CheckoutPage";
 import { useCookies } from "react-cookie";
-import useOrderContext from "./hooks/useOrderContext";
 export default function App({ indexToken }) {
-    // const { fetchProducts } = useProductContext()
-    // const { getCartProducts } = useCartContext();
-    // const { setLoggedUser, loggedUser, userChanged, getLoggedUser } = useAuthContext();
-    // const { getCardsInfo } = usePaymentContext();
-    // const { getLoggedUserOrders } = useOrderContext();
     const navigate = useNavigate();
     const [cookies, setCookie, removeCookie] = useCookies()
 

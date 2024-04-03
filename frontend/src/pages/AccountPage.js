@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import { useEffect, useState, useRef } from 'react'
 import useAuthContext from "../hooks/useAuthContext";
@@ -11,10 +11,16 @@ export default function AccountPage() {
     const [selected, setSelected] = useState('My Account');
     const { signout, loggedUser } = useAuthContext();
     const navigate = useNavigate()
+    const {state } = useLocation();
+    useEffect(() => {
+        if(state == 'add payment'){
+            setSelected('My Wallet')
+        }
+    },[])
     const handleMenuSelect = (value) => {
         setSelected(value)
     }
-
+    console.log(selected);
     const handleSignOut = () => {
         signout()
     }
@@ -39,7 +45,7 @@ export default function AccountPage() {
                 content = <PersonalInfo />
                 break;
             case 'My Wallet':
-                content = <Wallet />
+                content = state === 'add payment' ? <Wallet checkoutAddPayment={true}/> : <Wallet/>
                 break;
             case 'Active Orders':
                 content = <div>Active Orders</div>
