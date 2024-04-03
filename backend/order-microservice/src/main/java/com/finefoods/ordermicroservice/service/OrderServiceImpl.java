@@ -222,7 +222,7 @@ public class OrderServiceImpl implements OrderService{
             //update the order
             order.setStatus("cancelled");
             order.setTotalPaidOnCard(order.getTotalPaidOnCard() *-1);
-            order.setTotalPaidInPoints(order.getTotalPaidOnCard() * -1);
+            order.setTotalPaidInPoints(order.getTotalPaidInPoints() * -1);
             order.setOrderTotal(order.getOrderTotal()* -1);
             orderRepository.save(order);
 

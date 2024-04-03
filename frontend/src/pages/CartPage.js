@@ -47,6 +47,9 @@ export default function CartPage() {
     const pointsGainedByPurchase = cartProducts.reduce((acc,item) => {
         return acc = parseInt(acc) + parseInt(item.points * item.quantity)
     },[0])
+    const handleGoHome = () => {
+        navigate('/')
+    }
     return <div>
         {subTotal != 0 ?
             <div className="cart-main-container">
@@ -100,15 +103,18 @@ export default function CartPage() {
                     </div>
                 </div>
             </div> :
-            <div className="empty-cart-image">
+            <div>
+            <div className="no-active-orders">
                 <div>
-                    <img src={emptyCartImage} width="800" />
+                    No items can be found in your cart
                 </div>
-                <div>
-                    <h1>Your Cart is Empty!</h1>
-                    <h1>Items you add will appear here!</h1>
+                <div  onClick={handleGoHome}>
+                    Continue shopping
                 </div>
+
             </div>
+            <Footer />
+        </div>
         }
         <Footer />
     </div>

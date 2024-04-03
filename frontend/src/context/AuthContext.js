@@ -8,55 +8,57 @@ import useValidationContext from "../hooks/useValidationContext";
 const AuthContext = createContext();
 function AuthProvider({ children }) {
     const navigate = useNavigate();
-    const {setValMessage} = useValidationContext();
+    const { setValMessage } = useValidationContext();
     const [cookie, setCookie, removeCookie] = useCookies(['SESSION']);
     const [loggedUser, setLoggedUser] = useState();
-    const [token,setToken] = useState('');    
-    const [userChanged,setUserChanged] = useState(false);
+    const [token, setToken] = useState('');
+    const [userChanged, setUserChanged] = useState(false);
     useEffect(() => {
-        getLoggedUser()
-    },[userChanged])
-    const register =(user) => {
+        if (window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)) {
+            getLoggedUser()
+        }
+    }, [userChanged])
+    const register = (user) => {
         const res = axios.post("api/auth/register", user)
-                .then(res => {
-                if(res.data){
+            .then(res => {
+                if (res.data) {
                     setValMessage("User was Successfully Registered")
-                    navigate('/login')    
+                    navigate('/login')
 
-                }else{
+                } else {
                     setValMessage("User Exists")
                 }
-                })
+            })
     }
     const login = (user) => {
         const res = axios.post("/api/auth/authenticate", user)
-        .then(res => {
-            const localItem = {
-                
-            }
-            if(res){
-                const d = new Date();
-                d.setHours(d.getHours() + 2)
-                window.localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL , res.data.token)
-                window.localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL_EXPIRATION , d)
-                removeCookie('SESSION')
-                setToken(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL))
-                window.location.reload();
-            }else{
+            .then(res => {
+                const localItem = {
+
+                }
+                if (res) {
+                    const d = new Date();
+                    d.setHours(d.getHours() + 2)
+                    window.localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL, res.data.token)
+                    window.localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL_EXPIRATION, d)
+                    removeCookie('SESSION')
+                    setToken(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL))
+                    window.location.reload();
+                } else {
                     setValMessage("User Not Found!")
                 }
             }
-        )
+            )
     }
-    const updateUser = async (user,updateInitiator) => {
+    const updateUser = async (user, updateInitiator) => {
         await axios.put("/api/auth/user/update", user).then(res => {
-            if(updateInitiator && updateInitiator === 'email'){
+            if (updateInitiator && updateInitiator === 'email') {
                 signout()
             }
         })
     }
-    const getLoggedUser = async() => {
-        if(window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)){
+    const getLoggedUser = async () => {
+        if (window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)) {
             await axios.get('/api/auth/user').then(res => setLoggedUser(res.data))
         }
     }
@@ -65,12 +67,12 @@ function AuthProvider({ children }) {
         window.localStorage.removeItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL_EXPIRATION)
         window.location.replace('/')
     }
-    const valueProvided = { 
+    const valueProvided = {
         register,
         login,
         token,
         setToken,
-        signout, 
+        signout,
         setLoggedUser,
         loggedUser,
         updateUser,
@@ -79,8 +81,8 @@ function AuthProvider({ children }) {
         getLoggedUser
     }
     return <AuthContext.Provider value={valueProvided}>
-                {children}
-        </AuthContext.Provider>
+        {children}
+    </AuthContext.Provider>
 }
 export { AuthProvider };
 export default AuthContext;

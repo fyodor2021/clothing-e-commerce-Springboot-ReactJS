@@ -93,12 +93,12 @@ export default function NavBar() {
         navigate('/details/' + item.productId)
     }
     if (predictions) {
-        renderedItems = predictions.map((item, key) => {
+        renderedItems = predictions.slice(0, 6).map((item, key) => {
             const modedString = item.productName.replace(new RegExp(searchTerm, "gi"), match => `<b>${match}</b>`);
             return <div onClick={() => handleSearchTermClick(item)} className='search-rendered-item' key={key}>
                 <div dangerouslySetInnerHTML={{ __html: modedString }}></div>
             </div>
-        })
+        });
     }
     const notiItem = <div>
         <div className='noti-user-avatar'>
@@ -122,10 +122,6 @@ export default function NavBar() {
                     <img className="arz-logo-home" src={arzBrand} />
                     <img className="arz-logo-home-hidden" src={arzBrand} />
                 </Link>
-
-                <div className='hamburger-menu-icon' onClick={handleMenuToggle}>
-                    <GiHamburgerMenu />
-                </div>
             </div>
             <div className='nav-search-bar-container' ref={searchResult}>
                 <form onSubmit={handleSearchSubmit}>
@@ -182,7 +178,6 @@ export default function NavBar() {
                 <div></div>
                 <div></div>
             </div> : ''}
-            <Link className='nav-bar-item hamburger-menu-icon' to={'/cart'} element={<CartPage />}><BsCart4 /></Link>
 
         </div>
     )

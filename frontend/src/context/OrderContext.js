@@ -12,7 +12,6 @@ function OrderProvider({ children }) {
         await axios.post("/api/order", orderRequest)
             .catch(err => console.log(err))
     }
-
     const getLoggedUserOrders = async () => {
         if (loggedUser) {
             await axios.get('/api/order/' + loggedUser.email).then(res => {
@@ -20,11 +19,16 @@ function OrderProvider({ children }) {
             })
         }
     }
+    const cancelOrder = async  (orderId) => {
+        await axios.put('/api/order/cancel/' + orderId).then(() => window.location.reload())
+
+    }   
 
     const valueProvided = {
         placeOrder,
         getLoggedUserOrders,
-        orders
+        orders,
+        cancelOrder
     }
     return <OrderContext.Provider value={valueProvided}>
         {children}

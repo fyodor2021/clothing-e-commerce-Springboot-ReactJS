@@ -1,11 +1,11 @@
 import arzBrand from '../statics/arz-brand.png'
 import { FiPlusCircle } from "react-icons/fi";
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Input from './Input';
 import useAuthContext from '../hooks/useAuthContext';
 import usePaymentContext from '../hooks/usePaymentContext'
 import Accordion from './Accordion';
-export default function Wallet() {
+export default function Wallet({checkoutAddPayment}) {
     const { loggedUser } = useAuthContext();
     const { addPaymentMethod, userCardsInfo } = usePaymentContext();
     const [addPayment, setAddPayment] = useState(false)
@@ -14,11 +14,11 @@ export default function Wallet() {
     const [securityCode, setSecurityCode] = useState()
     const [cardNumber, setCardNumber] = useState()
     const [expiration, setExpiration] = useState()
-    // const [streetAddress, setStreetAddress] = useState()
-    // const [streetAddress2, setStreetAddress2] = useState()
-    // const [city, setCity] = useState()
-    // const [province, setProvince] = useState()
-    // const [zipCode, setZipCode] = useState()
+    useEffect(() => {
+        if(checkoutAddPayment){
+            setAddPayment(true)
+        }
+    },[])
     const handleAddPaymentMethod = () => {
         setAddPayment(true)
     }
@@ -53,7 +53,7 @@ export default function Wallet() {
                             Points
                         </div>
                         <div>
-                            Balance: 2000000
+                            Balance: {loggedUser.points}
                         </div>
                     </div>
                     <div className="arz-card-number">4242 4242 4242 4242</div>
