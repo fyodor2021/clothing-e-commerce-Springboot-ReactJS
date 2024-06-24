@@ -2,9 +2,11 @@ version: '3.8'
 
 services:
   api-gateway:
-    image: causeleea/backend-api-gateway:0.0.1
+    image: api-gateway
     ports:
       - "8181:8181"
+    extra_hosts:
+      - host.docker.internal:host-gateway
     build:
       context: ./api-gateway
       dockerfile: Dockerfile
@@ -16,9 +18,11 @@ services:
       - spring
 
   discovery-service:
-    image: causeleea/backend-discovery-microservice:0.0.1
+    image: discovery-microservice
     ports:
       - "8761:8761"
+    extra_hosts:
+      - host.docker.internal:host-gateway
     build:
       context: ./discovery-microservice
       dockerfile: Dockerfile
@@ -30,9 +34,11 @@ services:
 
 
   product-microservice:
-    image: causeleea/backend-product-microservice:0.0.2
+    image: product-microservice
     ports:
       - "3008:3008"
+    extra_hosts:
+      - host.docker.internal:host-gateway
     build:
       context: ./product-microservice
       dockerfile: Dockerfile

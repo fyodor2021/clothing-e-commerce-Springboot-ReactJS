@@ -23,7 +23,7 @@ FROM  openjdk:17-alpine
 
 RUN mkdir /app
 
-COPY --from=builder /home/gradle/src/build/libs/*.jar /app/discovery-service.jar
+COPY --from=builder /home/gradle/src/build/libs/*.jar /app/discovery-microservice.jar
 
 
 EXPOSE 8761

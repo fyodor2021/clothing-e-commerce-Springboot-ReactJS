@@ -1,5 +1,5 @@
 #-----------------------
-#Dockerfile for product-microservice
+#Dockerfile for product-service
 #-----------------------
 
 #------
@@ -25,13 +25,9 @@ RUN mkdir /app
 
 COPY --from=builder /home/gradle/src/build/libs/*.jar /app/product-microservice.jar
 
-ENV POSTGRES_USER=root \
-    POSTGRES_PASSWORD=root
+ENV MONGO_DB_USERNAME=root \
+    MONGO_DB_PWD=root
 
 EXPOSE 3008
 
 ENTRYPOINT ["java", "-jar", "/app/product-microservice.jar"]
-
-
-
-
