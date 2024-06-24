@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/api-gateway" />
+            <option value="$PROJECT_DIR$/authentication-microservice" />
+            <option value="$PROJECT_DIR$/availability-microservice" />
+            <option value="$PROJECT_DIR$/cart-microservice" />
+            <option value="$PROJECT_DIR$/discovery-microservice" />
+            <option value="$PROJECT_DIR$/flyer-microservice" />
+            <option value="$PROJECT_DIR$/inventory-microservice" />
+            <option value="$PROJECT_DIR$/order-microservice" />
+            <option value="$PROJECT_DIR$/points-microservice" />
+            <option value="$PROJECT_DIR$/product-microservice" />
+            <option value="$PROJECT_DIR$/review-microservice" />
+            <option value="$PROJECT_DIR$/shift-microservice" />
+            <option value="$PROJECT_DIR$/wallet-microservice" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
