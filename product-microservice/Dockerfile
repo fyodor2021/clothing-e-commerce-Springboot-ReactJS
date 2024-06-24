@@ -28,7 +28,7 @@ COPY --from=builder /home/gradle/src/build/libs/*.jar /app/product-microservice.
 ENV POSTGRES_USER=root \
     POSTGRES_PASSWORD=root
 
-EXPOSE 5000
+EXPOSE 3008
 
 ENTRYPOINT ["java", "-jar", "/app/product-microservice.jar"]
 
