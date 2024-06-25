@@ -51,6 +51,132 @@ services:
     networks:
       - spring
 
+  authentication-microservice:
+    image: authentication-microservice
+    ports:
+      - "8182:8182"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    build:
+      context: ./authentication-microservice
+      dockerfile: Dockerfile
+    container_name: authentication-microservice
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - discovery-service
+      - postgres-authentication
+    networks:
+      - spring
+
+  cart-microservice:
+    image: cart-microservice
+    ports:
+      - "3003:3003"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    build:
+      context: ./cart-microservice
+      dockerfile: Dockerfile
+    container_name: cart-microservice
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - discovery-service
+      - mongo-cart
+    networks:
+      - spring
+
+  inventory-microservice:
+    image: inventory-microservice
+    ports:
+      - "3007:3007"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    build:
+      context: ./inventory-microservice
+      dockerfile: Dockerfile
+    container_name: inventory-microservice
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - discovery-service
+      - postgres-inventory
+    networks:
+      - spring
+
+  order-microservice:
+    image: order-microservice
+    ports:
+      - "3002:3002"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    build:
+      context: ./order-microservice
+      dockerfile: Dockerfile
+    container_name: order-microservice
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - discovery-service
+      - mongo-order
+    networks:
+      - spring
+
+  points-microservice:
+    image: points-microservice
+    ports:
+      - "3005:3005"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    build:
+      context: ./points-microservice
+      dockerfile: Dockerfile
+    container_name: points-microservice
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - discovery-service
+      - postgres-points
+    networks:
+      - spring
+
+  review-microservice:
+    image: review-microservice
+    ports:
+      - "3001:3001"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    build:
+      context: ./review-microservice
+      dockerfile: Dockerfile
+    container_name: review-microservice
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - discovery-service
+      - postgres-review
+    networks:
+      - spring
+
+  wallet-microservice:
+    image: wallet-microservice
+    ports:
+      - "3004:3004"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    build:
+      context: ./wallet-microservice
+      dockerfile: Dockerfile
+    container_name: wallet-microservice
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - discovery-service
+      - postgres-wallet
+    networks:
+      - spring
+
   postgres-product:
     image: postgres:latest
     environment:
@@ -67,120 +193,104 @@ services:
     networks:
       - spring
 
-#  postgres-user:
-#    image: postgres:latest
-#    environment:
-#      POSTGRES_DB: user-microservice
-#      POSTGRES_USER: root
-#      POSTGRES_PASSWORD: root
-#    ports:
-#      - "5431:5432"
-#    restart: unless-stopped
-#    container_name: postgres-user
-#    volumes:
-#      - ./data/postgres/user-microservice:/data/postgres
-#      - ./init/postgres/user-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
-#    networks:
-#      - spring
-#
-#  postgres-review:
-#    image: postgres:latest
-#    environment:
-#      POSTGRES_DB: review-microservice
-#      POSTGRES_USER: root
-#      POSTGRES_PASSWORD: root
-#    ports:
-#      - "5430:5432"
-#    restart: unless-stopped
-#    container_name: postgres-review
-#    volumes:
-#      - ./data/postgres/review-microservice:/data/postgres
-#      - ./init/postgres/review-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
-#    networks:
-#      - spring
-#
-#
-#  postgres-wallet:
-#    image: postgres:latest
-#    environment:
-#      POSTGRES_DB: wallet-microservice
-#      POSTGRES_USER: root
-#      POSTGRES_PASSWORD: root
-#    ports:
-#      - "5433:5432"
-#    restart: unless-stopped
-#    container_name: postgres-wallet
-#    volumes:
-#      - ./data/postgres/wallet-microservice:/data/postgres
-#      - ./init/postgres/wallet-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
-#    networks:
-#      - spring
-#
-#
-#  postgres-points:
-#    image: postgres:latest
-#    environment:
-#      POSTGRES_DB: points-microservice
-#      POSTGRES_USER : root
-#      POSTGRES_PASSWORD: root
-#    ports:
-#      - "5434:5432"
-#    restart: unless-stopped
-#    container_name: postgres-points
-#    volumes:
-#      - ./data/postgres/points-microservice:/data/postgres
-#      - ./init/postgres/points-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
-#    networks:
-#      - spring
-#
-#  postgres-inventory:
-#    image: postgres:latest
-#    environment:
-#      POSTGRES_DB: inventory-microservice
-#      POSTGRES_USER: root
-#      POSTGRES_PASSWORD: root
-#    ports:
-#      - "5435:5432"
-#    restart: unless-stopped
-#    container_name: postgres-inventory
-#    volumes:
-#      - ./data/postgres/inventory-microservice:/data/postgres
-#      - ./init/postgres/inventory-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
-#    networks:
-#      - spring
-#
-#  postgres-authentication:
-#    image: postgres:latest
-#    restart: unless-stopped
-#    container_name: postgres-authentication
-#    ports:
-#      - "5436:5432"
-#    environment:
-#      POSTGRES_DB: authentication-microservice
-#      POSTGRES_USER: root
-#      POSTGRES_PASSWORD: root
-#    volumes:
-#      - ./data/postgres/authentication-microservice:/data/postgres
-#      - ./init/postgres/authentication-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
-#    networks:
-#      - spring
-#
-#
-#  mongo-cart:
-#    image: mongo:latest
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: root
-#      MONGO_INITDB_ROOT_PASSWORD: root
-#    ports:
-#      - "27017:27017"
-#    volumes:
-#      - ./data/mongo/cart-microservice:/data/db
-#      - ./init/mongo/cart-microservice/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-#    command: mongod --auth
-#    container_name: mongo-cart
-#    restart: unless-stopped
-#    networks:
-#      - spring
+  postgres-review:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: review-microservice
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5430:5432"
+    restart: unless-stopped
+    container_name: postgres-review
+    volumes:
+      - ./data/postgres/review-microservice:/data/postgres
+      - ./init/postgres/review-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - spring
+
+
+  postgres-wallet:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: wallet-microservice
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+    container_name: postgres-wallet
+    volumes:
+      - ./data/postgres/wallet-microservice:/data/postgres
+      - ./init/postgres/wallet-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - spring
+
+
+  postgres-points:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: points-microservice
+      POSTGRES_USER : root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5434:5432"
+    restart: unless-stopped
+    container_name: postgres-points
+    volumes:
+      - ./data/postgres/points-microservice:/data/postgres
+      - ./init/postgres/points-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - spring
+
+  postgres-inventory:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: inventory-microservice
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5435:5432"
+    restart: unless-stopped
+    container_name: postgres-inventory
+    volumes:
+      - ./data/postgres/inventory-microservice:/data/postgres
+      - ./init/postgres/inventory-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - spring
+
+  postgres-authentication:
+    image: postgres:latest
+    restart: unless-stopped
+    container_name: postgres-authentication
+    ports:
+      - "5436:5432"
+    environment:
+      POSTGRES_DB: authentication-microservice
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - ./data/postgres/authentication-microservice:/data/postgres
+      - ./init/postgres/authentication-microservice/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - spring
+
+
+  mongo-cart:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/mongo/cart-microservice:/data/db
+      - ./init/mongo/cart-microservice/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    command: mongod --auth
+    container_name: mongo-cart
+    restart: unless-stopped
+    networks:
+      - spring
 #
 #  mongo-express:
 #    image: mongo-express
@@ -216,20 +326,20 @@ services:
 #    networks:
 #      - spring
 #
-#  mongo-order:
-#    image: mongo:latest
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: root
-#      MONGO_INITDB_ROOT_PASSWORD: root
-#    ports:
-#      - "27019:27017"
-#    restart: unless-stopped
-#    volumes:
-#      - ./data/mongo/order-microservice:/data/db
-#      - ./init/mongo/order-microservice/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-#    command: mongod --auth
-#    networks:
-#      - spring
+  mongo-order:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27019:27017"
+    restart: unless-stopped
+    volumes:
+      - ./data/mongo/order-microservice:/data/db
+      - ./init/mongo/order-microservice/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    command: mongod --auth
+    networks:
+      - spring
 
 networks:
   spring:
