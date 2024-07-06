@@ -31,16 +31,14 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.0")
+	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.0.3")
 	implementation("org.apache.httpcomponents.client5:httpclient5:5.2")
 	implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.2")
 	implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.1.0")
 	compileOnly("org.springframework.boot:spring-boot-starter-aop")
-	implementation("com.amazonaws:aws-java-sdk-s3:1.12.656")
-
-	//Stripe
 	implementation("com.stripe:stripe-java:22.20.0")
 
+	implementation("com.google.cloud:google-cloud-storage:2.40.1")
 
 }
 

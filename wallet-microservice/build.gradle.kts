@@ -3,6 +3,7 @@ plugins {
     id("org.springframework.boot") version "3.2.1"
     id("io.spring.dependency-management") version "1.1.4"
 }
+val springCloudVersion by extra("2023.0.2")
 
 group = "com.finefoods"
 version = "0.0.1-SNAPSHOT"
@@ -31,20 +32,19 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.0")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.0.3")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.2")
-    implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.2")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.1")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
-//
-//    implementation("com.fasterxml.jackson.core:jackson-databind:2.8.9")
-//    implementation("io.vertx:vertx-core:3.5.3")
-
-
 }
-
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
+    }
+}
 tasks.withType<Test> {
     useJUnitPlatform()
 }

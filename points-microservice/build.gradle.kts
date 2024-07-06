@@ -3,6 +3,7 @@ plugins {
     id("org.springframework.boot") version "3.2.1"
     id("io.spring.dependency-management") version "1.1.4"
 }
+val springCloudVersion by extra("2023.0.2")
 
 group = "com.finefoods"
 version = "0.0.1-SNAPSHOT"
@@ -31,11 +32,15 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.0")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.0.3")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.2")
-    implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.2")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.1")
 }
-
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
+    }
+}
 tasks.withType<Test> {
     useJUnitPlatform()
 }

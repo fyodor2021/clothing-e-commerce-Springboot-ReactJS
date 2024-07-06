@@ -31,1195 +31,789 @@ public class ProductLoader implements CommandLineRunner {
         if (productRepository.findProductByProductId((long) 1) == null) {
             Product product = Product.builder()
                     .productId(1L)
-                    .brand("Arz")
-                    .productName("Coconut Macaroons")
-                    .description("Soft and chewy on the inside, crisp and golden on the outside")
-                    .category("sweets")
-                    .tags("sweets, cookies, coconut,")
-                    .size("500")
-                    .unit("g")
-                    .cost(10.99)
-                    .price(15.00)
-                    .currentPrice(12.99)
+                    .brand("JOSEDOR")
+                    .productName("KNIT MINI DRESS")
+                    .description(" a sleeveless, red knit garment with a delicate pattern throughout")
+                    .category("dress")
+                    .gender("women")
+                    .color("red")
+                    .tags("red, knit, sleeveless, short")
+                    .cost(19.99)
+                    .price(49.99)
+                    .currentPrice(49.99)
                     .isTaxed(true)
                     .skuCode("4501")
                     .upcCode("828696023345")
-                    .vendor("bakery")
+                    .vendor("france")
                     .points(20.00)
                     .build();
             productRepository.save(product);
             File productImage = new File(path + fileDir + "1.jpeg");
             productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "1-1.jpeg");
+            productServiceImp.imageLoader(productImage1,product);
+            File productImage2 = new File(path + fileDir + "1-2.jpeg");
+            productServiceImp.imageLoader(productImage2,product);
+            File productImage3 = new File(path + fileDir + "1-3.jpeg");
+            productServiceImp.imageLoader(productImage3,product);
 
         }
         if (productRepository.findProductByProductId((long) 2) == null) {
             Product product = Product.builder()
                     .productId(2L)
-                    .brand("Arz")
-                    .productName("Rosemary Sticks")
-                    .description("Rosemary sticks with sea salt")
-                    .category("sweets")
-                    .tags("sweets, cookies, rosemary, sticks, nuts-free")
-                    .size("400")
-                    .unit("g")
-                    .cost(10.99)
-                    .price(15.00)
-                    .currentPrice(12.99)
+                    .brand("JOSEDOR")
+                    .productName("PIPING KNIT MINI DRESS")
+                    .description("sleeveless, white mini dress with black trim")
+                    .category("dress")
+                    .tags("white, black, knit, trim, short")
+                    .gender("women")
+                    .color("white")
+                    .cost(18.99)
+                    .price(29.99)
+                    .currentPrice(29.99)
                     .isTaxed(true)
                     .skuCode("4502")
                     .upcCode("828696023345")
-                    .vendor("bakery")
+                    .vendor("france")
                     .points(20.00)
                     .build();
             productRepository.save(product);
             File productImage = new File(path + fileDir+ "2.jpeg");
             productServiceImp.imageLoader(productImage,product);
-
+            File productImage1 = new File(path + fileDir+ "2-1.jpeg");
+            productServiceImp.imageLoader(productImage1,product);
+            File productImage2 = new File(path + fileDir+ "2-2.jpeg");
+            productServiceImp.imageLoader(productImage2,product);
 
         }
         if (productRepository.findProductByProductId((long) 3) == null) {
             Product product = Product.builder()
                     .productId(3L)
-                    .brand("Arz")
-                    .productName("Rainbow Cookies")
-                    .description("Vanilla cookies dipped in colorful sparkles  ")
-                    .category("sweets")
-                    .tags("sweets, cookies, rainbow , nuts-free")
-                    .size("500")
-                    .unit("g")
-                    .cost(10.99)
-                    .price(15.00)
-                    .currentPrice(12.99)
+                    .brand("JOSEDOR")
+                    .productName("MINI DRESS ZW COLLECTION")
+                    .description("a sleeveless, red mini dress with a high neckline and a simple, streamlined silhouette")
+                    .category("dresses")
+                    .tags("red, dress, short , nuts-free")
+                    .gender("women")
+                    .color("red")
+                    .cost(24.99)
+                    .price(53.99)
+                    .currentPrice(53.99)
                     .isTaxed(true)
                     .skuCode("4503")
                     .upcCode("828696023345")
-                    .vendor("bakery")
+                    .vendor("france")
                     .points(20)
                     .build();
             productRepository.save(product);
             File productImage = new File(path + fileDir+ "3.jpeg");
             productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir+ "3-1.jpeg");
+            productServiceImp.imageLoader(productImage1,product);
+            File productImage2 = new File(path + fileDir+ "3-2.jpeg");
+            productServiceImp.imageLoader(productImage2,product);
+            File productImage3 = new File(path + fileDir+ "3-3.jpeg");
+            productServiceImp.imageLoader(productImage3,product);
         }
         if (productRepository.findProductByProductId((long) 4) == null) {
             Product product = Product.builder()
                     .productId(4L)
-                    .brand("Arz")
-                    .productName("Vanilla Chocolate Cookies")
-                    .description("Vanilla cookies dipped in chocolate ")
-                    .category("sweets")
-                    .tags("sweets, cookies, chocolate , nuts-free")
-                    .size("500")
-                    .unit("g")
+                    .brand("JOSEDOR")
+                    .productName("TIED GINGHAM DRESS")
+                    .description("V-neck mini dress with adjustable spaghetti straps. Elastic smocked fabric")
+                    .category("dresses")
+                    .tags("straps, short, white , yellow")
+                    .gender("women")
+                    .color("yellow")
                     .cost(10.99)
-                    .price(15.00)
-                    .currentPrice(12.99)
+                    .price(39.99)
+                    .currentPrice(39.99)
                     .isTaxed(true)
                     .skuCode("4504")
                     .upcCode("828696023345")
-                    .vendor("bakery")
+                    .vendor("france")
                     .points(20)
                     .build();
             productRepository.save(product);
             File productImage = new File(path + fileDir+ "4.jpeg");
             productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir+ "4-1.jpeg");
+            productServiceImp.imageLoader(productImage1,product);
+            File productImage2 = new File(path + fileDir+ "4-2.jpeg");
+            productServiceImp.imageLoader(productImage2,product);
+            File productImage3 = new File(path + fileDir+ "4-3.jpeg");
+            productServiceImp.imageLoader(productImage3,product);
         }
         if (productRepository.findProductByProductId((long) 5) == null) {
             Product product = Product.builder()
                     .productId(5L)
-                    .brand("Arz")
-                    .productName("Filo Bites")
-                    .description("Sesame squares with a hint of anis")
-                    .category("sweets")
-                    .tags("sweets, cookies, anis ")
-                    .size("500")
-                    .unit("g")
-                    .cost(10.99)
-                    .price(15.00)
-                    .currentPrice(12.99)
+                    .brand("JOSEDOR")
+                    .productName("BALLOON SLEEVE DRESS")
+                    .description("Mini dress made of cotton. Round neck with below-the-elbow length balloon sleeves")
+                    .category("dresses")
+                    .tags("orange, balloon, short")
+                    .gender("women")
+                    .color("orange")
+                    .cost(19.99)
+                    .price(45.99)
+                    .currentPrice(45.99)
                     .isTaxed(true)
                     .skuCode("4505")
                     .upcCode("828696023345")
-                    .vendor("bakery")
+                    .vendor("france")
                     .points(20)
                     .build();
             productRepository.save(product);
             File productImage = new File(path + fileDir+ "5.jpeg");
             productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir+ "5-1.jpeg");
+            productServiceImp.imageLoader(productImage1,product);
+            File productImage2 = new File(path + fileDir+ "5-2.jpeg");
+            productServiceImp.imageLoader(productImage2,product);
+            File productImage3 = new File(path + fileDir+ "5-3.jpeg");
+            productServiceImp.imageLoader(productImage3,product);
         }
         if (productRepository.findProductByProductId((long) 6) == null) {
             Product product = Product.builder()
                     .productId(6L)
-                    .brand("Arz")
-                    .productName("Date Cookies")
-                    .description("Delicious cookies filled with sweet and chewy dates")
-                    .category("sweets")
-                    .tags("sweets, cookies, dates, nuts-free ")
-                    .size("500")
-                    .unit("g")
-                    .cost(10.99)
-                    .price(10.00)
-                    .currentPrice(8.99)
+                    .brand("ZARA")
+                    .productName("RUFFLED MIDI DRESS")
+                    .description("Midi dress crafted from lightweight fabric. V-neckline and ruffled trim detailing.")
+                    .category("dresses")
+                    .tags("blue, midi, ruffled")
+                    .gender("women")
+                    .color("blue")
+                    .cost(29.99)
+                    .price(59.99)
+                    .currentPrice(59.99)
                     .isTaxed(true)
-                    .skuCode("4506")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(20)
+                    .skuCode("6021")
+                    .upcCode("729847566829")
+                    .vendor("Spain")
+                    .points(25)
                     .build();
             productRepository.save(product);
-            File productImage = new File(path + fileDir+ "6.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-            File productImage2 = new File(path + fileDir+ "6-1.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
+            File productImage = new File(path + fileDir + "6.jpeg");
+            productServiceImp.imageLoader(productImage, product);
+            File productImage1 = new File(path + fileDir + "6-1.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
         }
         if (productRepository.findProductByProductId((long) 7) == null) {
             Product product = Product.builder()
                     .productId(7L)
-                    .brand("Arz")
-                    .productName("Tuxedo Cake")
-                    .description("A delicious cake with layers of chocolate and vanilla, topped with white chocolate icing and white chocolate curls ")
-                    .category("sweets")
-                    .tags("sweets, cakes, chocolate, white , tuxedo , nuts-free")
-                    .size("10")
-                    .unit("inches")
-                    .cost(40.00)
-                    .price(50.00)
-                    .currentPrice(50.00)
+                    .brand("ZARA")
+                    .productName("FLORAL PRINT DRESS")
+                    .description("Flowy dress with a floral print. High neckline and long sleeves with elastic cuffs.")
+                    .category("dresses")
+                    .tags("floral, long sleeve, flowy")
+                    .gender("women")
+                    .color("green")
+                    .cost(34.99)
+                    .price(69.99)
+                    .currentPrice(69.99)
                     .isTaxed(true)
-                    .skuCode("4507")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(20)
+                    .skuCode("7542")
+                    .upcCode("830175694857")
+                    .vendor("Spain")
+                    .points(30)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "7.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "7.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "7-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
+
         if (productRepository.findProductByProductId((long) 8) == null) {
             Product product = Product.builder()
                     .productId(8L)
-                    .brand("Arz")
-                    .productName("Strawberry Shortcake")
-                    .description("layers of fluffy vanilla cake, stuffed with fresh strawberries, and whipped cream ")
-                    .category("sweets")
-                    .tags("sweets, cakes, strawberry, white , shortcake , nuts-free")
-                    .size("10")
-                    .unit("inches")
-                    .cost(40.00)
-                    .price(50.00)
-                    .currentPrice(50.00)
+                    .brand("ZARA")
+                    .productName("LACE MIDI DRESS")
+                    .description("Elegant lace midi dress with a round neckline and short sleeves. Fully lined.")
+                    .category("dresses")
+                    .tags("lace, midi, elegant")
+                    .gender("women")
+                    .color("black")
+                    .cost(39.99)
+                    .price(79.99)
+                    .currentPrice(79.99)
                     .isTaxed(true)
-                    .skuCode("4508")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(20)
+                    .skuCode("8963")
+                    .upcCode("912345678901")
+                    .vendor("Spain")
+                    .points(35)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "8.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "8.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "8-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
         if (productRepository.findProductByProductId((long) 9) == null) {
             Product product = Product.builder()
                     .productId(9L)
-                    .brand("Arz")
-                    .productName("Double Chocolate Cake")
-                    .description("chocolate cake infused with rich cocoa flavor and topped with a velvety chocolate frosting, and dark and milk chocolate curls for an extra dose of decadence.")
-                    .category("sweets")
-                    .tags("sweets, cakes, chocolate, nuts-free")
-                    .size("10")
-                    .unit("inches")
-                    .cost(40.00)
-                    .price(50.00)
-                    .currentPrice(50.00)
+                    .brand("ZARA")
+                    .productName("SATIN SLIP DRESS")
+                    .description("Satin slip dress with a V-neckline and spaghetti straps. Bias-cut for a flattering fit.")
+                    .category("dresses")
+                    .tags("satin, slip, bias-cut")
+                    .gender("women")
+                    .color("pink")
+                    .cost(49.99)
+                    .price(99.99)
+                    .currentPrice(99.99)
                     .isTaxed(true)
-                    .skuCode("4509")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(20)
+                    .skuCode("7321")
+                    .upcCode("856924701234")
+                    .vendor("Spain")
+                    .points(40)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "9.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "9.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "9-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
         if (productRepository.findProductByProductId((long) 10) == null) {
             Product product = Product.builder()
                     .productId(10L)
-                    .brand("Arz")
-                    .productName("Hazelnut Cake")
-                    .description("A delicious cake with hazelnut flavor, stuffed with hazelnut crumb and topped with creamy hazelnut frosting")
-                    .category("sweets")
-                    .tags("sweets, cakes, hazelnut")
-                    .size("8")
-                    .unit("inches")
-                    .cost(30.00)
-                    .price(40.00)
-                    .currentPrice(40.00)
+                    .brand("ZARA")
+                    .productName("KNIT MIDI DRESS")
+                    .description("Knit midi dress with a mock neckline and long sleeves. Ribbed knit pattern throughout.")
+                    .category("dresses")
+                    .tags("knit, midi, mock neckline")
+                    .gender("women")
+                    .color("gray")
+                    .cost(39.99)
+                    .price(79.99)
+                    .currentPrice(79.99)
                     .isTaxed(true)
-                    .skuCode("4510")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(20)
+                    .skuCode("6134")
+                    .upcCode("745612309876")
+                    .vendor("Spain")
+                    .points(35)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "10.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "10.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "10-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
         if (productRepository.findProductByProductId((long) 11) == null) {
             Product product = Product.builder()
                     .productId(11L)
-                    .brand("Arz")
-                    .productName("Triple Chocolate Cake")
-                    .description("A rich chocolate cake featuring layers of moist chocolate sponge with chocolate buttercream filling")
-                    .category("sweets")
-                    .tags("sweets, cakes, chocolate, nuts-free")
-                    .size("8")
-                    .unit("inches")
-                    .cost(30.00)
-                    .price(40.00)
-                    .currentPrice(40.00)
+                    .brand("ZARA")
+                    .productName("SLIM FIT SHIRT")
+                    .description("Slim fit shirt made from cotton with a button-down collar and long sleeves.")
+                    .category("shirts")
+                    .tags("slim fit, cotton, button-down")
+                    .gender("men")
+                    .color("white")
+                    .cost(29.99)
+                    .price(59.99)
+                    .currentPrice(59.99)
                     .isTaxed(true)
-                    .skuCode("4511")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(20)
+                    .skuCode("7123")
+                    .upcCode("820495632145")
+                    .vendor("Spain")
+                    .points(25)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "11.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "11.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "11-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
         if (productRepository.findProductByProductId((long) 12) == null) {
             Product product = Product.builder()
                     .productId(12L)
-                    .brand("Arz")
-                    .productName("Fruit Tart")
-                    .description("Buttery pastry crust filled with luscious custard and topped with fresh seasonal fruits")
-                    .category("sweets")
-                    .tags("sweets, cakes, fruits, custard, pastry, nuts-free")
-                    .size("8")
-                    .unit("inches")
-                    .cost(30.00)
-                    .price(40.00)
-                    .currentPrice(40.00)
+                    .brand("ZARA")
+                    .productName("DENIM JACKET")
+                    .description("Classic denim jacket with chest pockets and metal buttons. Adjustable tabs at sides.")
+                    .category("jackets")
+                    .tags("denim, jacket, blue")
+                    .gender("men")
+                    .color("blue")
+                    .cost(49.99)
+                    .price(99.99)
+                    .currentPrice(99.99)
                     .isTaxed(true)
-                    .skuCode("4512")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(20)
+                    .skuCode("8345")
+                    .upcCode("725431098765")
+                    .vendor("Spain")
+                    .points(40)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "12.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "12.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "12-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
+
         if (productRepository.findProductByProductId((long) 13) == null) {
             Product product = Product.builder()
                     .productId(13L)
-                    .brand("Arz")
-                    .productName("Gourmet Baklava")
-                    .description("layers of flaky phyllo pastry, rich nuts, and sweet honey syrup")
-                    .category("sweets")
-                    .tags("sweets, baklava, nuts,")
-                    .size("800")
-                    .unit("g")
-                    .cost(15.99)
-                    .price(12.00)
-                    .currentPrice(15.99)
+                    .brand("ZARA")
+                    .productName("TEXTURED BLAZER")
+                    .description("Textured blazer with notch lapels and two-button closure. Chest and flap pockets.")
+                    .category("blazers")
+                    .tags("textured, blazer, formal")
+                    .gender("men")
+                    .color("gray")
+                    .cost(79.99)
+                    .price(159.99)
+                    .currentPrice(159.99)
                     .isTaxed(true)
-                    .skuCode("4513")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(20)
+                    .skuCode("9765")
+                    .upcCode("603187654321")
+                    .vendor("Spain")
+                    .points(55)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "13.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "13.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "13-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
+
         if (productRepository.findProductByProductId((long) 14) == null) {
             Product product = Product.builder()
                     .productId(14L)
-                    .brand("Arz")
-                    .productName("Marble Cake")
-                    .description("cake with swirls of vanilla and chocolate, offering a perfect blend of flavors in every slice")
-                    .category("sweets")
-                    .tags("sweets, cakes, chocolate, vanilla, nuts-free")
-                    .size("800")
-                    .unit("g")
-                    .cost(8.00)
-                    .price(11.99)
-                    .currentPrice(9.99)
+                    .brand("ZARA")
+                    .productName("SLIM CHINOS")
+                    .description("Slim fit chino trousers made from stretch cotton fabric. Belt loops and side pockets.")
+                    .category("pants")
+                    .tags("slim fit, chinos, stretch")
+                    .gender("men")
+                    .color("khaki")
+                    .cost(39.99)
+                    .price(79.99)
+                    .currentPrice(79.99)
                     .isTaxed(true)
-                    .skuCode("4514")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(20)
+                    .skuCode("5432")
+                    .upcCode("812309876543")
+                    .vendor("Spain")
+                    .points(35)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "14.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "14.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "14-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
+
         if (productRepository.findProductByProductId((long) 15) == null) {
             Product product = Product.builder()
                     .productId(15L)
-                    .brand("Arz")
-                    .productName("Cashew Fingers")
-                    .description("crispy delights packed with roasted cashews, a touch of sweetness, and a satisfying crunch.")
-                    .category("sweets")
-                    .tags("baklava, cakes, chocolate, vanilla")
-                    .size("200")
-                    .unit("g")
-                    .cost(5)
-                    .price(6.99)
-                    .currentPrice(6.99)
+                    .brand("ZARA")
+                    .productName("COTTON POLO SHIRT")
+                    .description("Classic cotton polo shirt with short sleeves and ribbed collar and cuffs.")
+                    .category("shirts")
+                    .tags("cotton, polo, classic")
+                    .gender("men")
+                    .color("navy")
+                    .cost(24.99)
+                    .price(49.99)
+                    .currentPrice(49.99)
                     .isTaxed(true)
-                    .skuCode("4515")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(20)
+                    .skuCode("7564")
+                    .upcCode("945612378905")
+                    .vendor("Spain")
+                    .points(22)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "15.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "15.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "15-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
+
         if (productRepository.findProductByProductId((long) 16) == null) {
             Product product = Product.builder()
                     .productId(16L)
-                    .brand("Arz")
-                    .productName("Hazelnut Bites")
-                    .description("mini bites blending the flavors of traditional baklava with the irresistible crunch of hazelnuts")
-                    .category("sweets")
-                    .tags("baklava, cakes, chocolate, vanilla")
-                    .size("200")
-                    .unit("g")
-                    .cost(5)
-                    .price(6.99)
-                    .currentPrice(6.99)
+                    .brand("ZARA")
+                    .productName("SUEDE BOMBER JACKET")
+                    .description("Suede bomber jacket with a stand-up collar and zip-up front. Ribbed trim.")
+                    .category("jackets")
+                    .tags("suede, bomber, zip-up")
+                    .gender("men")
+                    .color("brown")
+                    .cost(89.99)
+                    .price(179.99)
+                    .currentPrice(179.99)
                     .isTaxed(true)
-                    .skuCode("4516")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(20)
+                    .skuCode("6854")
+                    .upcCode("702348765432")
+                    .vendor("Spain")
+                    .points(60)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "16.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "16.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "16-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
+
         if (productRepository.findProductByProductId((long) 17) == null) {
             Product product = Product.builder()
                     .productId(17L)
-                    .brand("Arz")
-                    .productName("Walnut Bites")
-                    .description("mini bites blending the flavors of traditional baklava with the irresistible crunch of walnuts")
-                    .category("sweets")
-                    .tags("baklava, cakes, chocolate, vanilla")
-                    .size("200")
-                    .unit("g")
-                    .cost(5)
-                    .price(6.99)
-                    .currentPrice(6.99)
+                    .brand("ZARA")
+                    .productName("WOOL BLEND COAT")
+                    .description("Wool blend coat with notched lapels and button closure. Side pockets.")
+                    .category("coats")
+                    .tags("wool blend, coat, classic")
+                    .gender("men")
+                    .color("gray")
+                    .cost(129.99)
+                    .price(259.99)
+                    .currentPrice(259.99)
                     .isTaxed(true)
-                    .skuCode("4517")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(20)
+                    .skuCode("7932")
+                    .upcCode("837456210987")
+                    .vendor("Spain")
+                    .points(80)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "17.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "17.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "17-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
+
         if (productRepository.findProductByProductId((long) 18) == null) {
             Product product = Product.builder()
                     .productId(18L)
-                    .brand("Arz")
-                    .productName("Fancy Baklava")
-                    .description("layers of flaky phyllo pastry, rich nuts, and sweet honey syrup")
-                    .category("sweets")
-                    .tags("sweets, baklava, nuts,")
-                    .size("800")
-                    .unit("g")
-                    .cost(15.99)
-                    .price(12.00)
-                    .currentPrice(15.99)
+                    .brand("ZARA")
+                    .productName("CASHMERE SWEATER")
+                    .description("Cashmere sweater with a round neckline and long sleeves. Ribbed trim at cuffs and hem.")
+                    .category("sweaters")
+                    .tags("cashmere, sweater, round neckline")
+                    .gender("men")
+                    .color("black")
+                    .cost(69.99)
+                    .price(139.99)
+                    .currentPrice(139.99)
                     .isTaxed(true)
-                    .skuCode("4518")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(20)
+                    .skuCode("6201")
+                    .upcCode("704938567812")
+                    .vendor("Spain")
+                    .points(50)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "18.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "18.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "18-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
         if (productRepository.findProductByProductId((long) 19) == null) {
             Product product = Product.builder()
                     .productId(19L)
-                    .brand("Arz")
-                    .productName("Cheese Pizza")
-                    .description("gooey melted cheese on a crisp golden crust")
-                    .category("cafe")
-                    .tags("pizza, cheese, cafe,nuts-free")
-                    .size("100")
-                    .unit("g")
-                    .cost(3.99)
-                    .price(4.99)
-                    .currentPrice(4.99)
+                    .brand("ZARA")
+                    .productName("LINEN BLEND SHIRT")
+                    .description("Linen blend shirt with a mandarin collar and long sleeves. Button-up front.")
+                    .category("shirts")
+                    .tags("linen blend, shirt, mandarin collar")
+                    .gender("men")
+                    .color("white")
+                    .cost(34.99)
+                    .price(69.99)
+                    .currentPrice(69.99)
                     .isTaxed(true)
-                    .skuCode("4519")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
+                    .skuCode("5046")
+                    .upcCode("812345670123")
+                    .vendor("Spain")
+                    .points(30)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "19.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "19.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "19-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
+
         if (productRepository.findProductByProductId((long) 20) == null) {
             Product product = Product.builder()
                     .productId(20L)
-                    .brand("Arz")
-                    .productName("Muhammara Pizza")
-                    .description("tomato with hint of red chilli papers sauce on a crisp golden crust")
-                    .category("cafe")
-                    .tags("pizza, spicy, cafe, tomato sauce, vegan ,nuts-free, non-dairy")
-                    .size("100")
-                    .unit("g")
-                    .cost(2.99)
-                    .price(3.99)
-                    .currentPrice(3.99)
+                    .brand("ZARA")
+                    .productName("SLIM FIT SUIT")
+                    .description("Slim fit suit with a two-button blazer and tailored trousers. Wool blend fabric.")
+                    .category("suits")
+                    .tags("slim fit, suit, wool blend")
+                    .gender("men")
+                    .color("navy")
+                    .cost(149.99)
+                    .price(299.99)
+                    .currentPrice(299.99)
                     .isTaxed(true)
-                    .skuCode("4520")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
+                    .skuCode("8532")
+                    .upcCode("809763452189")
+                    .vendor("Spain")
+                    .points(90)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "20.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-
+            File productImage1 = new File(path + fileDir + "20.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "20-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
         if (productRepository.findProductByProductId((long) 21) == null) {
             Product product = Product.builder()
                     .productId(21L)
-                    .brand("Arz")
-                    .productName("Zaatar & Cheese Pizza")
-                    .description("The perfect harmony of thyme, sesame, and sumac mixed with olive oil, generously sprinkled over gooey cheese on a crisp golden crust, creating a tantalizing zaatar and cheese pizza")
-                    .category("cafe")
-                    .tags("pizza, cafe, cheese, zataar")
-                    .size("100")
-                    .unit("g")
-                    .cost(2.99)
-                    .price(3.99)
-                    .currentPrice(3.99)
-                    .isTaxed(true)
-                    .skuCode("4521")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "21.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-
-        }
-        if (productRepository.findProductByProductId((long) 22) == null) {
-            Product product = Product.builder()
-                    .productId(22L)
-                    .brand("Arz")
-                    .productName("Zaatar Pizza")
-                    .description("The perfect harmony of thyme, sesame, and sumac mixed with olive oil on a crisp golden crust")
-                    .category("cafe")
-                    .tags("pizza, cafe, zataar, vegan, non-dairy")
-                    .size("100")
-                    .unit("g")
-                    .cost(2.99)
-                    .price(3.99)
-                    .currentPrice(3.99)
-                    .isTaxed(true)
-                    .skuCode("4522")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "22.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-
-        }
-        if (productRepository.findProductByProductId((long) 23) == null) {
-            Product product = Product.builder()
-                    .productId(23L)
-                    .brand("Arz")
-                    .productName("Olives and Cheese Pizza")
-                    .description("gooey melted cheese, topped with lebanese green olives on a crisp golden crust")
-                    .category("cafe")
-                    .tags("pizza, cafe, olives")
-                    .size("100")
-                    .unit("g")
-                    .cost(2.99)
-                    .price(3.99)
-                    .currentPrice(3.99)
-                    .isTaxed(true)
-                    .skuCode("4523")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "23.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-
-        }
-        if (productRepository.findProductByProductId((long) 24) == null) {
-            Product product = Product.builder()
-                    .productId(24L)
-                    .brand("Arz")
-                    .productName("Zaatar Croissant")
-                    .description("Flaky buttery croissant filled with a savory blend of zaatar")
-                    .category("cafe")
-                    .tags("croissant, cafe, zaatar")
-                    .size("50")
-                    .unit("g")
-                    .cost(1.49)
-                    .price(2.99)
-                    .currentPrice(2.99)
-                    .isTaxed(true)
-                    .skuCode("4524")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "24.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-
-        }
-        if (productRepository.findProductByProductId((long) 25) == null) {
-            Product product = Product.builder()
-                    .productId(25L)
-                    .brand("Arz")
-                    .productName("Cheese Croissant")
-                    .description("Flaky buttery croissant filled with a rich, melty cheese")
-                    .category("cafe")
-                    .tags("croissant, cafe, cheese")
-                    .size("50")
-                    .unit("g")
-                    .cost(1.99)
-                    .price(3.49)
-                    .currentPrice(3.49)
-                    .isTaxed(true)
-                    .skuCode("4525")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "25.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-
-        }
-        if (productRepository.findProductByProductId((long) 26) == null) {
-            Product product = Product.builder()
-                    .productId(26L)
-                    .brand("Arz")
-                    .productName("Meat Kibbeh Sanieh")
-                    .description("homemade-style kibbeh, stuffed with seasoned ground beef, conveniently prepared for heating and enjoying, offering a delicious taste of traditional Lebanese cuisine ")
-                    .category("frozen")
-                    .tags("frozen, meat, kibbeh")
-                    .size("500")
-                    .unit("g")
-                    .cost(13.00)
-                    .price(15.99)
-                    .currentPrice(15.99)
-                    .isTaxed(true)
-                    .skuCode("4526")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "26.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-
-        }
-        if (productRepository.findProductByProductId((long) 27) == null) {
-            Product product = Product.builder()
-                    .productId(27L)
-                    .brand("Arz")
-                    .productName("Beef Shawarma")
-                    .description("frozen beef shawarma, seasoned to perfection and ready to heat up for a mouthwatering taste of Middle Eastern cuisine at home")
-                    .category("frozen")
-                    .tags("frozen, meat, shawarma, nuts-free")
-                    .size("500")
-                    .unit("g")
-                    .cost(13.00)
-                    .price(15.99)
-                    .currentPrice(15.99)
-                    .isTaxed(true)
-                    .skuCode("4527")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "27.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-
-        }
-        if (productRepository.findProductByProductId((long) 28) == null) {
-            Product product = Product.builder()
-                    .productId(28L)
-                    .brand("Arz")
-                    .productName("Chicken Shawarma")
-                    .description("frozen chicken shawarma, seasoned to perfection and ready to heat up for a mouthwatering taste of Middle Eastern cuisine at home")
-                    .category("frozen")
-                    .tags("frozen, meat, chicken, shawarma, nuts-free")
-                    .size("500")
-                    .unit("g")
-                    .cost(13.00)
-                    .price(15.99)
-                    .currentPrice(15.99)
-                    .isTaxed(true)
-                    .skuCode("4528")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "28.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-
-        }
-        if (productRepository.findProductByProductId((long) 29) == null) {
-            Product product = Product.builder()
-                    .productId(29L)
-                    .brand("Arz")
-                    .productName("Meat Kibbeh ")
-                    .description("homemade-style kibbeh, stuffed with seasoned ground beef, conveniently prepared for frying and enjoying, offering a delicious taste of traditional Lebanese cuisine ")
-                    .category("frozen")
-                    .tags("frozen, meat, kibbeh ")
-                    .size("20")
-                    .unit("pc")
-                    .cost(13.00)
-                    .price(15.99)
-                    .currentPrice(15.99)
-                    .isTaxed(true)
-                    .skuCode("4529")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "29.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-
-        }
-        if (productRepository.findProductByProductId((long) 30) == null) {
-            Product product = Product.builder()
-                    .productId(30L)
-                    .brand("Arz")
-                    .productName("Spinach & Cheese Mini Pies")
-                    .description("frozen spinach and cheese mini pies, bursting with savory flavors and flaky pastry, perfect for a quick and delicious snack or appetizer")
-                    .category("frozen")
-                    .tags("frozen, pies, mini, cheese, spinach, nuts-free")
-                    .size("18")
-                    .unit("pc")
-                    .cost(7.00)
-                    .price(9.99)
-                    .currentPrice(9.99)
-                    .isTaxed(true)
-                    .skuCode("4530")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "30.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-        }
-        if (productRepository.findProductByProductId((long) 31) == null) {
-            Product product = Product.builder()
-                    .productId(31L)
-                    .brand("Arz")
-                    .productName("Phyllo Dough")
-                    .description("Layer phyllo dough with butter or oil to create flaky pastry sheets for sweet and savory dishes.")
-                    .category("frozen")
-                    .tags("frozen, dough")
-                    .size("454")
-                    .unit("g")
-                    .cost(1.50)
-                    .price(2.99)
-                    .currentPrice(1.99)
-                    .isTaxed(true)
-                    .skuCode("4531")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "31.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-        }
-        if (productRepository.findProductByProductId((long) 32) == null) {
-            Product product = Product.builder()
-                    .productId(32L)
-                    .brand("Arz")
-                    .productName("Tahina")
-                    .description("creamy paste made from 100% pure sesame seed")
-                    .category("grocery")
-                    .tags("grocery, tahini, sesame, vegan, non-dairy")
-                    .size("907")
-                    .unit("g")
-                    .cost(8.00)
-                    .price(10.99)
-                    .currentPrice(10.99)
-                    .isTaxed(false)
-                    .skuCode("4532")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "32.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-            File productImage2 = new File(fileDir+ "32-1.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
-            File productImage3 = new File(fileDir+ "32-2.jpeg");
-            productServiceImp.imageLoader(productImage3,product);
-        }
-        if (productRepository.findProductByProductId((long) 33) == null) {
-            Product product = Product.builder()
-                    .productId(33L)
-                    .brand("Arz")
-                    .productName("Halawa Regular")
-                    .description("sweet, dense confection made from sesame paste and sugar, enjoyed for its rich flavor and unique texture")
-                    .category("grocery")
-                    .tags("grocery, halawa, halva, sesame, vegan, non-dairy")
-                    .size("907")
-                    .unit("g")
-                    .cost(3.00)
-                    .price(4.99)
-                    .currentPrice(4.99)
-                    .isTaxed(true)
-                    .skuCode("4533")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "33.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-        }
-        if (productRepository.findProductByProductId((long) 34) == null) {
-            Product product = Product.builder()
-                    .productId(34L)
-                    .brand("Arz")
-                    .productName("Halawa Pistachio")
-                    .description("sweet, dense confection made from sesame paste and sugar,pistachio added, enjoyed for its rich flavor and unique texture")
-                    .category("grocery")
-                    .tags("grocery, halawa, halva, sesame, vegan, non-dairy")
-                    .size("907")
-                    .unit("g")
-                    .cost(4.00)
-                    .price(5.99)
-                    .currentPrice(5.99)
-                    .isTaxed(true)
-                    .skuCode("4534")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "34.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-        }
-        if (productRepository.findProductByProductId((long) 35) == null) {
-            Product product = Product.builder()
-                    .productId(35L)
-                    .brand("Arz")
-                    .productName("Green Olives")
-                    .description("Hand-picked from Lebanon, seasoned with thyme and lemon.")
-                    .category("grocery")
-                    .tags("grocery, olives, green, vegan, organic, nuts-free, non-dairy")
-                    .size("1")
-                    .unit("L")
-                    .cost(4.00)
-                    .price(5.99)
-                    .currentPrice(5.99)
-                    .isTaxed(false)
-                    .skuCode("4535")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "35.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-            File productImage2 = new File(fileDir+ "35-1.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
-            File productImage3 = new File(fileDir+ "35-2.jpeg");
-            productServiceImp.imageLoader(productImage3,product);
-        }
-        if (productRepository.findProductByProductId((long) 36) == null) {
-            Product product = Product.builder()
-                    .productId(36L)
-                    .brand("Arz")
-                    .productName("Black Olives")
-                    .description("Hand-picked from Lebanon, seasoned with thyme and vinegar.")
-                    .category("grocery")
-                    .tags("grocery, olives, black, vegan, organic, nuts-free, non-dairy")
-                    .size("1")
-                    .unit("L")
-                    .cost(4.00)
-                    .price(5.99)
-                    .currentPrice(5.99)
-                    .isTaxed(false)
-                    .skuCode("4536")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "36.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-            File productImage2 = new File(fileDir+ "36-1.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
-            File productImage3 = new File(fileDir+ "36-2.jpeg");
-            productServiceImp.imageLoader(productImage3,product);
-        }
-        if (productRepository.findProductByProductId((long) 37) == null) {
-            Product product = Product.builder()
-                    .productId(37L)
-                    .brand("Arz")
-                    .productName("Green Olives")
-                    .description("Hand-picked from Lebanon, seasoned with thyme and lemon.")
-                    .category("grocery")
-                    .tags("grocery, olives, green, vegan, organic, nuts-free, non-dairy")
-                    .size("3")
-                    .unit("L")
-                    .cost(10.00)
-                    .price(12.99)
-                    .currentPrice(12.99)
-                    .isTaxed(false)
-                    .skuCode("4537")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "37.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-            File productImage2 = new File(fileDir+ "35-1.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
-            File productImage3 = new File(fileDir+ "35-2.jpeg");
-            productServiceImp.imageLoader(productImage3,product);
-        }
-        if (productRepository.findProductByProductId((long) 38) == null) {
-            Product product = Product.builder()
-                    .productId(38L)
-                    .brand("Arz")
-                    .productName("Black Olives")
-                    .description("Hand-picked from Lebanon, seasoned with thyme and vinegar.")
-                    .category("grocery")
-                    .tags("grocery, olives, black, vegan, organic, nuts-free,non-dairy")
-                    .size("3")
-                    .unit("L")
-                    .cost(10.00)
-                    .price(12.99)
-                    .currentPrice(12.99)
-                    .isTaxed(false)
-                    .skuCode("4538")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "38.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-            File productImage2 = new File(fileDir+ "36-1.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
-            File productImage3 = new File(fileDir+ "36-2.jpeg");
-            productServiceImp.imageLoader(productImage3,product);
-        }
-        if (productRepository.findProductByProductId((long) 39) == null) {
-            Product product = Product.builder()
-                    .productId(39L)
-                    .brand("Arz")
-                    .productName("Pickled Turnips")
-                    .description("pickled turnips, vibrant with a pink hue from beets, offering crispness and flavor in every bite ")
-                    .category("grocery")
-                    .tags("grocery, turnips, pickles, vegan, organic, nuts-free, non-dairy")
-                    .size("1")
-                    .unit("kg")
-                    .cost(3.00)
-                    .price(4.99)
-                    .currentPrice(4.99)
-                    .isTaxed(false)
-                    .skuCode("4539")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "39.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-            File productImage2 = new File(fileDir+ "39-1.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
-            File productImage3 = new File(fileDir+ "39-2.jpeg");
-            productServiceImp.imageLoader(productImage3,product);
-        }
-        if (productRepository.findProductByProductId((long) 40) == null) {
-            Product product = Product.builder()
-                    .productId(40L)
-                    .brand("Arz")
-                    .productName("Pickled Cucumbers")
-                    .description("Crisp and tangy pickled cucumbers, preserved in a flavorful vinegar brine")
-                    .category("grocery")
-                    .tags("grocery, cucmbers, pickles, vegan, organic, nuts-free, non-dairy")
-                    .size("1")
-                    .unit("kg")
-                    .cost(3.00)
-                    .price(4.99)
-                    .currentPrice(4.99)
-                    .isTaxed(false)
-                    .skuCode("4540")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(20)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "40.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-        }
-        if (productRepository.findProductByProductId((long) 41) == null) {
-            Product product = Product.builder()
-                    .productId(41L)
-                    .brand("La Tortilla Factory")
-                    .productName(" Gluten Free Tortillas")
-                    .description("Thin circular unleavened flatbread")
-                    .category("bread")
-                    .tags("grocery, bread, gluten-free, vegan, organic, nuts-free, non-dairy")
-                    .size("240")
-                    .unit("g")
-                    .cost(7.00)
-                    .price(4.99)
-                    .currentPrice(7.99)
-                    .isTaxed(false)
-                    .skuCode("4541")
-                    .upcCode("828696023345")
-                    .vendor("La Tortilla Factory")
-                    .points(30)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "41.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-            File productImage2 = new File(fileDir+ "41-1.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
-        }
-        if (productRepository.findProductByProductId((long) 42) == null) {
-            Product product = Product.builder()
-                    .productId(42L)
-                    .brand("Catch Of The Day")
-                    .productName("Pacific Salmon Fillets")
-                    .description("A mild flavoured fish with a flaky, moist texture")
-                    .category("grocery")
-                    .tags("grocery, frozen, shellfish, nuts-free, non-dairy")
-                    .size("680")
-                    .unit("g")
-                    .cost(7.00)
-                    .price(12.99)
-                    .currentPrice(12.99)
-                    .isTaxed(false)
-                    .skuCode("4542")
-                    .upcCode("828696023345")
-                    .vendor("La Tortilla Factory")
-                    .points(10)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "42.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-            File productImage2 = new File(fileDir+ "42-1.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
-        }
-        if (productRepository.findProductByProductId((long) 43) == null) {
-            Product product = Product.builder()
-                    .productId(43L)
-                    .brand("Arz")
-                    .productName("Fruit Salad Bowl")
-                    .description("mix of seasonal cut fruits")
-                    .category("produce")
-                    .tags("nuts-free, non-dairy,vegan")
-                    .size("750")
-                    .unit("g")
-                    .cost(9.00)
-                    .price(14.99)
-                    .currentPrice(14.99)
-                    .isTaxed(false)
-                    .skuCode("4543")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(40)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "43.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-        }
-        if (productRepository.findProductByProductId((long) 44) == null) {
-            Product product = Product.builder()
-                    .productId(44L)
-                    .brand("Arz")
-                    .productName("Mango Salad Bowl")
-                    .description("spinach, cherry tomatoes topped with mangoes and raisins")
-                    .category("produce")
-                    .tags("nuts-free, non-dairy,vegan")
-                    .size("450")
-                    .unit("g")
-                    .cost(9.00)
-                    .price(10.99)
-                    .currentPrice(10.99)
-                    .isTaxed(false)
-                    .skuCode("4544")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(40)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "44.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-        }
-        if (productRepository.findProductByProductId((long) 45) == null) {
-            Product product = Product.builder()
-                    .productId(45L)
-                    .brand("Arz")
-                    .productName("Sandwich Pita Bread")
-                    .description("lebanese style pita bread")
-                    .category("bread")
-                    .tags("nuts-free, non-dairy,vegan")
-                    .size("258")
-                    .unit("g")
-                    .cost(0.50)
-                    .price(0.99)
-                    .currentPrice(0.99)
-                    .isTaxed(false)
-                    .skuCode("4545")
-                    .upcCode("828696023345")
-                    .vendor("bakery")
-                    .points(40)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "45.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-        }
-        if (productRepository.findProductByProductId((long) 46) == null) {
-            Product product = Product.builder()
-                    .productId(46L)
-                    .brand("Arz")
-                    .productName("Tabouleh Salad")
-                    .description("lebanese style salad, made with parsley, tomatoes, bulgurs and salad dressing ")
-                    .category("deli")
-                    .tags("nuts-free, non-dairy,vegan")
-                    .size("1")
-                    .unit("kg")
-                    .cost(17.50)
-                    .price(19.99)
-                    .currentPrice(19.99)
-                    .isTaxed(false)
-                    .skuCode("4546")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(50)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "46.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-        }
-        if (productRepository.findProductByProductId((long) 47) == null) {
-            Product product = Product.builder()
-                    .productId(47L)
-                    .brand("Arz")
-                    .productName("Olives Salad")
-                    .description("cut olives with oil and spices")
-                    .category("deli")
-                    .tags("nuts-free, non-dairy, vegan")
-                    .size("1")
-                    .unit("kg")
-                    .cost(17.50)
-                    .price(21.99)
-                    .currentPrice(21.99)
-                    .isTaxed(false)
-                    .skuCode("4547")
-                    .upcCode("828696023345")
-                    .vendor("kitchen")
-                    .points(60)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "47.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-        }
-        if (productRepository.findProductByProductId((long) 48) == null) {
-            Product product = Product.builder()
-                    .productId(48L)
-                    .brand("Arz")
-                    .productName("Chicken Legs")
-                    .description("Halal chicken legs")
-                    .category("meat")
-                    .tags("raw")
-                    .size("1")
-                    .unit("kg")
-                    .cost(3.50)
-                    .price(4.99)
-                    .currentPrice(4.99)
-                    .isTaxed(false)
-                    .skuCode("4548")
-                    .upcCode("828696023345")
-                    .vendor("meat section")
-                    .points(60)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "48.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-        }
-        if (productRepository.findProductByProductId((long) 49) == null) {
-            Product product = Product.builder()
-                    .productId(49L)
-                    .brand("Arz")
-                    .productName("Extra Lean Ground Beef")
-                    .description("Halal meat")
-                    .category("meat")
-                    .tags("raw")
-                    .size("1")
-                    .unit("kg")
-                    .cost(10.50)
-                    .price(12.99)
-                    .currentPrice(12.99)
-                    .isTaxed(false)
-                    .skuCode("4549")
-                    .upcCode("828696023345")
-                    .vendor("meat section")
-                    .points(60)
-                    .build();
-            productRepository.save(product);
-            File productImage = new File(fileDir+ "49.jpeg");
-            productServiceImp.imageLoader(productImage,product);
-        }
-        if (productRepository.findProductByProductId((long) 50) == null) {
-            Product product = Product.builder()
-                    .productId(50L)
-                    .brand("Arz")
-                    .productName("Flat Chicken Family Platter")
-                    .description("1 Chicken, Rice 500g or Spicy Potatoes 500g With Chef Selected Salad & Garlic Sauce 4oz.")
-                    .category("catering")
-                    .tags("meat")
-                    .size("")
-                    .unit("")
-                    .cost(20.50)
+                    .brand("ZARA")
+                    .productName("PRINTED T-SHIRT")
+                    .description("Cotton t-shirt with a printed design on the front. Round neckline and short sleeves.")
+                    .category("t-shirts")
+                    .tags("printed, cotton, round neckline")
+                    .gender("kids")
+                    .color("white")
+                    .cost(12.99)
                     .price(24.99)
                     .currentPrice(24.99)
                     .isTaxed(true)
-                    .skuCode("4550")
-                    .upcCode("828696023345")
-                    .vendor("cafe")
-                    .points(100)
+                    .skuCode("7543")
+                    .upcCode("812345670234")
+                    .vendor("Spain")
+                    .points(15)
                     .build();
             productRepository.save(product);
-            File productImage = new File(fileDir+ "50.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            File productImage1 = new File(path + fileDir + "21.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "21-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
+        }
+
+        if (productRepository.findProductByProductId((long) 22) == null) {
+            Product product = Product.builder()
+                    .productId(22L)
+                    .brand("ZARA")
+                    .productName("DENIM SHORTS")
+                    .description("Denim shorts with an elastic waistband and side pockets. Frayed hems.")
+                    .category("shorts")
+                    .tags("denim, shorts, elastic waistband")
+                    .gender("kids")
+                    .color("blue")
+                    .cost(19.99)
+                    .price(39.99)
+                    .currentPrice(39.99)
+                    .isTaxed(true)
+                    .skuCode("6023")
+                    .upcCode("729847566831")
+                    .vendor("Spain")
+                    .points(20)
+                    .build();
+            productRepository.save(product);
+            File productImage1 = new File(path + fileDir + "22.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "22-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
+        }
+
+        if (productRepository.findProductByProductId((long) 23) == null) {
+            Product product = Product.builder()
+                    .productId(23L)
+                    .brand("ZARA")
+                    .productName("PRINTED DRESS")
+                    .description("Printed dress with a round neckline and short sleeves. Cotton fabric.")
+                    .category("dresses")
+                    .tags("printed, dress, cotton")
+                    .gender("kids")
+                    .color("pink")
+                    .cost(24.99)
+                    .price(49.99)
+                    .currentPrice(49.99)
+                    .isTaxed(true)
+                    .skuCode("8321")
+                    .upcCode("856924701238")
+                    .vendor("Spain")
+                    .points(25)
+                    .build();
+            productRepository.save(product);
+            File productImage1 = new File(path + fileDir + "23.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "23-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
+        }
+
+        if (productRepository.findProductByProductId((long) 24) == null) {
+            Product product = Product.builder()
+                    .productId(24L)
+                    .brand("ZARA")
+                    .productName("HOODED SWEATSHIRT")
+                    .description("Hooded sweatshirt with a kangaroo pocket. Ribbed cuffs and hem. Soft cotton fabric.")
+                    .category("sweatshirts")
+                    .tags("hooded, sweatshirt, cotton")
+                    .gender("kids")
+                    .color("gray")
+                    .cost(29.99)
+                    .price(59.99)
+                    .currentPrice(59.99)
+                    .isTaxed(true)
+                    .skuCode("9761")
+                    .upcCode("603187654325")
+                    .vendor("Spain")
+                    .points(30)
+                    .build();
+            productRepository.save(product);
+            File productImage1 = new File(path + fileDir + "24.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "24-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
+        }
+
+        if (productRepository.findProductByProductId((long) 25) == null) {
+            Product product = Product.builder()
+                    .productId(25L)
+                    .brand("ZARA")
+                    .productName("CARGO PANTS")
+                    .description("Cargo pants with multiple pockets and adjustable waistband. Cotton fabric.")
+                    .category("pants")
+                    .tags("cargo, pants, cotton")
+                    .gender("kids")
+                    .color("khaki")
+                    .cost(34.99)
+                    .price(69.99)
+                    .currentPrice(69.99)
+                    .isTaxed(true)
+                    .skuCode("5435")
+                    .upcCode("812309876546")
+                    .vendor("Spain")
+                    .points(35)
+                    .build();
+            productRepository.save(product);
+            File productImage1 = new File(path + fileDir + "25.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "25-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
+        }
+
+        if (productRepository.findProductByProductId((long) 26) == null) {
+            Product product = Product.builder()
+                    .productId(26L)
+                    .brand("ZARA")
+                    .productName("PRINTED SHIRT")
+                    .description("Printed shirt with a button-up front and long sleeves. Linen fabric.")
+                    .category("shirts")
+                    .tags("printed, shirt, linen")
+                    .gender("kids")
+                    .color("blue")
+                    .cost(19.99)
+                    .price(39.99)
+                    .currentPrice(39.99)
+                    .isTaxed(true)
+                    .skuCode("7546")
+                    .upcCode("812345670236")
+                    .vendor("Spain")
+                    .points(20)
+                    .build();
+            productRepository.save(product);
+            File productImage1 = new File(path + fileDir + "26.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "26-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
+        }
+
+        if (productRepository.findProductByProductId((long) 27) == null) {
+            Product product = Product.builder()
+                    .productId(27L)
+                    .brand("ZARA")
+                    .productName("SWEATPANTS")
+                    .description("Sweatpants with an elastic waistband and side pockets. Soft fleece interior.")
+                    .category("pants")
+                    .tags("sweatpants, fleece, elastic waistband")
+                    .gender("kids")
+                    .color("gray")
+                    .cost(24.99)
+                    .price(49.99)
+                    .currentPrice(49.99)
+                    .isTaxed(true)
+                    .skuCode("8323")
+                    .upcCode("856924701240")
+                    .vendor("Spain")
+                    .points(25)
+                    .build();
+            productRepository.save(product);
+            File productImage1 = new File(path + fileDir + "27.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "27-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
+        }
+
+        if (productRepository.findProductByProductId((long) 28) == null) {
+            Product product = Product.builder()
+                    .productId(28L)
+                    .brand("ZARA")
+                    .productName("PATTERNED JUMPSUIT")
+                    .description("Patterned jumpsuit with short sleeves and a round neckline. Elastic waistband.")
+                    .category("jumpsuits")
+                    .tags("patterned, jumpsuit, elastic waistband")
+                    .gender("kids")
+                    .color("yellow")
+                    .cost(29.99)
+                    .price(59.99)
+                    .currentPrice(59.99)
+                    .isTaxed(true)
+                    .skuCode("9763")
+                    .upcCode("603187654327")
+                    .vendor("Spain")
+                    .points(30)
+                    .build();
+            productRepository.save(product);
+            File productImage1 = new File(path + fileDir + "28.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "28-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
+        }
+
+        if (productRepository.findProductByProductId((long) 29) == null) {
+            Product product = Product.builder()
+                    .productId(29L)
+                    .brand("ZARA")
+                    .productName("HOODED PUFFER JACKET")
+                    .description("Hooded puffer jacket with front zip closure. Side pockets and elastic cuffs.")
+                    .category("jackets")
+                    .tags("hooded, puffer, elastic cuffs")
+                    .gender("kids")
+                    .color("blue")
+                    .cost(49.99)
+                    .price(99.99)
+                    .currentPrice(99.99)
+                    .isTaxed(true)
+                    .skuCode("7561")
+                    .upcCode("945612378909")
+                    .vendor("Spain")
+                    .points(40)
+                    .build();
+            productRepository.save(product);
+            File productImage1 = new File(path + fileDir + "29.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "29-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
+        }
+
+        if (productRepository.findProductByProductId((long) 30) == null) {
+            Product product = Product.builder()
+                    .productId(30L)
+                    .brand("ZARA")
+                    .productName("EMBROIDERED DRESS")
+                    .description("Embroidered dress with short sleeves and a round neckline. Cotton fabric.")
+                    .category("dresses")
+                    .tags("embroidered, dress, cotton")
+                    .gender("kids")
+                    .color("white")
+                    .cost(24.99)
+                    .price(49.99)
+                    .currentPrice(49.99)
+                    .isTaxed(true)
+                    .skuCode("6203")
+                    .upcCode("704938567814")
+                    .vendor("Spain")
+                    .points(25)
+                    .build();
+            productRepository.save(product);
+            File productImage1 = new File(path + fileDir + "30.jpeg");
+            productServiceImp.imageLoader(productImage1, product);
+            File productImage2 = new File(path + fileDir + "30-1.jpeg");
+            productServiceImp.imageLoader(productImage2, product);
         }
     }
 }

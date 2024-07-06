@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InventoryRequest {
     private long productId;
-    private float stock;
-    private String stockUnit;
+    private long smallStock;
+    private long mediumStock;
+    private long largeStock;
+    private long xlStock;
 
 }

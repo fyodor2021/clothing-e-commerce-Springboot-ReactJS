@@ -34,48 +34,39 @@ public class AuthenticationService {
     @Value("${points-microservice.url}")
     private String pointsUri;
 
-    public AuthenticationResponse register(RegisterRequest authRequest) {
+    public ResponseEntity<?> register(RegisterRequest authRequest) {
         Optional<User> userLookup = userRepository.findByEmail(authRequest.getEmail());
         if (userLookup.isEmpty()) {
+            String cartId = createCartWithUserEmail(authRequest.getEmail());
             var user = User.builder()
                     .email(authRequest.getEmail())
                     .firstname(authRequest.getFirstname())
                     .lastname(authRequest.getLastname())
                     .password(passwordEncoder.encode(authRequest.getPassword()))
                     .address(authRequest.getAddress())
+                    .cartId(cartId)
                     .role(Role.USER)
                     .build();
             User savedUser = userRepository.save(user);
-
-            String cartId = webClientBuilder.build()
-                    .post()
-                    .uri(cartUri)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(savedUser.getEmail())
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
             createPoints(savedUser.getEmail());
-            var jwtToken = jwtService.generateToken(user);
-            return AuthenticationResponse.builder()
-                    .token(jwtToken).build();
-
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        return null;
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        Optional<User> users = userRepository.findByEmail(request.getEmail());
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+    public AuthenticationResponse authenticate(AuthenticationRequest request, String cookieHeader) {
+//        Optional<User> users = userRepository.findByEmail(request.getEmail());
+//        authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+//        );
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
         Map<String, Object> claims = new HashMap<>();
         claims.put("firstName", user.getFirstname());
         claims.put("firsName", user.getLastname());
         claims.put("ROLE", user.getRole());
-
+        mergeCarts(MergeRequest.builder().headerValue(cookieHeader).userEmail(request.getEmail()).build());
         var jwtToken = jwtService.generateToken(claims, user);
         return AuthenticationResponse.builder()
                 .token(jwtToken).build();
@@ -143,5 +134,24 @@ public class AuthenticationService {
                         .block()
         ).join();
     }
-
+    private String createCartWithUserEmail(String email) {
+       return  webClientBuilder.build()
+                .post()
+                .uri(cartUri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(email)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
+    private void mergeCarts(MergeRequest mergeRequest){
+         webClientBuilder.build()
+                .post()
+                .uri(cartUri +"/merge")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(mergeRequest)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
 }

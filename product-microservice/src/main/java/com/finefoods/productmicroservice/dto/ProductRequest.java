@@ -21,8 +21,8 @@ public class ProductRequest {
     private String description;
     private String category;
     private String tags;
-    private String size;
-    private String unit;
+    private String color;
+    private String gender;
     private double cost;
     private double price;
     private double currentPrice;

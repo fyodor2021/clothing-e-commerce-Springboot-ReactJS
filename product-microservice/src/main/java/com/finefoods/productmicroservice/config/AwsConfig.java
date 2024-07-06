@@ -15,9 +15,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AwsConfig {
 //    @Value("${aws.accessKey.value}")
-    private String accessKey = "AKIA4J3CD4ESYTROYX3T";
+    private String accessKey = "AKIAYVQ53JMH674EUJJ2";
 //    @Value("${aws.secretKey.value")
-    private String secretKey = "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";
+    private String secretKey = "JuyxUKzsCeIUEjmN9oNI38wCL7gqG8j7hxMriNpf";
     public AWSCredentials credentials(){
         return new BasicAWSCredentials(
                 accessKey,secretKey

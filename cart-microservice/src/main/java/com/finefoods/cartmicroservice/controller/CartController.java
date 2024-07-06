@@ -3,8 +3,10 @@ package com.finefoods.cartmicroservice.controller;
 
 import com.finefoods.cartmicroservice.dto.AddToCartRequest;
 import com.finefoods.cartmicroservice.dto.IncDecRequest;
+import com.finefoods.cartmicroservice.dto.MergeRequest;
 import com.finefoods.cartmicroservice.model.Cart;
 import com.finefoods.cartmicroservice.model.Product;
+import com.finefoods.cartmicroservice.repository.CartRepository;
 import com.finefoods.cartmicroservice.service.CartServiceImp;
 import com.finefoods.cartmicroservice.service.JwtService;
 import io.jsonwebtoken.Claims;
@@ -22,6 +24,8 @@ import java.util.List;
 public class CartController {
     private final CartServiceImp cartService;
     private final JwtService jwtService;
+    private final CartRepository cartRepository;
+
     @PostMapping
     public Cart createCart(@RequestBody String headerValue) {
         return cartService.createCart(headerValue);
@@ -32,7 +36,7 @@ public class CartController {
                           @RequestHeader(value = "Authorization", defaultValue = "") String authHeader,
                           @RequestHeader(value = "Cookie",defaultValue = "") String cookieHeader)
     {
-
+        String hello = "helllo";
         if(!cookieHeader.isEmpty() && !cookieHeader.contains(";")){
             String cookie = cookieHeader.substring(8);
             cartService.addToCart(addToCartRequest,cookie);
@@ -97,6 +101,13 @@ public class CartController {
             incDecRequest.setHeaderValue(username);
         }
     cartService.decrementProductCount(incDecRequest);
+    }
+    @PostMapping("/merge")
+    public void mergeCart(@RequestBody MergeRequest mergeRequest){
+        mergeRequest.setHeaderValue(mergeRequest.getHeaderValue().substring(8));
+        Cart guestCart = cartRepository.findCartByHeaderValue(mergeRequest.getHeaderValue());
+        Cart userCart = cartRepository.findCartByHeaderValue(mergeRequest.getUserEmail());
+
     }
 //    @GetMapping("/{sessionId}")
 //    public CartResponse getCartBySessionId(@PathVariable String sessionId){

@@ -11,10 +11,21 @@ import com.finefoods.productmicroservice.model.Image;
 import com.finefoods.productmicroservice.model.Product;
 import com.finefoods.productmicroservice.repository.ImageRepository;
 import com.finefoods.productmicroservice.repository.ProductRepository;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.ReadChannel;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,9 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -37,13 +46,14 @@ public class ProductServiceImp implements ProductService {
     private final ObjectMapper objectMapper;
 
     private final AmazonS3 amazonS3Client;
-    @Value("${aws.bucket.name}")
+    @Value("${gc.bucket.name}")
     private String bucketName;
 
     private final WebClient.Builder webClient;
     @Value("${inventory.service.url}")
     private String inventoryUri;
-
+    @Autowired
+    private Storage storage;
     @Override
     public Boolean creatProduct(MultipartFile[] files, ProductRequest productRequest) {
         Product product = Product.builder()
@@ -52,8 +62,8 @@ public class ProductServiceImp implements ProductService {
                 .description(productRequest.getDescription())
                 .category(productRequest.getCategory())
                 .tags(productRequest.getTags())
-                .size(productRequest.getSize())
-                .unit(productRequest.getUnit())
+                .gender(productRequest.getGender())
+                .color(productRequest.getColor())
                 .cost(productRequest.getCost())
                 .currentPrice(productRequest.getCurrentPrice())
                 .isTaxed(productRequest.getIsTaxed())
@@ -69,7 +79,7 @@ public class ProductServiceImp implements ProductService {
         // Creating Inventory for the product that was created
         InventoryRequest inventoryRequest = InventoryRequest.builder()
                 .productId(product.getProductId())
-                .stockUnit(product.getUnit()).build();
+                .build();
 
         webClient.build().post()
                 .uri(inventoryUri)
@@ -104,8 +114,8 @@ public class ProductServiceImp implements ProductService {
                 .description(product.getDescription())
                 .category(product.getCategory())
                 .tags(product.getTags())
-                .size(product.getSize())
-                .unit(product.getUnit())
+                .gender(product.getGender())
+                .color(product.getColor())
                 .cost(product.getCost())
                 .price(product.getPrice())
                 .currentPrice(product.getCurrentPrice())
@@ -157,7 +167,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public List<ProductResponse> getProductByCategory(String category) throws IOException {
-        List<Product> products = productRepository.findAllByCategory(category);
+        List<Product> products = productRepository.findAllByGender(category);
         return mapToProductImageResponse(products);
     }
 
@@ -240,8 +250,8 @@ public class ProductServiceImp implements ProductService {
                 .description(product.getDescription())
                 .category(product.getCategory())
                 .tags(product.getTags())
-                .size(product.getSize())
-                .unit(product.getUnit())
+                .gender(product.getGender())
+                .color(product.getColor())
                 .cost(product.getCost())
                 .price(product.getPrice())
                 .points(product.getPoints())
@@ -260,7 +270,7 @@ public class ProductServiceImp implements ProductService {
             List<Image> imageList = imageRepository.getImageByProductId(product.getProductId());
             List<byte[]> imagesInBytes = new ArrayList<>();
             for (Image image : imageList) {
-                imagesInBytes.add(getImage(image.getImageFileName()));
+                 imagesInBytes.add(getImage(image.getImageFileName()));
             }
             productResponses.add(productToProductResponse(product, imagesInBytes));
         }
@@ -290,9 +300,21 @@ public class ProductServiceImp implements ProductService {
 
 
     public byte[] getImage(String fileName) throws IOException {
-        S3Object s3Object = amazonS3Client.getObject(bucketName, fileName);
-        S3ObjectInputStream inputStream = s3Object.getObjectContent();
-        return IOUtils.toByteArray(inputStream);
+//        S3Object s3Object = amazonS3Client.getObject(bucketName, fileName);
+//        S3ObjectInputStream inputStream = s3Object.getObjectContent();
+//        return IOUtils.toByteArray(inputStream);
+//        InputStream inputStream = new ClassPathResource().getInputStream();
+//        StorageOptions options = StorageOptions.newBuilder().setProjectId(gcpProjectId)
+//                .setCredentials(GoogleCredentials.fromStream(inputStream)).build();
+
+        Blob blob = storage.get(bucketName,fileName);
+        if (blob != null){
+
+            return blob.getContent();
+        }else {
+            return new byte[0];
+        }
+
     }
 
     public void deleteImage(String filename) throws IOException {
@@ -320,8 +342,6 @@ public class ProductServiceImp implements ProductService {
                     .productName(product.getProductName())
                     .description(product.getDescription())
                     .imageFileNames(imagesNames)
-                    .size(product.getSize())
-                    .unit(product.getUnit())
                     .currentPrice(product.getCurrentPrice())
                     .build());
             imagesNames = new ArrayList<>();

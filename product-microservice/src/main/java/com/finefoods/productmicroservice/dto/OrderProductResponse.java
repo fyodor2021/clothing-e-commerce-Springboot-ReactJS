@@ -16,7 +16,5 @@ public class OrderProductResponse {
     private List<String> imageFileNames;
     private String productName;
     private String description;
-    private String size;
-    private String unit;
     private double currentPrice;
 }

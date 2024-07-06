@@ -1,18 +1,17 @@
 package com.finefoods.ordermicroservice.service;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.amazonaws.util.IOUtils;
 import com.finefoods.ordermicroservice.dto.*;
 import com.finefoods.ordermicroservice.model.Order;
 import com.finefoods.ordermicroservice.repository.OrderRepository;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Storage;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Refund;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
@@ -33,8 +32,6 @@ public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
 
-    private final AmazonS3 amazonS3Client;
-
 
     @Value("${inventory.microservice.url}")
     private String inventoryUri;
@@ -47,8 +44,10 @@ public class OrderServiceImpl implements OrderService{
 
     @Value("${api.stripe.key}")
     private String stripeKey;
-    @Value("${aws.bucket.name}")
+    @Value("${gc.bucket.name}")
     private String bucketName;
+    @Autowired
+    private Storage storage;
     @Override
     public String placeOrder(OrderRequest orderRequest) {
         //MAYBE -> make a call to cart microservice
@@ -371,9 +370,13 @@ public class OrderServiceImpl implements OrderService{
     }
 
     public byte[] getImage(String fileName) throws IOException {
-        S3Object s3Object = amazonS3Client.getObject(bucketName, fileName);
-        S3ObjectInputStream inputStream = s3Object.getObjectContent();
-        return IOUtils.toByteArray(inputStream);
+        Blob blob = storage.get(bucketName,fileName);
+        if (blob != null){
+            return blob.getContent();
+        }else {
+            return new byte[0];
+        }
+
     }
 
 

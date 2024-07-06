@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
@@ -9,13 +10,9 @@
         </processorPath>
         <module name="arz-fine-foods-final.inventory-microservice.main" />
         <module name="arz-fine-foods-final.order-microservice.main" />
-        <module name="arz-fine-foods-final.review-microservice.main" />
         <module name="arz-fine-foods-final.cart-microservice.main" />
-        <module name="arz-fine-foods-final.shift-microservice.main" />
         <module name="arz-fine-foods-final.wallet-microservice.main" />
-        <module name="arz-fine-foods-final.availability-microservice.main" />
         <module name="arz-fine-foods-final.product-microservice.main" />
-        <module name="arz-fine-foods-final.flyer-microservice.main" />
         <module name="arz-fine-foods-final.authentication-microservice.main" />
         <module name="arz-fine-foods-final.points-microservice.main" />
         <module name="arz-fine-foods-final.api-gateway.main" />
