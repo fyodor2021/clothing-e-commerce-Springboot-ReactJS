@@ -1,6 +1,7 @@
 package com.finefoods.authenticationmicroservice.config;
 
 import com.finefoods.authenticationmicroservice.Repository.UserRepository;
+import com.finefoods.authenticationmicroservice.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +20,14 @@ public class ApplicationConfig {
     private final UserRepository userRepository;
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> userRepository.findByEmail(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        return username -> {
+            User userLookup = userRepository.findByEmail(username);
+            if(userLookup == null) {
+                throw new UsernameNotFoundException(username);
+            }else{
+                return userLookup;
+            }
+        };
     }
     @Bean
     public AuthenticationProvider authenticationProvider(){

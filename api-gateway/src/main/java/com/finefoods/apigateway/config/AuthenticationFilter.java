@@ -1,12 +1,15 @@
 package com.finefoods.apigateway.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -19,9 +22,14 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
     @Autowired
     private JwtService jwtService;
+    private final WebClient.Builder webClientBuilder;
 
-    public AuthenticationFilter() {
+    @Value("${cart-microservice.url}")
+    private String cartUri;
+
+    public AuthenticationFilter(WebClient.Builder webClientBuilder) {
         super(Config.class);
+        this.webClientBuilder = webClientBuilder;
     }
 
     @Override
@@ -50,8 +58,8 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                             exchange.getResponse().addCookie(ResponseCookie.from("SESSION", guestToken)
                                     .httpOnly(false)
                                     .path("/")
-                                    .maxAge(Duration.ofHours(2).toMillis()).build());
-
+                                   .maxAge(Duration.ofHours(2).toMillis()).build());
+                            CreateCart(guestToken);
                             return chain.filter(exchange);
                         } else {
                             String cookie = exchange.getRequest().getHeaders().get("Cookie").get(0);
@@ -103,5 +111,15 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 //    }
     public static class Config {
 
+    }
+    private void CreateCart(String headerValue) {
+        webClientBuilder.build()
+                .post()
+                .uri(cartUri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(headerValue)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
     }
 }

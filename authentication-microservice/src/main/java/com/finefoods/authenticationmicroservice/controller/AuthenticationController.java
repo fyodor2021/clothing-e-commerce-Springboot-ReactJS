@@ -22,7 +22,7 @@ public class AuthenticationController {
         return authenticationService.register(request);
     }
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
+    public ResponseEntity<?> authenticate(
             @RequestBody AuthenticationRequest request,
             @RequestHeader(value = "Cookie",defaultValue = "") String cookieHeader
     ){

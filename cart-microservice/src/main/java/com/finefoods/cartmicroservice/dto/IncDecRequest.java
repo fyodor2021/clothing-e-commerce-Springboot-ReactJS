@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class IncDecRequest {
     private Long productId;
+    private String productSize;
     private String headerValue;
 }

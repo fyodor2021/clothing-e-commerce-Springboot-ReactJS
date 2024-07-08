@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @AllArgsConstructor
@@ -20,8 +19,8 @@ public class Product {
     private String description;
     private String category;
     private String tags;
-    private String size;
     private String unit;
+    private String size;
     private double cost;
     private double price;
     private double currentPrice;
@@ -30,6 +29,6 @@ public class Product {
     private String skuCode;
     private String upcCode;
     private String vendor;
-    private int quantity;
     private Boolean inStock;
+    private int quantity = 1;
 }

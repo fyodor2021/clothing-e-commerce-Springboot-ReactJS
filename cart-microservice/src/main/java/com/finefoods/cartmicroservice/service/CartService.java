@@ -22,6 +22,7 @@ public interface CartService {
 void decrementProductCount(IncDecRequest incDecRequest);
     void incrementProductCount(IncDecRequest incDecRequest);
     List<Product> getProductsInCart(String headerValue);
+    void mergeCarts(Cart guestCart,Cart userCart);
 //    CartResponse getCartBySessionId(String sessionId);
 //    CartResponse getCartByUserId(Long id);
 

@@ -61,7 +61,9 @@ public class CartServiceImp implements CartService {
         if(cart != null){
             List<Product> productsInCart = cart.getProducts();
             for(Product product : productsInCart){
-                if(product.getProductId() == addToCartRequest.getProduct().getProductId()){
+                if(product.getProductId().equals(addToCartRequest.getProduct().getProductId())
+                && addToCartRequest.getProduct().getSize().equals(product.getSize())
+                ){
                     product.setQuantity(product.getQuantity() + 1);
                     addToCartRequest.setProduct(null);
                     break;
@@ -112,9 +114,11 @@ public class CartServiceImp implements CartService {
 
         if(cart != null){
             for(Product product: cart.getProducts()){
-                if(product.getProductId().equals(incDecRequest.getProductId())){
+                if(product.getProductId().equals(incDecRequest.getProductId())
+                        && incDecRequest.getProductSize().equals(product.getSize())
+                ){
                     product.setQuantity(product.getQuantity() - 1);
-                    if(product.getQuantity() == 0){
+                    if(product.getQuantity() == 0) {
                         cart.getProducts().remove(product);
                     }
                     cartRepository.save(cart);
@@ -128,7 +132,8 @@ public class CartServiceImp implements CartService {
         Cart cart = cartRepository.findCartByHeaderValue(incDecRequest.getHeaderValue());
         if(cart != null){
             for(Product product: cart.getProducts()){
-                if(product.getProductId().equals(incDecRequest.getProductId())){
+                if(product.getProductId().equals(incDecRequest.getProductId())
+                        && incDecRequest.getProductSize().equals(product.getSize())){
                     product.setQuantity(product.getQuantity() + 1);
                     cartRepository.save(cart);
                 }
@@ -195,6 +200,27 @@ public class CartServiceImp implements CartService {
             return cartLookup.getProducts();
         }
         return new ArrayList<>();
+    }
+    public void mergeCarts(Cart guestCart,Cart userCart){
+        ArrayList<Product> mergedProducts = new ArrayList<>();
+        for(Product guestCartProduct: guestCart.getProducts()){
+            boolean found = false;
+            for(Product userCartProduct: userCart.getProducts()){
+                if(guestCartProduct.getProductId().equals(userCartProduct.getProductId())){
+                    userCartProduct.setQuantity(userCartProduct.getQuantity()
+                            + guestCartProduct.getQuantity());
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
+                mergedProducts.add(guestCartProduct);
+            }
+        }
+        cartRepository.delete(guestCart);
+        mergedProducts.addAll(userCart.getProducts());
+        userCart.setProducts(mergedProducts);
+        cartRepository.save(userCart);
     }
 //
 //    public CartResponse getCartBySessionId(String sessionId){

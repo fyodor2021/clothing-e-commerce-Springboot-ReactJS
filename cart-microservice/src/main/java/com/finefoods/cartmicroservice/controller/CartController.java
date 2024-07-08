@@ -34,20 +34,20 @@ public class CartController {
     @PostMapping("/add")
     public void addToCart(@RequestBody AddToCartRequest addToCartRequest,
                           @RequestHeader(value = "Authorization", defaultValue = "") String authHeader,
-                          @RequestHeader(value = "Cookie",defaultValue = "") String cookieHeader)
-    {
+                          @RequestHeader(value = "Cookie", defaultValue = "") String cookieHeader) {
         String hello = "helllo";
-        if(!cookieHeader.isEmpty() && !cookieHeader.contains(";")){
+        if (!cookieHeader.isEmpty() && !cookieHeader.contains(";")) {
             String cookie = cookieHeader.substring(8);
-            cartService.addToCart(addToCartRequest,cookie);
+            cartService.addToCart(addToCartRequest, cookie);
 
         } else if (authHeader != null) {
             String token = authHeader.substring(7);
             Claims claims = jwtService.extractAllGuestTokenClaims(token);
-            cartService.addToCart(addToCartRequest,claims.getSubject());
+            cartService.addToCart(addToCartRequest, claims.getSubject());
         }
     }
-//    @PostMapping("/testing/cart")
+
+    //    @PostMapping("/testing/cart")
 //    @CrossOrigin(origins = "*")
 //    public String testing(HttpSession session){
 //        return session.getId();
@@ -63,8 +63,8 @@ public class CartController {
 //    }
     @PutMapping("/all")
     public void emptyCart(@RequestHeader(value = "Authorization", defaultValue = "") String authHeader,
-                          @RequestHeader(value = "Cookie",defaultValue = "") String cookieHeader){
-        if(!cookieHeader.isEmpty() && !cookieHeader.contains(";")){
+                          @RequestHeader(value = "Cookie", defaultValue = "") String cookieHeader) {
+        if (!cookieHeader.isEmpty() && !cookieHeader.contains(";")) {
             String cookie = cookieHeader.substring(8);
             cartService.emptyCart(cookie);
         } else if (authHeader != null) {
@@ -73,10 +73,11 @@ public class CartController {
             cartService.emptyCart(claims.getSubject());
         }
     }
+
     @GetMapping("/products")
     public List<Product> getProductsInCart(@RequestHeader(value = "Authorization", defaultValue = "") String authHeader,
-                                           @RequestHeader(value = "Cookie",defaultValue = "") String cookieHeader){
-        if(!cookieHeader.isEmpty() && !cookieHeader.contains(";")){
+                                           @RequestHeader(value = "Cookie", defaultValue = "") String cookieHeader) {
+        if (!cookieHeader.isEmpty() && !cookieHeader.contains(";")) {
             String cookie = cookieHeader.substring(8);
             return cartService.getProductsInCart(cookie);
         } else if (authHeader != null) {
@@ -86,28 +87,33 @@ public class CartController {
         }
         return null;
     }
+
     @PostMapping("/product/inc")
-    public void incrementProductCount(@RequestBody IncDecRequest incDecRequest){
+    public void incrementProductCount(@RequestBody IncDecRequest incDecRequest) {
         String username = jwtService.extractUsername(incDecRequest.getHeaderValue());
-        if(!username.equals("guest")){
+        if (!username.equals("guest")) {
             incDecRequest.setHeaderValue(username);
         }
-    cartService.incrementProductCount(incDecRequest);
+        cartService.incrementProductCount(incDecRequest);
     }
+
     @PostMapping("/product/dec")
-    public void decrementProductCount(@RequestBody IncDecRequest incDecRequest){
+    public void decrementProductCount(@RequestBody IncDecRequest incDecRequest) {
         String username = jwtService.extractUsername(incDecRequest.getHeaderValue());
-        if(!username.equals("guest")){
+        if (!username.equals("guest")) {
             incDecRequest.setHeaderValue(username);
         }
-    cartService.decrementProductCount(incDecRequest);
+        cartService.decrementProductCount(incDecRequest);
     }
+
     @PostMapping("/merge")
-    public void mergeCart(@RequestBody MergeRequest mergeRequest){
+    public void mergeCart(@RequestBody MergeRequest mergeRequest) {
         mergeRequest.setHeaderValue(mergeRequest.getHeaderValue().substring(8));
         Cart guestCart = cartRepository.findCartByHeaderValue(mergeRequest.getHeaderValue());
         Cart userCart = cartRepository.findCartByHeaderValue(mergeRequest.getUserEmail());
-
+        if (guestCart != null && userCart != null) {
+            cartService.mergeCarts(guestCart, userCart);
+        }
     }
 //    @GetMapping("/{sessionId}")
 //    public CartResponse getCartBySessionId(@PathVariable String sessionId){

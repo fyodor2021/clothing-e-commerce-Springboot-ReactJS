@@ -35,8 +35,8 @@ public class AuthenticationService {
     private String pointsUri;
 
     public ResponseEntity<?> register(RegisterRequest authRequest) {
-        Optional<User> userLookup = userRepository.findByEmail(authRequest.getEmail());
-        if (userLookup.isEmpty()) {
+        User userLookup = userRepository.findByEmail(authRequest.getEmail());
+        if (userLookup == null) {
             String cartId = createCartWithUserEmail(authRequest.getEmail());
             var user = User.builder()
                     .email(authRequest.getEmail())
@@ -50,26 +50,29 @@ public class AuthenticationService {
             User savedUser = userRepository.save(user);
             createPoints(savedUser.getEmail());
             return new ResponseEntity<>(HttpStatus.OK);
-        }else{
+        } else {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request, String cookieHeader) {
-//        Optional<User> users = userRepository.findByEmail(request.getEmail());
-//        authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-//        );
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow();
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("firstName", user.getFirstname());
-        claims.put("firsName", user.getLastname());
-        claims.put("ROLE", user.getRole());
-        mergeCarts(MergeRequest.builder().headerValue(cookieHeader).userEmail(request.getEmail()).build());
-        var jwtToken = jwtService.generateToken(claims, user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken).build();
+    public ResponseEntity<?> authenticate(AuthenticationRequest request, String cookieHeader) {
+        User user = userRepository.findByEmail(request.getEmail());
+        if (user != null) {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            );
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("firstName", user.getFirstname());
+            claims.put("firsName", user.getLastname());
+            claims.put("ROLE", user.getRole());
+            mergeCarts(MergeRequest.builder().headerValue(cookieHeader).userEmail(request.getEmail()).build());
+            var jwtToken = jwtService.generateToken(claims, user);
+            return new ResponseEntity<>(AuthenticationResponse.builder()
+                    .token(jwtToken).build(),HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("user not found", HttpStatus.CONFLICT);
+        }
+
     }
 
     public ResponseEntity<HttpStatus> validate(String token) {
@@ -114,7 +117,8 @@ public class AuthenticationService {
         }
         return "user was updated successfully";
     }
-    private double getUserPoints (String email) {
+
+    private double getUserPoints(String email) {
         return CompletableFuture.supplyAsync(() ->
                 webClientBuilder.build()
                         .get()
@@ -124,7 +128,8 @@ public class AuthenticationService {
                         .block()
         ).join();
     }
-    private Long createPoints (String email) {
+
+    private Long createPoints(String email) {
         return CompletableFuture.supplyAsync(() ->
                 webClientBuilder.build()
                         .post()
@@ -134,8 +139,9 @@ public class AuthenticationService {
                         .block()
         ).join();
     }
+
     private String createCartWithUserEmail(String email) {
-       return  webClientBuilder.build()
+        return webClientBuilder.build()
                 .post()
                 .uri(cartUri)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -144,10 +150,11 @@ public class AuthenticationService {
                 .bodyToMono(String.class)
                 .block();
     }
-    private void mergeCarts(MergeRequest mergeRequest){
-         webClientBuilder.build()
+
+    private void mergeCarts(MergeRequest mergeRequest) {
+        webClientBuilder.build()
                 .post()
-                .uri(cartUri +"/merge")
+                .uri(cartUri + "/merge")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(mergeRequest)
                 .retrieve()
