@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -58,9 +59,14 @@ public class AuthenticationService {
     public ResponseEntity<?> authenticate(AuthenticationRequest request, String cookieHeader) {
         User user = userRepository.findByEmail(request.getEmail());
         if (user != null) {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-            );
+            try{
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+                );
+            }catch (BadCredentialsException e){
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
             Map<String, Object> claims = new HashMap<>();
             claims.put("firstName", user.getFirstname());
             claims.put("firsName", user.getLastname());
@@ -70,7 +76,7 @@ public class AuthenticationService {
             return new ResponseEntity<>(AuthenticationResponse.builder()
                     .token(jwtToken).build(),HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("user not found", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("user not found", HttpStatus.UNAUTHORIZED);
         }
 
     }

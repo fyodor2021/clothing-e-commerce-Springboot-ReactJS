@@ -41,4 +41,5 @@ public class AuthenticationController {
     public String updateUser(@RequestBody UserRequest userRequest) throws Exception{
         return authenticationService.updateUser(userRequest);
     }
+
 }
