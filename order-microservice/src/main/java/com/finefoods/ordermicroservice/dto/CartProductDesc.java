@@ -1,22 +1,16 @@
-package com.finefoods.productmicroservice.dto;
+package com.finefoods.ordermicroservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderProductResponse {
+public class CartProductDesc {
     private Long productId;
-    private List<String> imageFileNames;
-    private String productName;
     private String size;
     private int quantity;
-    private String description;
-    private double currentPrice;
 }

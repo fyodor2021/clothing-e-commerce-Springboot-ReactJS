@@ -15,20 +15,18 @@ import java.util.List;
 public interface CartService {
 
     Cart createCart(String headerValue);
+
     void addToCart(AddToCartRequest addToCartRequest, String headerValue);
-//    void deleteCart(String cartId);
-//    void deleteProductInCart(Long productId, String cartId);
+
+    void deleteCart(String cartId);
+
     void emptyCart(String cartId);
-void decrementProductCount(IncDecRequest incDecRequest);
+
+    void decrementProductCount(IncDecRequest incDecRequest);
+
     void incrementProductCount(IncDecRequest incDecRequest);
+
     List<Product> getProductsInCart(String headerValue);
-    void mergeCarts(Cart guestCart,Cart userCart);
-//    CartResponse getCartBySessionId(String sessionId);
-//    CartResponse getCartByUserId(Long id);
 
-
-
-
-
-
+    void mergeCarts(Cart guestCart, Cart userCart);
 }

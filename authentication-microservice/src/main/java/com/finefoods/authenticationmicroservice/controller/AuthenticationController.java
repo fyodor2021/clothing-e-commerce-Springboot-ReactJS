@@ -26,7 +26,14 @@ public class AuthenticationController {
             @RequestBody AuthenticationRequest request,
             @RequestHeader(value = "Cookie",defaultValue = "") String cookieHeader
     ){
-         return ResponseEntity.ok(authenticationService.authenticate(request,cookieHeader));
+        String value = "";
+        String[] cookies = cookieHeader.split(";");
+        for (int i = 0; i < cookies.length; i++) {
+            if (cookies[i].contains("JOSEDOR-SESSION")) {
+                value = cookies[i].strip().substring(16);
+            }
+        }
+         return ResponseEntity.ok(authenticationService.authenticate(request,value));
     }
     @GetMapping("/validate/{token}")
     public ResponseEntity<HttpStatus> validateToken(@PathVariable String token){

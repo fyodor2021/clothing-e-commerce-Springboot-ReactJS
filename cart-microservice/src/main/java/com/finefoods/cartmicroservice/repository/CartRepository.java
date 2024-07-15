@@ -4,9 +4,7 @@ import com.finefoods.cartmicroservice.model.Cart;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface CartRepository extends MongoRepository<Cart,String> {
-//    void deleteCartByCartId(String id);
-//    Cart findCartByUserId(Long id);
-//    Cart findCartByCartId(String id);
     Cart findCartByHeaderValue(String headerValue);
+    void deleteCartByHeaderValue(String headerValue);
 //    Cart findCartBySessionId(String sessionId);
 }

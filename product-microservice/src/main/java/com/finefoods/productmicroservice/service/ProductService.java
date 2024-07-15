@@ -18,6 +18,6 @@ public interface ProductService {
 //    List<ProductResponse> validateProductList(List<ProductRequest> products );
 //    Boolean updateProduct(Long id, ProductRequest productRequest);
     Boolean deleteProduct(Long id) throws IOException;
-    List<OrderProductResponse> getProductsByProductIdList(List<Long> productIds) throws IOException;
+    List<OrderProductResponse> getProductsByProductIdList(List<CartProductDesc> cartProductDescs) throws IOException;
     List<ProductFilterResponse> searchPrediction(String Search);
 }

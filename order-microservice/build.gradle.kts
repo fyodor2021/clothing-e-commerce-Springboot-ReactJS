@@ -37,7 +37,6 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.1.0")
 	compileOnly("org.springframework.boot:spring-boot-starter-aop")
 	implementation("com.stripe:stripe-java:22.20.0")
-
 	implementation("com.google.cloud:google-cloud-storage:2.40.1")
 
 }

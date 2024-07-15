@@ -50,29 +50,11 @@ public class OrderServiceImpl implements OrderService{
     private Storage storage;
     @Override
     public String placeOrder(OrderRequest orderRequest) {
-        //MAYBE -> make a call to cart microservice
-
-
-        List<InventoryRequest>  inventoryRequestList = new ArrayList<>();
-        List<Product> products = getProductList(orderRequest.getProductIds());
-        for (Product product : products){
-
-            InventoryRequest inventoryRequest = InventoryRequest
-                    .builder()
-                    .stock(product.getQuantity())
-                    .productId(product.getProductId())
-                    .build();
-            inventoryRequestList.add(inventoryRequest);
+        List<Long> productIds = new ArrayList<>();
+        for(CartProductDesc cartProductDesc: orderRequest.getProductIds()){
+            productIds.add(cartProductDesc.getProductId());
         }
-
-
-
-
-        List<ProductAvailability> inStock = areProductInStock(inventoryRequestList);
-//        if (!inStock){
-//            return "Not all items are in stock";
-//        }
-
+        List<Product> products = getProductList(orderRequest.getProductIds());
         String chargeId = "";
         if (orderRequest.getMoneyToPay() != 0.0) {
             try {
@@ -80,23 +62,19 @@ public class OrderServiceImpl implements OrderService{
             } catch (StripeException e) {
                 throw new RuntimeException(e);
             }
-
             if (chargeId.equals("")) {
                 return "Error during payment";
             }
-
         }else {
             chargeId = "Fully paid with points";
         }
-
-
         Order order = Order.builder()
                 .orderNumber(UUID.randomUUID().toString())
                 .orderTotal(orderRequest.getOrderTotal())
                 .totalPaidOnCard(orderRequest.getMoneyToPay())
                 .chargeId(chargeId)
                 .cardBrand(orderRequest.getCardBrand())
-                .totalPaidInPoints(orderRequest.getPointsToPay() )
+                .totalPaidInPoints(orderRequest.getPointsToPay())
                 .totalPointsGained(orderRequest.getPointsToAdd())
                 .status("placed")
                 .datePlaced(LocalDate.now())
@@ -105,9 +83,6 @@ public class OrderServiceImpl implements OrderService{
                 .build();
 
         orderRepository.save(order);
-
-
-        //Add points for user
         if (orderRequest.getPointsToAdd() > orderRequest.getPointsToPay()){
             PointsRequest pointsRequest = PointsRequest.builder()
                     .numberOfPoints(orderRequest.getPointsToAdd() - orderRequest.getPointsToPay())
@@ -120,7 +95,6 @@ public class OrderServiceImpl implements OrderService{
 
 
         }
-        //Redeem points for user
         else {
 
             PointsRequest pointsRequest = PointsRequest.builder()
@@ -131,14 +105,7 @@ public class OrderServiceImpl implements OrderService{
             updatePointsForUser(pointsRequest);
 
         }
-
-        //update inventory
-        updateInventory(inventoryRequestList, "purchase");
-
-        //delete items in cart
-
         return "order was placed successfully";
-
     }
 
 
@@ -224,17 +191,6 @@ public class OrderServiceImpl implements OrderService{
             order.setTotalPaidInPoints(order.getTotalPaidInPoints() * -1);
             order.setOrderTotal(order.getOrderTotal()* -1);
             orderRepository.save(order);
-
-
-            //update inventory
-            List<InventoryRequest>  inventoryRequestList = new ArrayList<>();
-            for (Product product : order.getProducts()){
-                InventoryRequest inventoryRequest = InventoryRequest.builder().stock(product.getQuantity()).productId(product.getProductId()).build();
-                inventoryRequestList.add(inventoryRequest);
-            }
-            updateInventory(inventoryRequestList, "cancel");
-
-
             return "order was cancelled";
 
         }
@@ -255,28 +211,6 @@ public class OrderServiceImpl implements OrderService{
         return orderToOrderResponse(orders);
     }
 
-
-//    public List<OrderResponse> getActiveOrders(String userEmail){
-//        List<Order> orders = orderRepository.findOrdersByUserEmailAndStatus(userEmail, "placed");
-//        return orders.stream().map(this::orderToOrderResponse).toList();
-//
-//    }
-//
-//    public List<OrderResponse> getInActiveOrders(String userEmail){
-//        List<Order> orders = orderRepository.findOrdersByUserEmailAndStatusOrStatus(userEmail, "cancelled", "picked up");
-//        return orders.stream().map(this::orderToOrderResponse).toList();
-//    }
-
-    private List<ProductAvailability> areProductInStock(List<InventoryRequest> inventoryRequestList){
-        return webClientBuilder.build()
-                .post()
-                .uri(inventoryUri + "/stock")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(inventoryRequestList).retrieve()
-                .bodyToFlux(ProductAvailability.class)
-                .collectList().block();
-
-    }
     private void updatePointsForUser(PointsRequest pointsRequest) {
 
         webClientBuilder.build()
@@ -294,39 +228,6 @@ public class OrderServiceImpl implements OrderService{
                         }
                 );
     }
-
-    private void updateInventory(List<InventoryRequest> inventoryRequestList, String updatingMethod) {
-
-        webClientBuilder.build()
-                .put()
-                .uri(inventoryUri+ "/" + updatingMethod)
-                .bodyValue(inventoryRequestList)
-                .retrieve()
-                .bodyToMono(Void.class)
-                .subscribe(
-                        response -> {
-                            System.out.println("Inventory was updated successfully");
-                        },
-                        error -> {
-                            System.err.println("Error updating inventory: " + error.getMessage());
-                        }
-                );
-    }
-
-
-
-//    private double payWithPoints(double total, String userEmail){
-//        double moneyLeftToPay =
-//                webClientBuilder.build()
-//                .put()
-//                .uri(pointsUri + "/" + userEmail + "/" + total)
-//                .retrieve().bodyToMono(Double.class).block();
-//
-//        System.out.println(moneyLeftToPay);
-//        return moneyLeftToPay;
-//
-//
-//    };
 
     private List<OrderResponse> orderToOrderResponse(List<Order> orders) throws IOException {
         List<OrderResponse> orderResponses = new ArrayList<>();
@@ -355,13 +256,13 @@ public class OrderServiceImpl implements OrderService{
         return orderResponses;
     }
 
-    private List<Product> getProductList (List<Long> productIds) {
+    private List<Product> getProductList (List<CartProductDesc> cartProductDescs) {
         return CompletableFuture.supplyAsync(() ->
                 webClientBuilder.build()
                         .post()
                         .uri(productUri + "/order/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(productIds)
+                        .bodyValue(cartProductDescs)
                         .retrieve()
                         .bodyToFlux(Product.class)
                         .collectList()

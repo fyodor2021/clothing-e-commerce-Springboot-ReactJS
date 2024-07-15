@@ -17,7 +17,7 @@ public class OrderRequest {
     private String orderId;
     private String userEmail;
     private double orderTotal;
-    private List<Long> productIds;
+    private List<CartProductDesc> productIds;
     private String cardBrand;
     private double pointsToAdd;
     private double pointsToPay;

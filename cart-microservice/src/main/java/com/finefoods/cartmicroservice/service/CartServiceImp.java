@@ -141,36 +141,13 @@ public class CartServiceImp implements CartService {
         }
     }
 
-    //    public void deleteCart(String cartId){
-//        Cart doesExist  = cartRepository.findCartByCartId(cartId);
-//        if (doesExist != null ){
-//            cartRepository.deleteCartByCartId(cartId);
-//        }
-//    }
-//
-//
-//    public void deleteProductInCart(Long productId, String cartId){
-//        Cart cartExist = cartRepository.findCartByCartId(cartId);
-//        List<Product> updatedList = new ArrayList<>();
-//        if (cartExist != null){
-//            List<Product> productList = cartExist.getProducts();
-//            Iterator<Product> iterator = productList.iterator();
-//            while (iterator.hasNext()) {
-//                Product product = iterator.next();
-//                if (product.getProductId().equals(productId)) {
-//                    iterator.remove();
-//                    break;
-//                }
-//            }
-//            while (iterator.hasNext()){
-//                updatedList.add(iterator.next());
-//            }
-//            cartExist.setProducts(productList);
-//            cartRepository.save(cartExist);
-//        }
-//    }
-//
-//
+        public void deleteCart(String cartId){
+        Cart doesExist  = cartRepository.findCartByHeaderValue(cartId);
+        if (doesExist != null ){
+            cartRepository.deleteCartByHeaderValue(cartId);
+        }
+    }
+
     public void emptyCart(String headerValue){
         Cart doesExist  = cartRepository.findCartByHeaderValue(headerValue);
         if(doesExist != null){
@@ -180,23 +157,8 @@ public class CartServiceImp implements CartService {
 
     }
     public List<Product> getProductsInCart(String headerValue){
-        List<InventoryRequest>  inventoryRequestList = new ArrayList<>();
         Cart cartLookup = cartRepository.findCartByHeaderValue(headerValue);
         if (cartLookup != null){
-            for (Product product : cartLookup.getProducts()){
-                InventoryRequest inventoryRequest = InventoryRequest
-                        .builder()
-                        .stock(product.getQuantity())
-                        .productId(product.getProductId())
-                        .build();
-                inventoryRequestList.add(inventoryRequest);
-            }
-            List<ProductAvailability> inStock = areProductInStock(inventoryRequestList);
-            for (int i = 0; i < inStock.size(); i++) {
-                if(cartLookup.getProducts().get(i).getProductId() == inStock.get(i).getProductId()){
-                    cartLookup.getProducts().get(i).setInStock(inStock.get(i).isInStock());
-                }
-            }
             return cartLookup.getProducts();
         }
         return new ArrayList<>();
@@ -273,18 +235,6 @@ public class CartServiceImp implements CartService {
 //
 //
 //    }
-
-    private List<ProductAvailability> areProductInStock(List<InventoryRequest> inventoryRequestList){
-        return webClientBuilder.build()
-                .post()
-                .uri(inventoryUri + "/stock")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(inventoryRequestList).retrieve()
-                .bodyToFlux(ProductAvailability.class)
-                .collectList().block();
-
-    }
-
 
 }
 

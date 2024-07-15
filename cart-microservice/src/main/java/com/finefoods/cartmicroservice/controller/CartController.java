@@ -35,16 +35,7 @@ public class CartController {
     public void addToCart(@RequestBody AddToCartRequest addToCartRequest,
                           @RequestHeader(value = "Authorization", defaultValue = "") String authHeader,
                           @RequestHeader(value = "Cookie", defaultValue = "") String cookieHeader) {
-        String hello = "helllo";
-        if (!cookieHeader.isEmpty() && !cookieHeader.contains(";")) {
-            String cookie = cookieHeader.substring(8);
-            cartService.addToCart(addToCartRequest, cookie);
-
-        } else if (authHeader != null) {
-            String token = authHeader.substring(7);
-            Claims claims = jwtService.extractAllGuestTokenClaims(token);
-            cartService.addToCart(addToCartRequest, claims.getSubject());
-        }
+        cartService.addToCart(addToCartRequest, extractToken(authHeader,cookieHeader));
     }
 
     //    @PostMapping("/testing/cart")
@@ -52,10 +43,10 @@ public class CartController {
 //    public String testing(HttpSession session){
 //        return session.getId();
 //    }
-//    @DeleteMapping("/{cartId}")
-//    public void deleteCart(@PathVariable String cartId){
-//        cartService.deleteCart(cartId);
-//    }
+    @DeleteMapping("/{cartId}")
+    public void deleteCart(@PathVariable String cartId){
+        cartService.deleteCart(cartId);
+    }
 //
 //    @DeleteMapping("/{cartId}/{productId}")
 //    public void deleteProductInCart(@PathVariable  Long productId, @PathVariable String cartId){
@@ -64,51 +55,36 @@ public class CartController {
     @PutMapping("/all")
     public void emptyCart(@RequestHeader(value = "Authorization", defaultValue = "") String authHeader,
                           @RequestHeader(value = "Cookie", defaultValue = "") String cookieHeader) {
-        if (!cookieHeader.isEmpty() && !cookieHeader.contains(";")) {
-            String cookie = cookieHeader.substring(8);
-            cartService.emptyCart(cookie);
-        } else if (authHeader != null) {
-            String token = authHeader.substring(7);
-            Claims claims = jwtService.extractAllGuestTokenClaims(token);
-            cartService.emptyCart(claims.getSubject());
-        }
+        cartService.emptyCart(extractToken(authHeader,cookieHeader));
     }
 
     @GetMapping("/products")
     public List<Product> getProductsInCart(@RequestHeader(value = "Authorization", defaultValue = "") String authHeader,
                                            @RequestHeader(value = "Cookie", defaultValue = "") String cookieHeader) {
-        if (!cookieHeader.isEmpty() && !cookieHeader.contains(";")) {
-            String cookie = cookieHeader.substring(8);
-            return cartService.getProductsInCart(cookie);
-        } else if (authHeader != null) {
-            String token = authHeader.substring(7);
-            Claims claims = jwtService.extractAllGuestTokenClaims(token);
-            return cartService.getProductsInCart(claims.getSubject());
-        }
-        return null;
+        String value = extractToken(authHeader,cookieHeader);
+        return cartService.getProductsInCart(value);
     }
 
     @PostMapping("/product/inc")
-    public void incrementProductCount(@RequestBody IncDecRequest incDecRequest) {
-        String username = jwtService.extractUsername(incDecRequest.getHeaderValue());
-        if (!username.equals("guest")) {
-            incDecRequest.setHeaderValue(username);
-        }
+    public void incrementProductCount(@RequestBody IncDecRequest incDecRequest,
+                                      @RequestHeader(value = "Authorization", defaultValue = "") String authHeader,
+                                      @RequestHeader(value = "Cookie", defaultValue = "") String cookieHeader) {
+        incDecRequest.setHeaderValue(extractToken(authHeader,cookieHeader));
         cartService.incrementProductCount(incDecRequest);
     }
 
     @PostMapping("/product/dec")
-    public void decrementProductCount(@RequestBody IncDecRequest incDecRequest) {
-        String username = jwtService.extractUsername(incDecRequest.getHeaderValue());
-        if (!username.equals("guest")) {
-            incDecRequest.setHeaderValue(username);
-        }
+    public void decrementProductCount(@RequestBody IncDecRequest incDecRequest,
+                                      @RequestHeader(value = "Authorization", defaultValue = "") String authHeader,
+                                      @RequestHeader(value = "Cookie", defaultValue = "") String cookieHeader) {
+        incDecRequest.setHeaderValue(extractToken(authHeader,cookieHeader));
         cartService.decrementProductCount(incDecRequest);
     }
 
     @PostMapping("/merge")
     public void mergeCart(@RequestBody MergeRequest mergeRequest) {
-        mergeRequest.setHeaderValue(mergeRequest.getHeaderValue().substring(8));
+
+        mergeRequest.setHeaderValue(mergeRequest.getHeaderValue());
         Cart guestCart = cartRepository.findCartByHeaderValue(mergeRequest.getHeaderValue());
         Cart userCart = cartRepository.findCartByHeaderValue(mergeRequest.getUserEmail());
         if (guestCart != null && userCart != null) {
@@ -125,4 +101,20 @@ public class CartController {
 //    public CartResponse getCartByUserId(@PathVariable Long userId){
 //        return cartService.getCartByUserId(userId);
 //    }
+
+    private String extractToken(String authHeader, String cookieHeader) {
+        if (!authHeader.isEmpty()) {
+            String token = authHeader.substring(7);
+            Claims claims = jwtService.extractAllGuestTokenClaims(token);
+            return claims.getSubject();
+        }else if(!cookieHeader.isEmpty()){
+            String[] cookies = cookieHeader.split(";");
+            for (int i = 0; i < cookies.length; i++) {
+                if (cookies[i].contains("JOSEDOR-SESSION")) {
+                   return cookies[i].strip().substring(16);
+                }
+            }
+        }
+        return null;
+    }
 }

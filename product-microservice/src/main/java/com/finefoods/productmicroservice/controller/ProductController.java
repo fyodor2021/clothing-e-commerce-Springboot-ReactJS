@@ -65,8 +65,8 @@ public class ProductController {
         return productService.getProductsBySearchTerm(search);
     }
     @PostMapping("/order/products")
-    List<OrderProductResponse> getProductsByProductIdList(@RequestBody List<Long> productIds) throws IOException{
-        return productService.getProductsByProductIdList(productIds);
+    List<OrderProductResponse> getProductsByProductIdList(@RequestBody List<CartProductDesc> cartProductDescs) throws IOException{
+        return productService.getProductsByProductIdList(cartProductDescs);
     }
     @GetMapping({"search/category/{search}"})
     public List<ProductResponse> getProductByCategory(@PathVariable("search") String search) throws IOException {

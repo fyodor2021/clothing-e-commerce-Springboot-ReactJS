@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
 #  api-gateway:
@@ -87,24 +87,6 @@ services:
 #    networks:
 #      - spring
 #
-#  inventory-microservice:
-#    image: inventory-microservice
-#    ports:
-#      - "3007:3007"
-#    extra_hosts:
-#      - host.docker.internal:host-gateway
-#    build:
-#      context: ./inventory-microservice
-#      dockerfile: Dockerfile
-#    container_name: inventory-microservice
-#    environment:
-#      SPRING_PROFILES_ACTIVE: docker
-#    depends_on:
-#      - discovery-service
-#      - postgres-inventory
-#    networks:
-#      - spring
-#
 #  order-microservice:
 #    image: order-microservice
 #    ports:
@@ -140,7 +122,7 @@ services:
 #      - postgres-points
 #    networks:
 #      - spring
-#
+
 #  review-microservice:
 #    image: review-microservice
 #    ports:
@@ -158,7 +140,7 @@ services:
 #      - postgres-review
 #    networks:
 #      - spring
-#
+
 #  wallet-microservice:
 #    image: wallet-microservice
 #    ports:

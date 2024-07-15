@@ -4,7 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-
+./gifted-proxy-427415-p2-69f656e027c6.json
 ### STS ###
 .apt_generated
 .classpath

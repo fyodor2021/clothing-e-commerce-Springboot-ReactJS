@@ -72,7 +72,6 @@ public class ProductServiceImp implements ProductService {
                 .vendor(productRequest.getVendor())
                 .points(productRequest.getPoints())
                 .build();
-
         Product savedProduct = productRepository.save(product);
         uploadImages(files, savedProduct);
 
@@ -300,13 +299,6 @@ public class ProductServiceImp implements ProductService {
 
 
     public byte[] getImage(String fileName) throws IOException {
-//        S3Object s3Object = amazonS3Client.getObject(bucketName, fileName);
-//        S3ObjectInputStream inputStream = s3Object.getObjectContent();
-//        return IOUtils.toByteArray(inputStream);
-//        InputStream inputStream = new ClassPathResource().getInputStream();
-//        StorageOptions options = StorageOptions.newBuilder().setProjectId(gcpProjectId)
-//                .setCredentials(GoogleCredentials.fromStream(inputStream)).build();
-
         Blob blob = storage.get(bucketName,fileName);
         if (blob != null){
 
@@ -329,17 +321,20 @@ public class ProductServiceImp implements ProductService {
     }
 
 
-    public List<OrderProductResponse> getProductsByProductIdList(List<Long> productIds) throws IOException {
+    public List<OrderProductResponse> getProductsByProductIdList(List<CartProductDesc> cartProductDescs) throws IOException {
         List<OrderProductResponse> orderProductResponses = new ArrayList<>();
         List<String> imagesNames = new ArrayList<>();
-        for (Long productId : productIds) {
-            Product product = productRepository.findProductByProductId(productId);
-            List<Image> imageList = imageRepository.getImageByProductId(productId);
+        for (CartProductDesc cartProductDesc : cartProductDescs) {
+            Product product = productRepository.findProductByProductId(cartProductDesc.getProductId());
+            List<Image> imageList = imageRepository.getImageByProductId(cartProductDesc.getProductId());
             for (Image image : imageList) {
                 imagesNames.add(image.getImageFileName());
             }
-            orderProductResponses.add(OrderProductResponse.builder().productId(product.getProductId())
+            orderProductResponses.add(OrderProductResponse.builder()
+                    .productId(product.getProductId())
                     .productName(product.getProductName())
+                            .size(cartProductDesc.getSize())
+                            .quantity(cartProductDesc.getQuantity())
                     .description(product.getDescription())
                     .imageFileNames(imagesNames)
                     .currentPrice(product.getCurrentPrice())
@@ -348,10 +343,4 @@ public class ProductServiceImp implements ProductService {
         }
         return orderProductResponses;
     }
-//private List<String> imageFileNames;
-//private String productName;
-//private String description;
-//private String size;
-//private String unit;
-//private double currentPrice;
 }
