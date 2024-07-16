@@ -3,13 +3,13 @@ package com.finefoods.walletmicroservice.service;
 import com.finefoods.walletmicroservice.dto.WalletRequest;
 import com.finefoods.walletmicroservice.dto.WalletResponse;
 import com.finefoods.walletmicroservice.model.CardInfo;
-import com.finefoods.walletmicroservice.model.Wallet;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface WalletService {
 
-    void addCard(WalletRequest walletRequest);
+    ResponseEntity<Object> addCard(WalletRequest walletRequest);
 
 //    List<Wallet> getAllWallets();
     List<WalletResponse> getCardsByUserEmail(String userEmail);

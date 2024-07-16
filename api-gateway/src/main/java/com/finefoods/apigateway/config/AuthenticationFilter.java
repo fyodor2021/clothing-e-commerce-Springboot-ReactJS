@@ -50,8 +50,9 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             } else {
                 if (exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                     authHeaderValidation(exchange);
-                } else if (exchange.getRequest().getHeaders().containsKey("Cookie")) {
-                    validateGuestToken(exchange);
+                } else {
+                    if (exchange.getRequest().getHeaders().containsKey("Cookie")) validateGuestToken(exchange);
+                    else guestSetup(exchange);
                 }
             }
             return chain.filter(exchange);

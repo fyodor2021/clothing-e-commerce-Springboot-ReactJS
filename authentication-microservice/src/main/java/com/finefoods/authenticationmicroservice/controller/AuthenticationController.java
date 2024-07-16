@@ -33,7 +33,7 @@ public class AuthenticationController {
                 value = cookies[i].strip().substring(16);
             }
         }
-         return ResponseEntity.ok(authenticationService.authenticate(request,value));
+         return authenticationService.authenticate(request,value);
     }
     @GetMapping("/validate/{token}")
     public ResponseEntity<HttpStatus> validateToken(@PathVariable String token){

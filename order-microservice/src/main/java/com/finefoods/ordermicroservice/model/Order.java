@@ -24,6 +24,7 @@ public class Order {
     private LocalDate datePlaced;
     private String status;
     private double orderTotal;
+    private double orderTax;
     private double totalPaidOnCard;
     private String cardBrand;
     private double totalPaidInPoints;

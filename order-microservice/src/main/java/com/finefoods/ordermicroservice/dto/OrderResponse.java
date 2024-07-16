@@ -18,6 +18,7 @@ public class OrderResponse {
     private LocalDate datePlaced;
     private String status;
     private double orderTotal;
+    private double orderTax;
     private double totalPaidOnCard;
     private String brand;
     private double totalPaidInPoints;

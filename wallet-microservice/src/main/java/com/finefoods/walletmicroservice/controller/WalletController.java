@@ -43,5 +43,8 @@ public class WalletController {
         String email = jwtService.extractUsername(token);
         return walletServiceImp.getCardsInfoByUserEmail(email);
     }
-
+    @DeleteMapping()
+    public void deleteCard(@RequestBody Long walletId){
+        walletServiceImp.deleteWallet(walletId);
+    }
 }

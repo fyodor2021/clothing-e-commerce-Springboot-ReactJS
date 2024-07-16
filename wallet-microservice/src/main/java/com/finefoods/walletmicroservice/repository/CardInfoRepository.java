@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface CardInfoRepository  extends JpaRepository<CardInfo,Long> {
     List<CardInfo> findByUserEmail(String userEmail);
+    CardInfo findByCardInfoId(Long cardInfoId);
+    void deleteByCardInfoId(Long cardInfoId);
 }
