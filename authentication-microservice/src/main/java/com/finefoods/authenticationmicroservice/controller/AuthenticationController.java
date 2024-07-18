@@ -19,7 +19,7 @@ public class AuthenticationController {
     public ResponseEntity<?> register(
             @RequestBody RegisterRequest request
     ){
-        return authenticationService.register(request);
+        return ResponseEntity.ok(authenticationService.register(request));
     }
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(
@@ -33,7 +33,7 @@ public class AuthenticationController {
                 value = cookies[i].strip().substring(16);
             }
         }
-         return authenticationService.authenticate(request,value);
+        return ResponseEntity.ok(authenticationService.authenticate(request,value));
     }
     @GetMapping("/validate/{token}")
     public ResponseEntity<HttpStatus> validateToken(@PathVariable String token){

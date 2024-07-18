@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface WalletService {
 
-    ResponseEntity<Object> addCard(WalletRequest walletRequest);
+    ResponseEntity<?> addCard(WalletRequest walletRequest);
 
 //    List<Wallet> getAllWallets();
     List<WalletResponse> getCardsByUserEmail(String userEmail);

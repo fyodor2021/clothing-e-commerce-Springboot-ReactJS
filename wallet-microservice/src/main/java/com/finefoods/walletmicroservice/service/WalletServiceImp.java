@@ -65,7 +65,6 @@ public class WalletServiceImp implements WalletService{
             return userCardInfo;
         }
         return null;
-
     }
 
     public void updateWallet(Long walletId, WalletRequest walletRequest){

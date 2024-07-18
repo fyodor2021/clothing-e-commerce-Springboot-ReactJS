@@ -2,46 +2,34 @@ version: '3.8'
 
 services:
     api-gateway:
-      image: api-gateway
+      image: causeleea/api-gateway:v2.0
       ports:
         - "8181:8181"
       extra_hosts:
         - host.docker.internal:host-gateway
-      build:
-        context: ./api-gateway
-        dockerfile: Dockerfile
       container_name: api-gateway
       environment:
         SPRING_PROFILES_ACTIVE: docker
       restart: unless-stopped
       networks:
         - spring
-
     discovery-service:
-      image: discovery-microservice
+      image: causeleea/discovery-microservice:v2.0
       ports:
         - "8761:8761"
       extra_hosts:
         - host.docker.internal:host-gateway
-      build:
-        context: ./discovery-microservice
-        dockerfile: Dockerfile
       container_name: discovery-microservice
       environment:
         SPRING_PROFILES_ACTIVE: docker
       networks:
         - spring
-
-
     product-microservice:
-      image: product-microservice
+      image: causeleea/product-microservice:v2.0
       ports:
         - "3008:3008"
       extra_hosts:
         - host.docker.internal:host-gateway
-      build:
-        context: ./product-microservice
-        dockerfile: Dockerfile
       container_name: product-microservice
       environment:
         SPRING_PROFILES_ACTIVE: docker
@@ -52,14 +40,11 @@ services:
         - spring
 
     authentication-microservice:
-      image: authentication-microservice
+      image: causeleea/authentication-microservice:v3.0
       ports:
         - "8182:8182"
       extra_hosts:
         - host.docker.internal:host-gateway
-      build:
-        context: ./authentication-microservice
-        dockerfile: Dockerfile
       container_name: authentication-microservice
       environment:
         SPRING_PROFILES_ACTIVE: docker
@@ -70,14 +55,11 @@ services:
         - spring
 
     cart-microservice:
-      image: cart-microservice
+      image: causeleea/cart-microservice:v2.0
       ports:
         - "3003:3003"
       extra_hosts:
         - host.docker.internal:host-gateway
-      build:
-        context: ./cart-microservice
-        dockerfile: Dockerfile
       container_name: cart-microservice
       environment:
         SPRING_PROFILES_ACTIVE: docker
@@ -88,14 +70,11 @@ services:
         - spring
 
     order-microservice:
-      image: order-microservice
+      image: causeleea/order-microservice:v2.0
       ports:
         - "3002:3002"
       extra_hosts:
         - host.docker.internal:host-gateway
-      build:
-        context: ./order-microservice
-        dockerfile: Dockerfile
       container_name: order-microservice
       environment:
         SPRING_PROFILES_ACTIVE: docker
@@ -106,7 +85,7 @@ services:
         - spring
 
     points-microservice:
-      image: points-microservice
+      image: causeleea/points-microservice:v2.0
       ports:
         - "3005:3005"
       extra_hosts:
@@ -125,14 +104,11 @@ services:
 
 
     wallet-microservice:
-      image: wallet-microservice
+      image: causeleea/wallet-microservice:v2.0
       ports:
         - "3004:3004"
       extra_hosts:
         - host.docker.internal:host-gateway
-      build:
-        context: ./wallet-microservice
-        dockerfile: Dockerfile
       container_name: wallet-microservice
       environment:
         SPRING_PROFILES_ACTIVE: docker
