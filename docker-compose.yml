@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
     api-gateway:
-      image: api-gateway:v2.0
+      image: causeleea/api-gateway:v3.0
       ports:
         - "8181:8181"
       build:
@@ -18,7 +18,7 @@ services:
         - spring
 
     discovery-microservice:
-      image: discovery-microservice:v2.0
+      image: causeleea/discovery-microservice:v3.0
       ports:
         - "8761:8761"
       build:
@@ -32,7 +32,7 @@ services:
 
 
     product-microservice:
-      image: product-microservice:v2.0
+      image: causeleea/product-microservice:v3.0
       ports:
         - "3008:3008"
       build:
@@ -48,7 +48,7 @@ services:
         - spring
 
     authentication-microservice:
-      image: authentication-microservice:v3.0
+      image: causeleea/authentication-microservice:v4.0
       ports:
         - "8182:8182"
       build:
@@ -64,7 +64,7 @@ services:
         - spring
 
     cart-microservice:
-      image: cart-microservice:v2.0
+      image: causeleea/cart-microservice:v3.0
       ports:
         - "3003:3003"
       build:
@@ -80,7 +80,7 @@ services:
         - spring
 
     order-microservice:
-      image: order-microservice:v2.0
+      image: causeleea/order-microservice:v3.0
       ports:
         - "3002:3002"
       build:
@@ -96,7 +96,7 @@ services:
         - spring
 
     points-microservice:
-      image: points-microservice:v2.0
+      image: causeleea/points-microservice:v3.0
       ports:
         - "3005:3005"
       build:
@@ -113,7 +113,7 @@ services:
 
 
     wallet-microservice:
-      image: wallet-microservice:v2.0
+      image: causeleea/wallet-microservice:v3.0
       ports:
         - "3004:3004"
       build:
