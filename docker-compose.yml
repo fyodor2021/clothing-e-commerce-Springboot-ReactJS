@@ -2,113 +2,103 @@ version: '3.8'
 
 services:
     api-gateway:
-      image: causeleea/api-gateway:v2.0
+      image: api-gateway:v2.0
       ports:
         - "8181:8181"
       build:
         context: ./api-gateway
         dockerfile: Dockerfile
-      extra_hosts:
-        - host.docker.internal:host-gateway
       container_name: api-gateway
       environment:
         SPRING_PROFILES_ACTIVE: docker
       restart: unless-stopped
+      depends_on:
+        - discovery-microservice
       networks:
         - spring
 
-    discovery-service:
-      image: causeleea/discovery-microservice:v2.0
+    discovery-microservice:
+      image: discovery-microservice:v2.0
       ports:
         - "8761:8761"
       build:
         context: ./discovery-microservice
         dockerfile: Dockerfile
-      extra_hosts:
-        - host.docker.internal:host-gateway
       container_name: discovery-microservice
       environment:
         SPRING_PROFILES_ACTIVE: docker
       networks:
         - spring
+
+
     product-microservice:
-      image: causeleea/product-microservice:v2.0
+      image: product-microservice:v2.0
       ports:
         - "3008:3008"
       build:
         context: ./product-microservice
         dockerfile: Dockerfile
-      extra_hosts:
-        - host.docker.internal:host-gateway
       container_name: product-microservice
       environment:
         SPRING_PROFILES_ACTIVE: docker
       depends_on:
-        - discovery-service
+        - discovery-microservice
         - postgres-product
       networks:
         - spring
 
     authentication-microservice:
-      image: causeleea/authentication-microservice:v3.0
+      image: authentication-microservice:v3.0
       ports:
         - "8182:8182"
       build:
         context: ./authentication-microservice
         dockerfile: Dockerfile
-      extra_hosts:
-        - host.docker.internal:host-gateway
       container_name: authentication-microservice
       environment:
         SPRING_PROFILES_ACTIVE: docker
       depends_on:
-        - discovery-service
+        - discovery-microservice
         - postgres-authentication
       networks:
         - spring
 
     cart-microservice:
-      image: causeleea/cart-microservice:v2.0
+      image: cart-microservice:v2.0
       ports:
         - "3003:3003"
       build:
         context: ./cart-microservice
         dockerfile: Dockerfile
-      extra_hosts:
-        - host.docker.internal:host-gateway
       container_name: cart-microservice
       environment:
         SPRING_PROFILES_ACTIVE: docker
       depends_on:
-        - discovery-service
+        - discovery-microservice
         - mongo-cart
       networks:
         - spring
 
     order-microservice:
-      image: causeleea/order-microservice:v2.0
+      image: order-microservice:v2.0
       ports:
         - "3002:3002"
       build:
         context: ./order-microservice
         dockerfile: Dockerfile
-      extra_hosts:
-        - host.docker.internal:host-gateway
       container_name: order-microservice
       environment:
         SPRING_PROFILES_ACTIVE: docker
       depends_on:
-        - discovery-service
+        - discovery-microservice
         - mongo-order
       networks:
         - spring
 
     points-microservice:
-      image: causeleea/points-microservice:v2.0
+      image: points-microservice:v2.0
       ports:
         - "3005:3005"
-      extra_hosts:
-        - host.docker.internal:host-gateway
       build:
         context: ./points-microservice
         dockerfile: Dockerfile
@@ -116,26 +106,24 @@ services:
       environment:
         SPRING_PROFILES_ACTIVE: docker
       depends_on:
-        - discovery-service
+        - discovery-microservice
         - postgres-points
       networks:
         - spring
 
 
     wallet-microservice:
-      image: causeleea/wallet-microservice:v2.0
+      image: wallet-microservice:v2.0
       ports:
         - "3004:3004"
       build:
         context: ./wallet-microservice
         dockerfile: Dockerfile
-      extra_hosts:
-        - host.docker.internal:host-gateway
       container_name: wallet-microservice
       environment:
         SPRING_PROFILES_ACTIVE: docker
       depends_on:
-        - discovery-service
+        - discovery-microservice
         - postgres-wallet
       networks:
         - spring
@@ -209,7 +197,7 @@ services:
 
 
     mongo-cart:
-      image: mongo:latest
+      image: mongo
       environment:
         MONGO_INITDB_ROOT_USERNAME: root
         MONGO_INITDB_ROOT_PASSWORD: root
@@ -225,20 +213,21 @@ services:
         - spring
 
     mongo-order:
-      image: mongo:latest
+      image: mongo
       environment:
         MONGO_INITDB_ROOT_USERNAME: root
         MONGO_INITDB_ROOT_PASSWORD: root
       ports:
         - "27019:27017"
-      restart: unless-stopped
-      container_name: mongo-order
       volumes:
         - ./data/mongo/order-microservice:/data/db
         - ./init/mongo/order-microservice/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       command: mongod --auth
+      container_name: mongo-order
+      restart: unless-stopped
       networks:
         - spring
+
 
 networks:
   spring:

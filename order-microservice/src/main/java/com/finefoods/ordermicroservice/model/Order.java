@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document
+@Document(value = "t_order")
 public class Order {
     @Id
     private String orderId;
