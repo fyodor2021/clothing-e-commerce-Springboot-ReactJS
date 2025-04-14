@@ -40,6 +40,9 @@ dependencies {
 //	implementation("org.springframework.session:spring-session-data-redis")
 //	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.0.3")
+	implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.1.0")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+
 
 }
 dependencyManagement {

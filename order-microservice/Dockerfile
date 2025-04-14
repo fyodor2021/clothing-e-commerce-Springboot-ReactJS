@@ -14,7 +14,7 @@ COPY --from=builder /home/gradle/src/build/libs/*.jar /app/order-microservice.ja
 
 RUN mkdir /gcb
 
-COPY  ./gifted-proxy-427415-p2-69f656e027c6.json /gcb/gifted-proxy-427415-p2-69f656e027c6.json
+COPY  gifted-proxy-427415-p2-69f656e027c6.json /gcb/gifted-proxy-427415-p2-69f656e027c6.json
 
 EXPOSE 3002
 

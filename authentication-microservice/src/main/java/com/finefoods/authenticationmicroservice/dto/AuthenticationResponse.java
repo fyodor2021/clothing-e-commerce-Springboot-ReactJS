@@ -12,4 +12,7 @@ import lombok.NoArgsConstructor;
 
 public class AuthenticationResponse {
     private String token;
+    private Object fname;
+    private String lname;
+    private String email;
 }

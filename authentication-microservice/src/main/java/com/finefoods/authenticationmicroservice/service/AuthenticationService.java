@@ -4,20 +4,23 @@ import com.finefoods.authenticationmicroservice.Repository.UserRepository;
 import com.finefoods.authenticationmicroservice.dto.*;
 import com.finefoods.authenticationmicroservice.model.Role;
 import com.finefoods.authenticationmicroservice.model.User;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -28,24 +31,21 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
     private final WebClient.Builder webClientBuilder;
-    @Value("${cart-microservice.url}")
-    private String cartUri;
-    @Value("${points-microservice.url}")
-    private String pointsUri;
+    private final HttpServletResponse httpServletResponse;
+
+    @Value("${order-microservice.url}")
+    private String orderUri;
 
     public ResponseEntity<?> register(RegisterRequest authRequest) {
         User userLookup = userRepository.findByEmail(authRequest.getEmail());
         if (userLookup == null) {
-            String cartId = createCartWithUserEmail(authRequest.getEmail());
             var user = User.builder()
                     .email(authRequest.getEmail())
                     .firstname(authRequest.getFirstname())
                     .lastname(authRequest.getLastname())
                     .password(passwordEncoder.encode(authRequest.getPassword()))
                     .address(authRequest.getAddress())
-                    .cartId(cartId)
                     .role(Role.USER)
                     .build();
             User savedUser = userRepository.save(user);
@@ -56,29 +56,55 @@ public class AuthenticationService {
         }
     }
 
-    public ResponseEntity<?> authenticate(AuthenticationRequest request, String cookieHeader) {
-        User user = userRepository.findByEmail(request.getEmail());
-        if (user != null) {
-            try{
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-                );
-            }catch (BadCredentialsException e){
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-
+    public ResponseEntity<?> authenticate(AuthenticationRequest request) {
+        User user = userRepository.findUserByEmail(request.getEmail());
+        if (user != null && passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             Map<String, Object> claims = new HashMap<>();
             claims.put("firstName", user.getFirstname());
-            claims.put("firsName", user.getLastname());
+            claims.put("lastName", user.getLastname());
             claims.put("ROLE", user.getRole());
-            mergeCarts(MergeRequest.builder().headerValue(cookieHeader).userEmail(request.getEmail()).build());
             var jwtToken = jwtService.generateToken(claims, user);
-            return new ResponseEntity<>(AuthenticationResponse.builder()
-                    .token(jwtToken).build(),HttpStatus.OK);
+            Cookie cookie = new Cookie("jwt", jwtToken);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(3600);
+            httpServletResponse.addCookie(cookie);
+            return new ResponseEntity<>(UserResponse.builder()
+                    .firstname(user.getFirstname())
+                    .lastname(user.getLastname())
+                    .email(user.getEmail())
+                    .token(jwtToken)
+                    .points(getUserPoints(user.getEmail()))
+                    .address(user.getAddress())
+                    .build(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("user not found", HttpStatus.UNAUTHORIZED);
         }
 
+    }
+
+    public void signOutUser(AddToCartRequest addToCartRequest) {
+        if (addToCartRequest != null && addToCartRequest.getProducts() != null && !addToCartRequest.getProducts().isEmpty()) {
+            addToCart(addToCartRequest);
+        }
+        Cookie cookie = new Cookie("jwt", "");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        httpServletResponse.addCookie(cookie);
+    }
+
+    private void addToCart(AddToCartRequest addToCartRequest) {
+        webClientBuilder.build()
+                .post()
+                .uri(orderUri + "/cart/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(addToCartRequest)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
     }
 
     public ResponseEntity<HttpStatus> validate(String token) {
@@ -98,6 +124,7 @@ public class AuthenticationService {
                 .email(user.getEmail())
                 .address(user.getAddress())
                 .points(getUserPoints(user.getEmail()))
+                .token(authHeader)
                 .build();
     }
 
@@ -125,10 +152,11 @@ public class AuthenticationService {
     }
 
     private double getUserPoints(String email) {
+        String uri = orderUri + "/points/" + email;
         return CompletableFuture.supplyAsync(() ->
                 webClientBuilder.build()
                         .get()
-                        .uri(pointsUri + "/" + email)
+                        .uri(uri)
                         .retrieve()
                         .bodyToMono(Double.class)
                         .block()
@@ -139,7 +167,7 @@ public class AuthenticationService {
         return CompletableFuture.supplyAsync(() ->
                 webClientBuilder.build()
                         .post()
-                        .uri(pointsUri + "/" + email)
+                        .uri(orderUri + "/points/" + email)
                         .retrieve()
                         .bodyToMono(Long.class)
                         .block()
@@ -149,7 +177,7 @@ public class AuthenticationService {
     private String createCartWithUserEmail(String email) {
         return webClientBuilder.build()
                 .post()
-                .uri(cartUri)
+                .uri(orderUri + "/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(email)
                 .retrieve()
@@ -157,14 +185,5 @@ public class AuthenticationService {
                 .block();
     }
 
-    private void mergeCarts(MergeRequest mergeRequest) {
-        webClientBuilder.build()
-                .post()
-                .uri(cartUri + "/merge")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(mergeRequest)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-    }
+
 }

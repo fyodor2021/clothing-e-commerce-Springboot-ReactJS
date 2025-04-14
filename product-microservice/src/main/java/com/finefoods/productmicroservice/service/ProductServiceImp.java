@@ -1,346 +1,83 @@
 package com.finefoods.productmicroservice.service;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.amazonaws.util.IOUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finefoods.productmicroservice.dto.*;
 import com.finefoods.productmicroservice.model.Image;
 import com.finefoods.productmicroservice.model.Product;
 import com.finefoods.productmicroservice.repository.ImageRepository;
 import com.finefoods.productmicroservice.repository.ProductRepository;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.ReadChannel;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.reactive.function.client.WebClient;
 
 
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ProductServiceImp implements ProductService {
 
     private final ProductRepository productRepository;
+
     private final ImageRepository imageRepository;
-    private final ObjectMapper objectMapper;
 
-    private final AmazonS3 amazonS3Client;
-    @Value("${gc.bucket.name}")
-    private String bucketName;
-
-    private final WebClient.Builder webClient;
-    @Value("${inventory.service.url}")
-    private String inventoryUri;
-    @Autowired
-    private Storage storage;
-    @Override
-    public Boolean creatProduct(MultipartFile[] files, ProductRequest productRequest) {
-        Product product = Product.builder()
-                .brand(productRequest.getBrand())
-                .productName(productRequest.getProductName())
-                .description(productRequest.getDescription())
-                .category(productRequest.getCategory())
-                .tags(productRequest.getTags())
-                .gender(productRequest.getGender())
-                .color(productRequest.getColor())
-                .cost(productRequest.getCost())
-                .currentPrice(productRequest.getCurrentPrice())
-                .isTaxed(productRequest.getIsTaxed())
-                .skuCode(productRequest.getSkuCode())
-                .upcCode(productRequest.getUpcCode())
-                .vendor(productRequest.getVendor())
-                .points(productRequest.getPoints())
-                .build();
-        Product savedProduct = productRepository.save(product);
-        uploadImages(files, savedProduct);
-
-        // Creating Inventory for the product that was created
-        InventoryRequest inventoryRequest = InventoryRequest.builder()
-                .productId(product.getProductId())
-                .build();
-
-        webClient.build().post()
-                .uri(inventoryUri)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(inventoryRequest)
-                .retrieve()
-                .bodyToMono(String.class)
-                .subscribe(responseBody -> {
-                    System.out.println("Response: " + responseBody);
-                }, error -> {
-                    System.err.println("Error: " + error.getMessage());
-                });
+    private final ProductHelper productHelper;
 
 
-        return Boolean.TRUE;
-    }
-
-    @Override
-    public ProductResponse validateProduct(Long id) {
-        Product product = productRepository.findProductByProductId(id);
-        if (product != null) {
-            return mapToProductResponseValidate(product);
-        }
-        return ProductResponse.builder().build();
-    }
-
-    private ProductResponse mapToProductResponseValidate(Product product) {
-        return ProductResponse.builder()
-                .productId(product.getProductId())
-                .brand(product.getBrand())
-                .productName(product.getProductName())
-                .description(product.getDescription())
-                .category(product.getCategory())
-                .tags(product.getTags())
-                .gender(product.getGender())
-                .color(product.getColor())
-                .cost(product.getCost())
-                .price(product.getPrice())
-                .currentPrice(product.getCurrentPrice())
-                .points(product.getPoints())
-                .isTaxed(product.getIsTaxed())
-                .skuCode(product.getSkuCode())
-                .upcCode(product.getUpcCode())
-                .vendor(product.getVendor())
-                .points(product.getPoints())
-                .build();
-    }
 
     @Override
     public ResponseEntity<ProductResponse> getProduct(Long id) throws IOException {
-        List<Image> imageList = imageRepository.getImageByProductId(id);
-        List<byte[]> imagesInBytes = new ArrayList<>();
+        List<Image> imageList = imageRepository.getImagesByProductId(id);
+        List<URL> imageUrls = new ArrayList<>();
         for (Image image : imageList) {
-            imagesInBytes.add(getImage(image.getImageFileName()));
+            imageUrls.add(productHelper.getImage(image.getImageFileName()));
         }
 
         Product product = productRepository.findProductByProductId(id);
         if (product != null) {
-            ProductResponse productResponse = productToProductResponse(product, imagesInBytes);
+            ProductResponse productResponse = productHelper.productToProductResponse(product, imageUrls);
             return ResponseEntity.ok(productResponse);
         }
         ProductResponse emptyObject = ProductResponse.builder().build();
         return ResponseEntity.ok(emptyObject);
 
     }
+    @Override
+    public List<OrderProductResponse> getCartProductList(CartProductReq cartProductReq) throws IOException {
+        if(cartProductReq.getUserEmail() == null || cartProductReq.getUserEmail().isEmpty()){
+            if(cartProductReq.getCartProducts() != null && !cartProductReq.getCartProducts().isEmpty()){
+                return productHelper.productListToProducts(cartProductReq.getCartProducts());
+            }else{
+                return new ArrayList<>();
+            }
+        }else{
+            if(cartProductReq.getCartProducts() != null && !cartProductReq.getCartProducts().isEmpty()){
+                List<CartProduct> cartProducts =
+                        productHelper.getCartItems(cartProductReq.getUserEmail());
+                cartProducts.addAll(cartProductReq.getCartProducts());
+                return productHelper.productListToProducts(cartProducts);
+            }else{
+                return productHelper.productListToProducts(
+                        productHelper.getCartItems(cartProductReq.getUserEmail()));
+            }
+        }
+    }
 
     @Override
     public List<ProductResponse> getAllProducts() throws IOException {
         List<Product> products = productRepository.findAll();
-        return mapToProductImageResponse(products);
+        return productHelper.mapToProductImageResponse(products,true);
     }
-
-    //    @Override
-//    public List<ProductResponse> getProductsByCategory(String category){
-//        List<Product> products = productRepository.findProductByCategory(category);
-//        return products.stream().map(this::productToProductResponse).toList();
-//
-//    }
-//
     @Override
     public List<ProductResponse> getProductsBySearchTerm(String word) throws IOException {
         List<Product> products = productRepository.findByProductNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(word, word);
-        return mapToProductImageResponse(products);
-    }
-
-    @Override
-    public List<ProductResponse> getProductByCategory(String category) throws IOException {
-        List<Product> products = productRepository.findAllByGender(category);
-        return mapToProductImageResponse(products);
+        return productHelper.mapToProductImageResponse(products, true);
     }
 
 
-//    @Override
-//    public List<ProductResponse> validateProductList(List<ProductRequest> products ){
-//        return products.stream().map(this::doesExist).toList();
-//    }
-//
-//    private ProductResponse doesExist(ProductRequest p){
-//        Product pp = productRepository.findProductByProductId(p.getProductId());
-//        if(pp != null){
-//            return productToProductResponse(pp);
-//        }
-//        else {
-//            return ProductResponse.builder().build();
-//        }
-//
-//    }
-//    @Override
-//    public Boolean updateProduct(Long id, ProductRequest p){
-//        Product product = productRepository.findProductByProductId(id);
-//        if (product != null){
-//            product.setBrand(p.getBrand());
-//            product.setProductName(p.getProductName());
-//            product.setDescription(p.getDescription());
-//            product.setCategory(p.getCategory());
-//            product.setTags(p.getTags());
-//            product.setSize(p.getSize());
-//            product.setUnit(p.getUnit());
-//            product.setCost(p.getCost());
-//            product.setCurrentPrice(p.getCurrentPrice());
-//            product.setIsTaxed(p.getIsTaxed());
-//            product.setSkuCode(p.getSkuCode());
-//            product.setUpcCode(p.getUpcCode());
-//            product.setVendor(p.getVendor());
-//
-//            productRepository.save(product);
-//            return true;
-//        }
-//        return false;
-//    }
-
-
-    @Override
-    public Boolean deleteProduct(Long id) throws IOException {
-        Product p = productRepository.findProductByProductId(id);
-        List<Image> imageList = imageRepository.getImageByProductId(id);
-        for (Image image : imageList) {
-            deleteImage(image.getImageFileName());
-        }
-        if (p != null) {
-            productRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public List<ProductFilterResponse> searchPrediction(String search) {
-        List<Product> products = productRepository.findByProductNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(search, search);
-        List<ProductFilterResponse> productFilterResponses = new ArrayList<>();
-        for (Product product : products) {
-            productFilterResponses.add(
-                    ProductFilterResponse
-                            .builder()
-                            .productName(product.getProductName())
-                            .productId(product.getProductId())
-                            .build());
-        }
-        return productFilterResponses;
-    }
-
-    private ProductResponse productToProductResponse(Product product, List<byte[]> imageList) {
-        return ProductResponse.builder()
-                .productId(product.getProductId())
-                .imageList(imageList)
-                .brand(product.getBrand())
-                .productName(product.getProductName())
-                .description(product.getDescription())
-                .category(product.getCategory())
-                .tags(product.getTags())
-                .gender(product.getGender())
-                .color(product.getColor())
-                .cost(product.getCost())
-                .price(product.getPrice())
-                .points(product.getPoints())
-                .currentPrice(product.getCurrentPrice())
-                .isTaxed(product.getIsTaxed())
-                .skuCode(product.getSkuCode())
-                .upcCode(product.getUpcCode())
-                .vendor(product.getVendor())
-                .points(product.getPoints())
-                .build();
-    }
-
-    public List<ProductResponse> mapToProductImageResponse(List<Product> products) throws IOException {
-        List<ProductResponse> productResponses = new ArrayList<>();
-        for (Product product : products) {
-            List<Image> imageList = imageRepository.getImageByProductId(product.getProductId());
-            List<byte[]> imagesInBytes = new ArrayList<>();
-            for (Image image : imageList) {
-                 imagesInBytes.add(getImage(image.getImageFileName()));
-            }
-            productResponses.add(productToProductResponse(product, imagesInBytes));
-        }
-        return productResponses;
-    }
-
-    private void uploadImages(MultipartFile[] files, Product product) {
-        for (MultipartFile file : files) {
-            File fileObj = convertMultiToFile(file);
-            String fileName = product.getSkuCode() + "_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
-            Image image = Image.builder().imageFileName(fileName).productId(product.getProductId()).build();
-            Image savedImage = imageRepository.save(image);
-            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, fileObj));
-            fileObj.delete();
-        }
-    }
-
-    private File convertMultiToFile(MultipartFile file) {
-        File convertedFile = new File(file.getOriginalFilename());
-        try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
-            fos.write(file.getBytes());
-        } catch (IOException e) {
-            log.error("Error Converting file", e);
-        }
-        return convertedFile;
-    }
-
-
-    public byte[] getImage(String fileName) throws IOException {
-        Blob blob = storage.get(bucketName,fileName);
-        if (blob != null){
-
-            return blob.getContent();
-        }else {
-            return new byte[0];
-        }
-
-    }
-
-    public void deleteImage(String filename) throws IOException {
-        amazonS3Client.deleteObject(bucketName, filename);
-    }
-
-
-    public void imageLoader(File file, Product product) {
-        String fileName = file.getName();
-        Image image = Image.builder().imageFileName(fileName).productId(product.getProductId()).build();
-        Image savedImage = imageRepository.save(image);
-    }
-
-
-    public List<OrderProductResponse> getProductsByProductIdList(List<CartProductDesc> cartProductDescs) throws IOException {
-        List<OrderProductResponse> orderProductResponses = new ArrayList<>();
-        List<String> imagesNames = new ArrayList<>();
-        for (CartProductDesc cartProductDesc : cartProductDescs) {
-            Product product = productRepository.findProductByProductId(cartProductDesc.getProductId());
-            List<Image> imageList = imageRepository.getImageByProductId(cartProductDesc.getProductId());
-            for (Image image : imageList) {
-                imagesNames.add(image.getImageFileName());
-            }
-            orderProductResponses.add(OrderProductResponse.builder()
-                    .productId(product.getProductId())
-                    .productName(product.getProductName())
-                            .size(cartProductDesc.getSize())
-                            .quantity(cartProductDesc.getQuantity())
-                    .description(product.getDescription())
-                    .imageFileNames(imagesNames)
-                    .currentPrice(product.getCurrentPrice())
-                    .build());
-            imagesNames = new ArrayList<>();
-        }
-        return orderProductResponses;
-    }
 }

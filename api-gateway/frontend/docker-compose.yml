@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+    frontend:
+      image: frontend
+      ports:
+      - "3000:3000"
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: frontend
+      volumes:
+       - ./src:/app/src
+      networks:
+      - spring
+      
+networks:
+    spring:
+      driver: bridge

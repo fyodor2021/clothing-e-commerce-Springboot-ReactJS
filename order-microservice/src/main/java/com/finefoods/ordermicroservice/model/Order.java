@@ -1,6 +1,7 @@
 package com.finefoods.ordermicroservice.model;
 
 //import com.finefoods.ordermicroservice.dto.ProductResponse;
+import com.finefoods.ordermicroservice.dto.CartProductDesc;
 import com.finefoods.ordermicroservice.dto.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,6 @@ public class Order {
     private String chargeId;
     private String orderNumber;
     private LocalDate pickedUpDate;
-    private List<Product> products;
+    private List<CartProductDesc> products;
 
 }

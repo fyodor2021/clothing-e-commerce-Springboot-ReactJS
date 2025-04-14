@@ -2,6 +2,7 @@ package com.finefoods.productmicroservice.dataLoader;
 
 import com.finefoods.productmicroservice.model.Product;
 import com.finefoods.productmicroservice.repository.ProductRepository;
+import com.finefoods.productmicroservice.service.ProductHelper;
 import com.finefoods.productmicroservice.service.ProductServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -18,7 +19,7 @@ import java.nio.file.Paths;
 public class ProductLoader implements CommandLineRunner {
     private final ProductRepository productRepository;
     private final ProductServiceImp productServiceImp;
-
+    private final ProductHelper productHelper;
     public String getWorkingDir() throws IOException {
         return new File(".").getCanonicalPath();
     }
@@ -49,13 +50,13 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage = new File(path + fileDir + "1.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            productHelper.imageLoader(productImage,product);
             File productImage1 = new File(path + fileDir + "1-1.jpeg");
-            productServiceImp.imageLoader(productImage1,product);
+            productHelper.imageLoader(productImage1,product);
             File productImage2 = new File(path + fileDir + "1-2.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
+            productHelper.imageLoader(productImage2,product);
             File productImage3 = new File(path + fileDir + "1-3.jpeg");
-            productServiceImp.imageLoader(productImage3,product);
+            productHelper.imageLoader(productImage3,product);
 
         }
         if (productRepository.findProductByProductId((long) 2) == null) {
@@ -79,11 +80,11 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage = new File(path + fileDir+ "2.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            productHelper.imageLoader(productImage,product);
             File productImage1 = new File(path + fileDir+ "2-1.jpeg");
-            productServiceImp.imageLoader(productImage1,product);
+            productHelper.imageLoader(productImage1,product);
             File productImage2 = new File(path + fileDir+ "2-2.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
+            productHelper.imageLoader(productImage2,product);
 
         }
         if (productRepository.findProductByProductId((long) 3) == null) {
@@ -107,13 +108,13 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage = new File(path + fileDir+ "3.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            productHelper.imageLoader(productImage,product);
             File productImage1 = new File(path + fileDir+ "3-1.jpeg");
-            productServiceImp.imageLoader(productImage1,product);
+            productHelper.imageLoader(productImage1,product);
             File productImage2 = new File(path + fileDir+ "3-2.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
+            productHelper.imageLoader(productImage2,product);
             File productImage3 = new File(path + fileDir+ "3-3.jpeg");
-            productServiceImp.imageLoader(productImage3,product);
+            productHelper.imageLoader(productImage3,product);
         }
         if (productRepository.findProductByProductId((long) 4) == null) {
             Product product = Product.builder()
@@ -136,13 +137,13 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage = new File(path + fileDir+ "4.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            productHelper.imageLoader(productImage,product);
             File productImage1 = new File(path + fileDir+ "4-1.jpeg");
-            productServiceImp.imageLoader(productImage1,product);
+            productHelper.imageLoader(productImage1,product);
             File productImage2 = new File(path + fileDir+ "4-2.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
+            productHelper.imageLoader(productImage2,product);
             File productImage3 = new File(path + fileDir+ "4-3.jpeg");
-            productServiceImp.imageLoader(productImage3,product);
+            productHelper.imageLoader(productImage3,product);
         }
         if (productRepository.findProductByProductId((long) 5) == null) {
             Product product = Product.builder()
@@ -165,13 +166,13 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage = new File(path + fileDir+ "5.jpeg");
-            productServiceImp.imageLoader(productImage,product);
+            productHelper.imageLoader(productImage,product);
             File productImage1 = new File(path + fileDir+ "5-1.jpeg");
-            productServiceImp.imageLoader(productImage1,product);
+            productHelper.imageLoader(productImage1,product);
             File productImage2 = new File(path + fileDir+ "5-2.jpeg");
-            productServiceImp.imageLoader(productImage2,product);
+            productHelper.imageLoader(productImage2,product);
             File productImage3 = new File(path + fileDir+ "5-3.jpeg");
-            productServiceImp.imageLoader(productImage3,product);
+            productHelper.imageLoader(productImage3,product);
         }
         if (productRepository.findProductByProductId((long) 6) == null) {
             Product product = Product.builder()
@@ -194,9 +195,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage = new File(path + fileDir + "6.jpeg");
-            productServiceImp.imageLoader(productImage, product);
+            productHelper.imageLoader(productImage, product);
             File productImage1 = new File(path + fileDir + "6-1.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
         }
         if (productRepository.findProductByProductId((long) 7) == null) {
             Product product = Product.builder()
@@ -219,9 +220,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "7.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "7-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 8) == null) {
@@ -245,9 +246,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "8.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "8-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
         if (productRepository.findProductByProductId((long) 9) == null) {
             Product product = Product.builder()
@@ -270,9 +271,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "9.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "9-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
         if (productRepository.findProductByProductId((long) 10) == null) {
             Product product = Product.builder()
@@ -295,9 +296,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "10.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "10-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
         if (productRepository.findProductByProductId((long) 11) == null) {
             Product product = Product.builder()
@@ -320,9 +321,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "11.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "11-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
         if (productRepository.findProductByProductId((long) 12) == null) {
             Product product = Product.builder()
@@ -345,9 +346,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "12.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "12-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 13) == null) {
@@ -371,9 +372,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "13.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "13-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 14) == null) {
@@ -397,9 +398,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "14.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "14-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 15) == null) {
@@ -423,9 +424,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "15.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "15-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 16) == null) {
@@ -449,9 +450,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "16.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "16-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 17) == null) {
@@ -475,9 +476,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "17.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "17-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 18) == null) {
@@ -501,9 +502,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "18.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "18-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
         if (productRepository.findProductByProductId((long) 19) == null) {
             Product product = Product.builder()
@@ -526,9 +527,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "19.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "19-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 20) == null) {
@@ -552,9 +553,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "20.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "20-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
         if (productRepository.findProductByProductId((long) 21) == null) {
             Product product = Product.builder()
@@ -577,9 +578,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "21.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "21-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 22) == null) {
@@ -603,9 +604,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "22.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "22-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 23) == null) {
@@ -629,9 +630,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "23.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "23-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 24) == null) {
@@ -655,9 +656,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "24.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "24-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 25) == null) {
@@ -681,9 +682,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "25.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "25-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 26) == null) {
@@ -707,9 +708,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "26.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "26-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 27) == null) {
@@ -733,9 +734,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "27.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "27-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 28) == null) {
@@ -759,9 +760,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "28.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "28-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 29) == null) {
@@ -785,9 +786,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "29.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "29-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
 
         if (productRepository.findProductByProductId((long) 30) == null) {
@@ -811,9 +812,9 @@ public class ProductLoader implements CommandLineRunner {
                     .build();
             productRepository.save(product);
             File productImage1 = new File(path + fileDir + "30.jpeg");
-            productServiceImp.imageLoader(productImage1, product);
+            productHelper.imageLoader(productImage1, product);
             File productImage2 = new File(path + fileDir + "30-1.jpeg");
-            productServiceImp.imageLoader(productImage2, product);
+            productHelper.imageLoader(productImage2, product);
         }
     }
 }

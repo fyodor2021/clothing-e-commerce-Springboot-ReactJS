@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.net.URL;
 import java.util.List;
 @Builder
 @Data
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class ProductResponse {
     private Long productId;
-    private List<byte[]> imageList;
+    private List<URL> imageList;
     private String brand;
     private String productName;
     private String description;

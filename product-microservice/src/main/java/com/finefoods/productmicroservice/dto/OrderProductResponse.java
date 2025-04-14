@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.net.URL;
 import java.util.List;
 
 @Data
@@ -13,10 +14,11 @@ import java.util.List;
 @Builder
 public class OrderProductResponse {
     private Long productId;
-    private List<String> imageFileNames;
+    private URL imageUrl;
     private String productName;
     private String size;
     private int quantity;
     private String description;
-    private double currentPrice;
+    private double price;
+    private String upcCode;
 }

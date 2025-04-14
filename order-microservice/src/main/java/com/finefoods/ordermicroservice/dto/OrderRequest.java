@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -22,5 +20,6 @@ public class OrderRequest {
     private String cardBrand;
     private double pointsToAdd;
     private double pointsToPay;
+    private List<CartProductDesc> products;
     private double moneyToPay;
 }

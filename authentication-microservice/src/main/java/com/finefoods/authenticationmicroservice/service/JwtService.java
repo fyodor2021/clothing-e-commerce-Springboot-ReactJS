@@ -1,5 +1,6 @@
 package com.finefoods.authenticationmicroservice.service;
 
+import com.finefoods.authenticationmicroservice.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,18 +22,13 @@ public class JwtService {
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
-    public String generateToken(
-            UserDetails userDetails
-    ){
-        return generateToken(new HashMap<>(), userDetails);
-    }
     public String  generateToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails
+            User user
     ){
         return Jwts.builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(user.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()  + 1000 *  60 * 24 * 4))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/e-commerce-site.iml" filepath="$PROJECT_DIR$/.idea/e-commerce-site.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api-gateway/clothing-e-commerce.api-gateway.main.iml" filepath="$PROJECT_DIR$/.idea/modules/api-gateway/clothing-e-commerce.api-gateway.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/authentication-microservice/clothing-e-commerce.authentication-microservice.main.iml" filepath="$PROJECT_DIR$/.idea/modules/authentication-microservice/clothing-e-commerce.authentication-microservice.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/order-microservice/clothing-e-commerce.order-microservice.main.iml" filepath="$PROJECT_DIR$/.idea/modules/order-microservice/clothing-e-commerce.order-microservice.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/product-microservice/clothing-e-commerce.product-microservice.main.iml" filepath="$PROJECT_DIR$/.idea/modules/product-microservice/clothing-e-commerce.product-microservice.main.iml" />
     </modules>
   </component>
 </project>

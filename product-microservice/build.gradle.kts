@@ -35,10 +35,10 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.2")
     implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.1")
-    implementation("com.amazonaws:aws-java-sdk-s3:1.12.656")
     implementation("com.google.cloud:google-cloud-storage:2.40.1")
-
     testImplementation("org.springframework:spring-test")
+    implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.1.0")
+
 
 }
 dependencyManagement {
