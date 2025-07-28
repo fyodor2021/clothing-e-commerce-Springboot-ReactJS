@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import useCartContext from "../hooks/useCartContext";
+import { toast, ToastContainer } from "react-toastify";
+
 export default function Product({ product, suggestion = false}) {
   const [images, setImages] = useState([]);
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ export default function Product({ product, suggestion = false}) {
   }, []);
   const addToCartClick = (size) => {
     handleAddToCart(product.productId,size)
+    toast('item added to cart')
   }
   if (product) {
     return (
@@ -27,7 +30,7 @@ export default function Product({ product, suggestion = false}) {
         <div className={"product-img "}>
           <a href="#" data-abc="true" onClick={handleCardClick}>
             {images[0]}
-          </a>{" "}
+          </a>
           <span className="text-center">
             <i className="fa fa-rupee"></i> ${product.currentPrice}
           </span>
@@ -50,6 +53,7 @@ export default function Product({ product, suggestion = false}) {
             </div>
           </div>}
         </div>
+
       </div>
     );
   }

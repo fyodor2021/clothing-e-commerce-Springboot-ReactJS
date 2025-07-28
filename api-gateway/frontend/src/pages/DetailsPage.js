@@ -1,42 +1,44 @@
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { FaCar } from "react-icons/fa";
-import { FaStore } from "react-icons/fa";
-import { MdAssignmentReturn } from "react-icons/md";
-import { FaChevronCircleRight } from "react-icons/fa";
-import { FaChevronCircleLeft } from "react-icons/fa";
-import Loading from "../components/Loading";
-import Logo from '../statics/logo.png'
-import { useFetchProductDetailsQuery, useAddToCartMutation } from "../store";
-import useCartContext from "../hooks/useCartContext";
+import { useEffect, useState } from 'react';
+import {
+  FaCar,
+  FaChevronCircleLeft,
+  FaChevronCircleRight,
+  FaStore,
+} from 'react-icons/fa';
+import { MdAssignmentReturn } from 'react-icons/md';
+import { useParams } from 'react-router-dom';
+import useCartContext from '../hooks/useCartContext';
+import { useFetchProductDetailsQuery } from '../store';
+import { toast, ToastContainer } from 'react-toastify';
+
 export default function DetailsPage() {
   const { productId } = useParams();
   const [slideNumber, setSlideNumber] = useState(0);
   const { data: product, isLoading } = useFetchProductDetailsQuery(productId);
-  const [addToCart, result] = useAddToCartMutation();
-  const {handleAddToCart} = useCartContext();
+
+  const { handleAddToCart } = useCartContext();
   useEffect(() => {
-    const el = document.getElementById("slide-" + slideNumber);
+    const el = document.getElementById('slide-' + slideNumber);
     if (el) {
-      el.scrollIntoView({ block: "center" });
+      el.scrollIntoView({ block: 'center' });
     }
   }, [slideNumber]);
   if (product) {
     const renderedImages = product.imageList.map((image, key) => {
       if (key === 0) {
-        return <img id={"slide-" + key} src={image} key={key} />;
+        return <img id={'slide-' + key} src={image} key={key} />;
       } else {
-        return <img id={"slide-" + key} src={image} key={key} />;
+        return <img id={'slide-' + key} src={image} key={key} />;
       }
     });
     const updateSlideNumber = (direction) => {
       switch (direction) {
-        case "right":
+        case 'right':
           if (slideNumber < renderedImages.length - 1) {
             setSlideNumber((prev) => prev + 1);
           }
           break;
-        case "left":
+        case 'left':
           if (slideNumber > 0) {
             setSlideNumber((prev) => prev - 1);
           }
@@ -46,14 +48,15 @@ export default function DetailsPage() {
     };
 
     const handleRightClick = (event) => {
-      updateSlideNumber("right");
+      updateSlideNumber('right');
     };
 
     const handleLeftClick = (event) => {
-      updateSlideNumber("left");
+      updateSlideNumber('left');
     };
-    const addToCartClick = ( size) => {
-      handleAddToCart(product.productId,size)
+    const addToCartClick = (size) => {
+      handleAddToCart(product.productId, size);
+      toast('Item added to cart');
     };
 
     return (
@@ -76,9 +79,7 @@ export default function DetailsPage() {
               </button>
             </div>
           </div>
-          <div
-            className="w-full xl:w-3/4 px-8 py-10 bg-gray-100 h-full"
-          >
+          <div className="w-full xl:w-3/4 px-8 py-10 bg-gray-100 h-full">
             <div className="h-16 w-16 m-3 border border-black-500 text-black-500 flex justify-center items-center rounded">
               In Store
             </div>
@@ -95,30 +96,28 @@ export default function DetailsPage() {
             </div>
             <div className="m-4">
               <h4>
-                Price in points?{" "}
+                Price in points?{' '}
                 <span className="text-green-900">
                   {product.currentPrice * 1000}
-                </span>{" "}
+                </span>{' '}
                 JoseDor-points
               </h4>
             </div>
             <div
               className="mb-5 min-w-60 product-action-style"
-              style={{ width: "12.7vw" }}
+              style={{ width: '12.7vw' }}
             >
               <div>
-                <button onClick={() => addToCartClick("s")}>S</button>
+                <button onClick={() => addToCartClick('s')}>S</button>
               </div>
               <div>
-                <button onClick={() => addToCartClick("m")}>M</button>
+                <button onClick={() => addToCartClick('m')}>M</button>
               </div>
               <div>
-                <button onClick={() => addToCartClick("l")}>L</button>
+                <button onClick={() => addToCartClick('l')}>L</button>
               </div>
               <div>
-                <button onClick={() => addToCartClick("xl")}>
-                  XL
-                </button>
+                <button onClick={() => addToCartClick('xl')}>XL</button>
               </div>
             </div>
             <div className="flex items-center m-2 m-2 text-1xl">
@@ -135,6 +134,18 @@ export default function DetailsPage() {
             </div>
           </div>
         </div>
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </div>
     );
   }

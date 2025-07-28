@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,18 +52,15 @@ public class ProductServiceImp implements ProductService {
     public List<OrderProductResponse> getCartProductList(CartProductReq cartProductReq) throws IOException {
         if(cartProductReq.getUserEmail() == null || cartProductReq.getUserEmail().isEmpty()){
             if(cartProductReq.getCartProducts() != null && !cartProductReq.getCartProducts().isEmpty()){
-                return productHelper.productListToProducts(cartProductReq.getCartProducts());
+                return productHelper.cartProductToOrderProductList(cartProductReq.getCartProducts());
             }else{
                 return new ArrayList<>();
             }
         }else{
             if(cartProductReq.getCartProducts() != null && !cartProductReq.getCartProducts().isEmpty()){
-                List<CartProduct> cartProducts =
-                        productHelper.getCartItems(cartProductReq.getUserEmail());
-                cartProducts.addAll(cartProductReq.getCartProducts());
-                return productHelper.productListToProducts(cartProducts);
+                return productHelper.cartProductToOrderProductList(cartProductReq.getCartProducts());
             }else{
-                return productHelper.productListToProducts(
+                return productHelper.cartProductToOrderProductList(
                         productHelper.getCartItems(cartProductReq.getUserEmail()));
             }
         }

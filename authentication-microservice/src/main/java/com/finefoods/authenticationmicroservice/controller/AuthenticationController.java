@@ -3,17 +3,10 @@ package com.finefoods.authenticationmicroservice.controller;
 import com.finefoods.authenticationmicroservice.dto.*;
 import com.finefoods.authenticationmicroservice.service.AuthenticationService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpCookie;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -68,12 +61,12 @@ public class AuthenticationController {
     }
 
     @PutMapping("/user/update")
-    public String updateUser(@RequestBody UserRequest userRequest) throws Exception{
+    public ResponseEntity<HttpStatus> updateUser(@RequestBody UserRequest userRequest) throws Exception{
         return authenticationService.updateUser(userRequest);
     }
 
     @DeleteMapping("/signout")
-    public void signOutUser(@RequestBody AddToCartRequest addToCartRequest) {
-        authenticationService.signOutUser(addToCartRequest);
+    public ResponseEntity<HttpStatus> signOutUser(@RequestBody ReplaceCartForSignedUserRequest replaceCartForSignedUserRequest) {
+        return authenticationService.signOutUser(replaceCartForSignedUserRequest);
     }
 }

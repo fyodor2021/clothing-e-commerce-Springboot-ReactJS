@@ -4,25 +4,19 @@ import com.finefoods.authenticationmicroservice.Repository.UserRepository;
 import com.finefoods.authenticationmicroservice.dto.*;
 import com.finefoods.authenticationmicroservice.model.Role;
 import com.finefoods.authenticationmicroservice.model.User;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -50,6 +44,7 @@ public class AuthenticationService {
                     .build();
             User savedUser = userRepository.save(user);
             createPoints(savedUser.getEmail());
+            createCartWithUserEmail(savedUser.getEmail());
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -68,7 +63,7 @@ public class AuthenticationService {
             cookie.setHttpOnly(true);
             cookie.setSecure(true);
             cookie.setPath("/");
-            cookie.setMaxAge(3600);
+            cookie.setMaxAge(86400);
             httpServletResponse.addCookie(cookie);
             return new ResponseEntity<>(UserResponse.builder()
                     .firstname(user.getFirstname())
@@ -84,9 +79,9 @@ public class AuthenticationService {
 
     }
 
-    public void signOutUser(AddToCartRequest addToCartRequest) {
-        if (addToCartRequest != null && addToCartRequest.getProducts() != null && !addToCartRequest.getProducts().isEmpty()) {
-            addToCart(addToCartRequest);
+    public ResponseEntity<HttpStatus> signOutUser(ReplaceCartForSignedUserRequest replaceCartForSignedUserRequest) {
+        if (replaceCartForSignedUserRequest != null && replaceCartForSignedUserRequest.getProducts() != null && !replaceCartForSignedUserRequest.getProducts().isEmpty()) {
+            replaceCartForSignedUser(replaceCartForSignedUserRequest);
         }
         Cookie cookie = new Cookie("jwt", "");
         cookie.setHttpOnly(true);
@@ -94,14 +89,15 @@ public class AuthenticationService {
         cookie.setPath("/");
         cookie.setMaxAge(0);
         httpServletResponse.addCookie(cookie);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private void addToCart(AddToCartRequest addToCartRequest) {
+    private void replaceCartForSignedUser(ReplaceCartForSignedUserRequest replaceCartForSignedUserRequest) {
         webClientBuilder.build()
                 .post()
-                .uri(orderUri + "/cart/add")
+                .uri(orderUri + "/cart/replace")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(addToCartRequest)
+                .bodyValue(replaceCartForSignedUserRequest)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -128,7 +124,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public String updateUser(UserRequest userRequest) throws Exception {
+    public ResponseEntity<HttpStatus> updateUser(UserRequest userRequest) throws Exception {
         User userLookup = userRepository.findUserByEmail(userRequest.getEmail());
         if (userLookup != null) {
             switch (userRequest.getUpdateForm()) {
@@ -147,8 +143,9 @@ public class AuthenticationService {
                     break;
             }
             userRepository.save(userLookup);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return "user was updated successfully";
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     private double getUserPoints(String email) {

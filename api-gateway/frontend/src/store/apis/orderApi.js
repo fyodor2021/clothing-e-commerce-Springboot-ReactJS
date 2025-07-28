@@ -62,4 +62,4 @@ const orderApi = createApi({
 
 
 export { orderApi }
-export const { usePlaceOrderMutation, useCancelOrderMutation, useGetLoggedUserOrdersQuery, useLazyGetOrderByOrderIdQuery } = orderApi
+export const { usePlaceOrderMutation, useCancelOrderMutation, useLazyGetLoggedUserOrdersQuery, useLazyGetOrderByOrderIdQuery } = orderApi

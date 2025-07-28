@@ -24,7 +24,7 @@ public class OrderController {
     @Transactional
     @CircuitBreaker(name = "order", fallbackMethod = "createOrderFallBack")
     public ResponseEntity<?> placeOrder(@RequestBody OrderRequest orderRequest){
-        return new ResponseEntity<>(orderService.placeOrder(orderRequest), HttpStatus.CREATED);
+        return orderService.placeOrder(orderRequest);
     }
     public ResponseEntity<?> createOrderFallBack(OrderRequest orderRequest,Exception e){
         System.out.println("im here");
@@ -32,8 +32,7 @@ public class OrderController {
     }
 
     @PutMapping("/cancel/{orderId}")
-    public String cancelOrder(@PathVariable String orderId){
-        System.out.println(orderId);
+    public ResponseEntity<?> cancelOrder(@PathVariable String orderId){
         return orderService.cancelOrder(orderId);
     }
 

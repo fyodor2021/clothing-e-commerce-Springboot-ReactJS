@@ -12,15 +12,16 @@ import {validationReducer} from './slices/validationSlice.js'
 import { searchApi } from "./apis/searchApi.js";
 import { userReducer } from "./slices/userSlice.js";
 import { cartReducer } from "./slices/cartslice.js";
-import { useNavigate } from "react-router-dom";
-// const authMiddleware = (store) => (next) => (action) => {
-//     if(action.payload && action.payload.status){
-//         if (action.type.endsWith('/rejected') && action.payload.status === 401) {
-//             navigateToLogin()
-//         }
-//     }
-//     return next(action);
-// };
+
+const authMiddleware = (store) => (next) => (action) => {
+    if(action.payload && action.payload.status){
+        if (action.type.endsWith('/rejected') && action.payload.status === 403) {
+          window.localStorage.removeItem('cart')
+          window.location.assign('/login');
+        }
+    }
+    return next(action);
+};
 const store  = configureStore({
     reducer:{
         token: tokenReducer,
@@ -40,6 +41,7 @@ const store  = configureStore({
         return getDefaultMiddleware({
             ignoredPaths: ['input'],
         })
+        .concat(authMiddleware)
         .concat(authApi.middleware)
         .concat(productApi.middleware)
         .concat(cartApi.middleware)
@@ -58,13 +60,12 @@ export {useRegisterMutation,
     useUpdateUserMutation,useSignoutMutation} from './apis/authApi'
 export {useFetchProductsQuery,useFetchProductDetailsQuery, useLazyFetchCartProductsQuery} from './apis/productApi'
 export {
-    useAddToCartMutation,
-    useProductCountDecrementMutation,
-    useProductCountIncrementMutation,
+
+
     useEmptyCartMutation,
     } from './apis/cartApi'
 export { useAddPaymentMethodMutation, useFetchCardsInfoQuery, useDeleteCardInfoMutation} from './apis/paymentApi.js'
-export { usePlaceOrderMutation, useCancelOrderMutation, useGetLoggedUserOrdersQuery, useLazyGetOrderByOrderIdQuery } from './apis/orderApi.js'
+export { usePlaceOrderMutation, useCancelOrderMutation, useLazyGetLoggedUserOrdersQuery, useLazyGetOrderByOrderIdQuery } from './apis/orderApi.js'
 export {setResMessage} from './slices/validationSlice.js'
 export { setToken }  from './slices/tokenSlice.js'
 export { setMenu }  from './slices/menuSlice.js'
@@ -83,5 +84,5 @@ export {
     setLoggedEmail,
     setLoggedAddress
 } from './slices/userSlice.js'
-export { useLazyFilterProductsBySearchTermQuery } from './apis/searchApi.js' 
+export { useLazyFilterProductsBySearchTermQuery, useLazyFetchProductsBySearchTermQuery } from './apis/searchApi.js' 
 export { setCartItems,setCartItemCounter} from './slices/cartslice.js'

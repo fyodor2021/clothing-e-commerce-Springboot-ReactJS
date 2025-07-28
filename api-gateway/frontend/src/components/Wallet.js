@@ -15,7 +15,6 @@ import {
 import { HiCreditCard } from "react-icons/hi2";
 import { RiMastercardLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { BiFontSize } from "react-icons/bi";
 export default function Wallet({ checkoutAddPayment }) {
   const loggedUser = useSelector((state) => {
     return state.user;
@@ -80,7 +79,7 @@ export default function Wallet({ checkoutAddPayment }) {
 
   return loggedUser ? (
     !addPayment ? (
-      <div >
+      <div className="overflow-auto" >
         <div className="flex align-center justify-between">
           <h1 className="account-page-headers">Your Payment Methods</h1>
           <div onClick={handleAddPaymentMethod}>
@@ -95,7 +94,7 @@ export default function Wallet({ checkoutAddPayment }) {
             </div>
             <div className="flex justify-center mt-4">
               <h1 className="text-gray-400 font-thin font-os">
-                XXXX XXXX XXXX {}
+                XXXX XXXX XXXX XXXX 
               </h1>
             </div>
             <div className="flex flex-col justfiy-end mt-4 p-4 text-gray-400 font-quick">
@@ -106,7 +105,9 @@ export default function Wallet({ checkoutAddPayment }) {
             </div>
           </div>
         </div>
+        <div>
         <Accordion items={data} />
+        </div>
       </div>
     ) : (
       <div >

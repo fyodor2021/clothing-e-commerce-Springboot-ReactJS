@@ -16,43 +16,6 @@ const cartApi = createApi({
 
     endpoints: (builder) => {
         return {
-
-            addToCart: builder.mutation({
-                invalidatesTags: ['fetchCartProducts'],
-                query: (product) => {
-                    return {
-                        url: 'cart/add',
-                        method: 'post',
-                        body: {product},
-                        credentials: "include"
-                    }
-                }
-            }),
-
-            productCountDecrement: builder.mutation({
-                invalidatesTags: ['fetchCartProducts'],
-                query: (incDecRequest) => {
-                    return{
-                        url: 'cart/product/dec',
-                        method: 'post',
-                        body: incDecRequest,
-                        credentials: "include"
-
-                    }
-                }
-            }),
-            productCountIncrement: builder.mutation({
-                invalidatesTags: ['fetchCartProducts'],
-                query: (incDecRequest) => {
-                    return {
-                        url: 'cart/product/inc',
-                        method: 'POST', 
-                        body: incDecRequest,
-                        credentials: "include"
-
-                    }
-                }
-            }),
             emptyCart: builder.mutation({
                 query: (email) => {
                     return {
@@ -68,7 +31,6 @@ const cartApi = createApi({
 
 export {cartApi}
 export const {
-                useAddToCartMutation,
-                useProductCountDecrementMutation,
-                useProductCountIncrementMutation,
+                
+
                 useEmptyCartMutation} = cartApi

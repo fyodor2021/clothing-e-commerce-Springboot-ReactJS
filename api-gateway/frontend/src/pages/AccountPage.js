@@ -1,16 +1,16 @@
-import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import Wallet from "../components/Wallet";
-import PersonalInfo from "../components/PersonalInfo";
-import josedorCard from "../statics/josedor-card.png";
-import { MdOutlineWavingHand } from "react-icons/md";
+import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Wallet from '../components/Wallet';
+import PersonalInfo from '../components/PersonalInfo';
+import josedorCard from '../statics/josedor-card.png';
+import { MdOutlineWavingHand } from 'react-icons/md';
 export default function AccountPage() {
   const [personalSelected, setPersonalSelected] = useState(true);
   const [selected, setSelected] = useState(true);
   const { state } = useLocation();
   useEffect(() => {
-    if (state == "add payment") {
-      setSelected("My Wallet");
+    if (state == 'add payment') {
+      setSelected('My Wallet');
     }
   }, []);
   return (
@@ -20,7 +20,7 @@ export default function AccountPage() {
           <PersonalInfo />
         </div>
         <div className="flex xl:w-[50%] bg-white flex-col xl:px-14 xl:py-20 px-1 py-2 justify-between ">
-          {state === "add payment" ? (
+          {state === 'add payment' ? (
             <Wallet checkoutAddPayment={true} />
           ) : (
             <Wallet />

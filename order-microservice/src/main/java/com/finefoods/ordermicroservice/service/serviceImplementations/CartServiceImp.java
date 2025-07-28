@@ -3,8 +3,10 @@ package com.finefoods.ordermicroservice.service.serviceImplementations;
 
 import com.finefoods.ordermicroservice.dto.AddToCartRequest;
 import com.finefoods.ordermicroservice.dto.CartProductDesc;
+import com.finefoods.ordermicroservice.dto.ReplaceCartForSignedUserRequest;
 import com.finefoods.ordermicroservice.model.Cart;
 import com.finefoods.ordermicroservice.repository.CartRepository;
+import com.finefoods.ordermicroservice.service.serviceInterfaces.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CartServiceImp {
+public class CartServiceImp implements CartService {
     final CartRepository cartRepository;
     private final WebClient.Builder webClientBuilder;
 
@@ -25,7 +27,13 @@ public class CartServiceImp {
         return cartRepository.save(cart);
 
     }
-
+    public void replaceCartForUser(ReplaceCartForSignedUserRequest replaceCartRequest) {
+        Cart cart = cartRepository.findCartByEmail(replaceCartRequest.getUserEmail());
+        if(cart != null) {
+            cart.setProducts(replaceCartRequest.getProducts());
+            cartRepository.save(cart);
+        }
+    }
     public void addToCart(AddToCartRequest addToCartRequest) {
         Cart cart = cartRepository.findCartByEmail(addToCartRequest.getUserEmail());
         if(cart == null) {

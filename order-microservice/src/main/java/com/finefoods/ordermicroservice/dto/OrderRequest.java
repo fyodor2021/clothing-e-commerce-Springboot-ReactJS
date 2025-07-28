@@ -16,7 +16,6 @@ public class OrderRequest {
     private String userEmail;
     private double orderTotal;
     private double orderTax;
-    private List<CartProductDesc> productIds;
     private String cardBrand;
     private double pointsToAdd;
     private double pointsToPay;

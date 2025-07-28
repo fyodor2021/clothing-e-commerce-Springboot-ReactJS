@@ -3,6 +3,8 @@ package com.finefoods.ordermicroservice.controller;
 
 import com.finefoods.ordermicroservice.dto.AddToCartRequest;
 import com.finefoods.ordermicroservice.dto.CartProductDesc;
+import com.finefoods.ordermicroservice.dto.CartRequest;
+import com.finefoods.ordermicroservice.dto.ReplaceCartForSignedUserRequest;
 import com.finefoods.ordermicroservice.model.Cart;
 import com.finefoods.ordermicroservice.repository.CartRepository;
 import com.finefoods.ordermicroservice.service.serviceImplementations.CartServiceImp;
@@ -21,10 +23,17 @@ import java.util.List;
 public class CartController {
     private final CartServiceImp cartService;
     private final CartRepository cartRepository;
-
+    @PostMapping()
+    public void addToCart(@RequestBody String email) {
+        cartService.createCart(email);
+    }
     @PostMapping("/add")
     public void addToCart(@RequestBody AddToCartRequest addToCartRequest) {
         cartService.addToCart(addToCartRequest);
+    }
+    @PostMapping("/replace")
+    public void replaceCartForUser(@RequestBody ReplaceCartForSignedUserRequest replaceCartForSignedUserRequest) {
+        cartService.replaceCartForUser(replaceCartForSignedUserRequest);
     }
 
     @PostMapping("/products")
@@ -40,4 +49,5 @@ public class CartController {
     public void emptyCart(@PathVariable String email) {
         cartService.emptyCart(email);
     }
+
 }

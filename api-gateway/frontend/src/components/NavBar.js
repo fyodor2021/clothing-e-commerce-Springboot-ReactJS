@@ -1,29 +1,27 @@
-import { Link, useNavigate } from "react-router-dom";
-import HomePage from "../pages/HomePage";
-import LoginPage from "../pages/LoginPage";
-import OrdersPage from "../pages/OrdersPage";
-import AccountPage from "../pages/AccountPage";
-import AboutPage from "../pages/AboutPage";
-import CartPage from "../pages/CartPage";
-import { BsCart4 } from "react-icons/bs";
-import { MdOutlineNotifications } from "react-icons/md";
-import { useEffect, useRef, useState } from "react";
-import josedorBranding from "../statics/josedor-branding.png";
-import userAvatar from "../statics/user-avatar.png";
-import useFilterContext from "../hooks/useFilterContext";
-import { CiMenuBurger } from "react-icons/ci";
+import { useEffect, useRef, useState } from 'react';
+import { BsCart4 } from 'react-icons/bs';
+import { CiMenuBurger } from 'react-icons/ci';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import useFilterContext from '../hooks/useFilterContext';
+import AboutPage from '../pages/AboutPage';
+import AccountPage from '../pages/AccountPage';
+import CartPage from '../pages/CartPage';
+import HomePage from '../pages/HomePage';
+import LoginPage from '../pages/LoginPage';
+import OrdersPage from '../pages/OrdersPage';
+import josedorBranding from '../statics/josedor-branding.png';
 import {
   setMenu,
-  setToken,
-  setCartItemCounter,
   useSignoutMutation,
-} from "../store";
-import { useDispatch, useSelector } from "react-redux";
+  useLazyFetchProductsBySearchTermQuery,
+} from '../store';
 export default function NavBar() {
-  //DECLARATIONS -----------------------------------
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState();
-  const { searchPrediction, predictions, setPredictions } = useFilterContext();
+  const [fetchProductsBySearchTerm, fetchProductsBySearchTermResult] =
+    useLazyFetchProductsBySearchTermQuery();
+
   const dispatch = useDispatch();
   const { value: menu } = useSelector((state) => {
     return state.menu;
@@ -37,7 +35,7 @@ export default function NavBar() {
   const { cartItems } = useSelector((state) => {
     return state.cartSlice;
   });
-  const [signout] = useSignoutMutation();
+  const [signout, signoutResults] = useSignoutMutation();
   const loggedUser = useSelector((state) => {
     return state.user;
   });
@@ -45,27 +43,30 @@ export default function NavBar() {
   const searchResult = useRef();
   const notiPanel = useRef();
 
-  //USEEFFECT FUNCTIONS -----------------------------------
   useEffect(() => {
     const handler = (e) => {
       if (searchResult && !searchResult.current.contains(e.target)) {
         setShowSearch(false);
       }
     };
-    document.addEventListener("mousedown", handler);
+    document.addEventListener('mousedown', handler);
     return () => {
-      document.removeEventListener("mousedown", handler);
+      document.removeEventListener('mousedown', handler);
     };
   }, []);
 
   useEffect(() => {
-    if (searchTerm) {
-      setShowSearch(true);
-      searchPrediction(searchTerm);
+    if (signoutResults.isSuccess) {
+      window.localStorage.removeItem('cart');
+      navigate(0);
     }
-  }, [searchTerm]);
+  }, [signoutResults]);
 
-  //HANDLER FUNCTIONS -----------------------------------
+  useEffect(() => {
+    if (fetchProductsBySearchTermResult.isSuccess) {
+      dispatch(setMenu(false));
+    }
+  }, [fetchProductsBySearchTermResult]);
   const handleSearchFocus = () => {
     setShowSearch(true);
   };
@@ -74,7 +75,7 @@ export default function NavBar() {
   };
 
   const handleSignout = () => {
-    const storedCart = window.localStorage.getItem("cart");
+    const storedCart = window.localStorage.getItem('cart');
     const cartItems = storedCart ? JSON.parse(storedCart) : [];
 
     const signoutReq = {
@@ -82,27 +83,28 @@ export default function NavBar() {
       userEmail: loggedUser.email,
     };
     signout(signoutReq);
-    // navigate(0)
   };
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     setShowSearch(false);
-    navigate("/filter", { state: { searchTerm } });
+    navigate('/product/details/' + fetchProductsBySearchTermResult.data[0].productId);
   };
 
-  let renderedItems;
   const handleSearchBoxChange = (event) => {
-    setSearchTerm(event.target.value.replace(/[^\w\s]/gi, ""));
-    dispatch(setMenu(false));
+    fetchProductsBySearchTerm(event.target.value.replace(/[^\w\s]/gi, ''));
   };
+
   const handleSearchTermClick = async (item) => {
     setShowSearch(false);
-    navigate("/details/" + item.productId);
+    navigate('/product/details/' + item.productId);
   };
-  if (predictions) {
-    renderedItems = predictions.slice(0, 6).map((item, key) => {
+  let renderedItems;
+
+  renderedItems =
+    fetchProductsBySearchTermResult.data &&
+    fetchProductsBySearchTermResult.data.slice(0, 6).map((item, key) => {
       const modedString = item.productName.replace(
-        new RegExp(searchTerm, "gi"),
+        new RegExp(searchTerm, 'gi'),
         (match) => `<b>${match}</b>`
       );
       return (
@@ -115,12 +117,11 @@ export default function NavBar() {
         </div>
       );
     });
-  }
-  
+
   return (
     <div className="nav-container">
       {/* logo image */}
-      <Link className="nav-bar-item" to={"/"} element={<HomePage />}>
+      <Link className="nav-bar-item" to={'/'} element={<HomePage />}>
         <img className="josedor-logo-home" src={josedorBranding} />
       </Link>
       {/* search input  */}
@@ -137,7 +138,7 @@ export default function NavBar() {
           {showSearch ? (
             <div className="rendered-search text-black">{renderedItems}</div>
           ) : (
-            ""
+            ''
           )}
         </form>
         <CiMenuBurger
@@ -155,30 +156,30 @@ export default function NavBar() {
             Sign-out
           </Link>
         ) : (
-          <Link className="nav-bar-item" to={"/login"} element={<LoginPage />}>
+          <Link className="nav-bar-item" to={'/login'} element={<LoginPage />}>
             Login
           </Link>
         )}
-        <Link className="nav-bar-item" to={token ? "/orders" : "/login"}>
+        <Link className="nav-bar-item" to={token ? '/orders' : '/login'}>
           My Orders
         </Link>
         {token ? (
           <Link
             className="nav-bar-item"
-            to={"/account"}
+            to={'/account'}
             element={<AccountPage />}
           >
             Account
           </Link>
         ) : (
-          ""
+          ''
         )}
-        <Link className="nav-bar-item" to={"/about"} element={<AboutPage />}>
+        <Link className="nav-bar-item" to={'/about'} element={<AboutPage />}>
           About
         </Link>
         <Link
           className="nav-bar-item relative"
-          to={"/cart"}
+          to={'/cart'}
           element={<CartPage />}
         >
           {cartItemCounter > 0 ? (
@@ -189,7 +190,7 @@ export default function NavBar() {
               {cartItemCounter}
             </span>
           ) : (
-            ""
+            ''
           )}
           <span className="cart-icon">
             <BsCart4 />
@@ -197,10 +198,10 @@ export default function NavBar() {
         </Link>
       </div>
       {/* hamburger menu */}
-      <div className={`navigation-menu ${menu ? "show" : ""}`}>
+      <div className={`navigation-menu ${menu ? 'show' : ''}`}>
         <div className="navigation-menu-item">
           <Link
-            to={token ? "/orders" : "/login"}
+            to={token ? '/orders' : '/login'}
             element={<OrdersPage />}
             onClick={() => dispatch(setMenu(false))}
           >
@@ -210,7 +211,7 @@ export default function NavBar() {
         {token ? (
           <div className="navigation-menu-item">
             <Link
-              to={"/account"}
+              to={'/account'}
               element={<AccountPage />}
               onClick={() => dispatch(setMenu(false))}
             >
@@ -218,11 +219,11 @@ export default function NavBar() {
             </Link>
           </div>
         ) : (
-          ""
+          ''
         )}
         <div className="navigation-menu-item">
           <Link
-            to={"/about"}
+            to={'/about'}
             element={<AboutPage />}
             onClick={() => dispatch(setMenu(false))}
           >
@@ -239,7 +240,7 @@ export default function NavBar() {
         ) : (
           <div className="navigation-menu-item">
             <Link
-              to={"/login"}
+              to={'/login'}
               element={<LoginPage />}
               onClick={() => dispatch(setMenu(false))}
             >
@@ -249,8 +250,8 @@ export default function NavBar() {
         )}
         <div className="navigation-menu-item">
           <Link
-            to={"/cart"}
-            style={{ position: "relative" }}
+            to={'/cart'}
+            style={{ position: 'relative' }}
             element={<CartPage />}
             onClick={() => dispatch(setMenu(false))}
           >
@@ -262,7 +263,7 @@ export default function NavBar() {
                 {cartItemCounter}
               </span>
             ) : (
-              ""
+              ''
             )}
             <span className="cart-icon">
               <BsCart4 />

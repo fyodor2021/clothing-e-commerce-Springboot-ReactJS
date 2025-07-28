@@ -1,22 +1,20 @@
 {
   "files": {
-    "main.css": "/static/css/main.a4708582.css",
-    "main.js": "/static/js/main.04455bfb.js",
+    "main.css": "/static/css/main.546c9c79.css",
+    "main.js": "/static/js/main.54af89c0.js",
     "static/media/josedor-about.png": "/static/media/josedor-about.b81ff42b1128dac77311.png",
     "static/media/slide1.jpg": "/static/media/slide1.5e4876e6642b00e4dc40.jpg",
     "static/media/josedor-card.png": "/static/media/josedor-card.48bd60f7f9276db8c5ed.png",
     "static/media/slide3.jpg": "/static/media/slide3.b5139269a80c79c04a88.jpg",
     "static/media/slide4.jpg": "/static/media/slide4.4fb990a9431407466db1.jpg",
     "static/media/slide2.jpg": "/static/media/slide2.00103e183cf30438f030.jpg",
-    "static/media/logo.png": "/static/media/logo.d4d95ee260330bb7ee57.png",
-    "static/media/user-avatar.png": "/static/media/user-avatar.0431e2167dc7538efb55.png",
     "static/media/arz-brand.png": "/static/media/arz-brand.f91d9678f73f32d24f07.png",
     "index.html": "/index.html",
-    "main.a4708582.css.map": "/static/css/main.a4708582.css.map",
-    "main.04455bfb.js.map": "/static/js/main.04455bfb.js.map"
+    "main.546c9c79.css.map": "/static/css/main.546c9c79.css.map",
+    "main.54af89c0.js.map": "/static/js/main.54af89c0.js.map"
   },
   "entrypoints": [
-    "static/css/main.a4708582.css",
-    "static/js/main.04455bfb.js"
+    "static/css/main.546c9c79.css",
+    "static/js/main.54af89c0.js"
   ]
 }

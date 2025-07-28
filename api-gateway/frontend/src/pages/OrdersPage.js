@@ -1,36 +1,46 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useGetLoggedUserOrdersQuery } from "../store/index.js";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLazyGetLoggedUserOrdersQuery } from '../store/index.js';
+import OrderSkeleton from '../components/OrderSkeleton.js';
+import CartPage from './CartPage.js';
+import ProductSuggestion from '../components/ProductSuggestion.js';
 
-import OrderSkeleton from "../components/OrderSkeleton.js";
-import CartPage from "./CartPage.js";
-import ProductSuggestion from "../components/ProductSuggestion.js";
 export default function OrdersPage() {
   const navigate = useNavigate();
+
   const loggedUser = useSelector((state) => {
     return state.user;
   });
-  let isFetching = false;
-  const { data: orders, isLoading } = useGetLoggedUserOrdersQuery(loggedUser);
+
+  const [fetchOrders, fetchOrdersResults] = useLazyGetLoggedUserOrdersQuery();
+  const [orders, setOrders] = useState();
   const { value: token } = useSelector((state) => {
     return state.token;
   });
+
   let renderedOrders;
+
   useEffect(() => {
     if (!token) {
-      navigate("/login");
+      navigate('/login');
+    } else {
+      fetchOrders(loggedUser);
     }
   }, []);
-
+  useEffect(() => {
+    if (fetchOrdersResults.isSuccess) {
+      setOrders(fetchOrdersResults.data);
+    }
+  }, [fetchOrdersResults]);
   const handleGoHome = () => {
-    navigate("/");
+    navigate('/');
   };
   let sortedData;
 
   if (orders && orders.length > 0) {
     sortedData = [...orders].sort((a) => {
-      if (a.status == "placed") {
+      if (a.status == 'placed') {
         return -1;
       } else {
         return 1;
@@ -63,10 +73,9 @@ export default function OrdersPage() {
           </div>
         );
       });
-      console.log(order);
       let total = order.orderTotal.toFixed(2);
       let subTotal = total - order.orderTax;
-      const orderDetailItem = "p-1 words-break";
+      const orderDetailItem = 'p-1 words-break';
       return (
         <div
           className="bg-white border border-gray-200 flex flex-col mb-1"
@@ -91,11 +100,11 @@ export default function OrdersPage() {
                 </div>
                 <div className={orderDetailItem}>
                   <div>status</div>
-                  <div style={{ fontSize: "1rem" }}>
-                    {order.status === "placed" ? (
-                      <span style={{ color: "green" }}>Active</span>
-                    ) : order.status === "cancelled" ? (
-                      <span style={{ color: "red" }}>{order.status}</span>
+                  <div style={{ fontSize: '1rem' }}>
+                    {order.status === 'placed' ? (
+                      <span style={{ color: 'green' }}>Active</span>
+                    ) : order.status === 'cancelled' ? (
+                      <span style={{ color: 'red' }}>{order.status}</span>
                     ) : (
                       <span>{order.status}</span>
                     )}
@@ -110,7 +119,7 @@ export default function OrdersPage() {
           <div className="p-3">
             <div className="order-summary order-history-summary w-full flex justify-end border-t border-[#e9e9e9]">
               <button
-                onClick={() => navigate("/order/details/" + order.orderId)}
+                onClick={() => navigate('/order/details/' + order.orderId)}
                 className="button bg-white outline-1 text-black shadow-none rounded-[0] active:bg-gray-200 "
               >
                 View Order
@@ -122,10 +131,10 @@ export default function OrdersPage() {
     });
     return (
       <div className="mt-44 md:mt-36 xl:mt-48 w-full  h-screen bg-black bg-opacity-80 font-semibold flex flex-col justify-center items-center xl:h-[calc(100vh-192px)]">
-        {isFetching ? (
+        {fetchOrdersResults.isFetching ||
+        fetchOrdersResults.isUninitialized ||
+        fetchOrdersResults.isLoading ? (
           <div className=" overflow-y-hidden xl:h-[calc(100vh-192px)] mt-10 w-3/4">
-            <OrderSkeleton />
-            <OrderSkeleton />
             <OrderSkeleton />
             <OrderSkeleton />
             <OrderSkeleton />
@@ -140,6 +149,14 @@ export default function OrdersPage() {
   } else {
     return (
       <div className="mt-44 md:mt-36 xl:mt-48 w-full h-screen bg-black bg-opacity-80 overflow-x-hidden font-semibold flex justify-center items-center xl:h-[calc(100vh-192px)]">
+        {fetchOrdersResults.isFetching || fetchOrdersResults.isUninitialized ||
+        fetchOrdersResults.isLoading ? 
+        <div className=" overflow-y-hidden xl:h-[calc(100vh-192px)] mt-10 w-3/4">
+          <OrderSkeleton />
+          <OrderSkeleton />
+          <OrderSkeleton />
+        </div>
+         :
         <div className="xl:w-[75%] h-full overflow-x-hidden transform translate-x-0 transition ease-in-out duration-700">
           <div
             className="flex  md:flex-row xl:flex-row justify-end flex-col-reverse h-full  py-10 "
@@ -147,12 +164,12 @@ export default function OrdersPage() {
           >
             <div className=" w-full bg-gray-100 h-full px-5 py-5">
               <p className="text-2xl font-black leading-10  w-full text-gray-500 ">
-                  Looks like your orders took a rain check!
+                Looks like your orders took a rain check!
               </p>
               <ProductSuggestion />
             </div>
           </div>
-        </div>
+        </div>}
       </div>
     );
   }

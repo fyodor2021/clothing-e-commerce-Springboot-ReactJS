@@ -29,7 +29,7 @@ public class WalletServiceImp implements WalletService {
 
     @Override
     public ResponseEntity<?> addCard(WalletRequest walletRequest) {
-        Wallet walletExist = walletRepository.findByCardNumber(cardHelper.encrypt(walletRequest.getCardNumber(),"secret"));
+        Wallet walletExist = walletRepository.findWalletByUserEmailAndCardNumber(walletRequest.getUserEmail(),cardHelper.encrypt(walletRequest.getCardNumber(),"secret"));
         if (walletExist == null) {
             if (cardHelper.varifyCard(walletRequest.getCardNumber())){
                 Wallet wallet = Wallet.builder()

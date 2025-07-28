@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import {
   useFetchProductsQuery,
 } from "../store";
+import {toast, ToastContainer} from 'react-toastify'
 export default function ProductPage() {
   const { data,isLoading } = useFetchProductsQuery();
   const { womenProduct, menProduct, kidsProduct } = useProductContext();
@@ -54,6 +55,18 @@ export default function ProductPage() {
       ) : (
         <></>
       )}
+              <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
     </div>
   );
 }

@@ -12,7 +12,9 @@ import com.stripe.model.Refund;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -35,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
     private String stripeKey;
 
     @Override
-    public String placeOrder(OrderRequest orderRequest) {
+    public ResponseEntity<?> placeOrder(OrderRequest orderRequest) {
         String chargeId = "";
         if (orderRequest.getMoneyToPay() != 0.0) {
             try {
@@ -44,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
                 throw new RuntimeException(e);
             }
             if (chargeId.equals("")) {
-                return "Error during payment";
+                return new ResponseEntity<>("Error during payment", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }else {
             chargeId = "Fully paid with points";
@@ -61,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
                 .status("placed")
                 .datePlaced(LocalDate.now())
                 .userEmail(orderRequest.getUserEmail())
-                .products(orderRequest.getProductIds())
+                .products(orderRequest.getProducts())
                 .build();
 
         orderRepository.save(order);
@@ -81,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
             pointsService.updatePointsForUser(pointsRequest);
 
         }
-        return "order was placed successfully";
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     private String payForOrder(double total, String cardBrand) throws StripeException {
@@ -115,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
         return "";
     }
 
-    public String cancelOrder(String orderId) {
+    public ResponseEntity<?> cancelOrder(String orderId) {
         Order order = orderRepository.findOrderByOrderId(orderId);
         if (order != null && !order.getStatus().equals("cancelled")){
             //Update the points for user
@@ -160,10 +162,9 @@ public class OrderServiceImpl implements OrderService {
             order.setTotalPaidInPoints(order.getTotalPaidInPoints() * -1);
             order.setOrderTotal(order.getOrderTotal()* -1);
             orderRepository.save(order);
-            return "order was cancelled";
-
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return "Error cancelling the order";
+        return new ResponseEntity<>("Error cancelling order",HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
     public OrderResponse getOrderById(String orderId) throws IOException {

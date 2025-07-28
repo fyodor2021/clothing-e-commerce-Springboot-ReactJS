@@ -82,7 +82,7 @@ public class ProductHelper {
         }).block();
     }
 
-    public List<OrderProductResponse> productListToProducts(List<CartProduct> cartProducts) throws IOException {
+    public List<OrderProductResponse> cartProductToOrderProductList(List<CartProduct> cartProducts) throws IOException {
         if(cartProducts == null|| cartProducts.isEmpty()) {
             return new ArrayList<>();
         }else{

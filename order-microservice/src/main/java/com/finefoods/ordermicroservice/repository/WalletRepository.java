@@ -9,4 +9,5 @@ public interface WalletRepository extends JpaRepository<Wallet, Long> {
     Wallet findByCardNumber(String cardNumber);
     List<Wallet> findWalletByUserEmail(String userEmail);
     Wallet findWalletByWalletId(Long walletId);
+    Wallet findWalletByUserEmailAndCardNumber(String userEmail, String cardNumber);
 }

@@ -12,8 +12,13 @@ export const searchApi = createApi({
                 method: 'get',
             })
         }),
-
+        fetchProductsBySearchTerm: builder.query({
+            query: (searchTerm) => ({
+                url: `/product/search/${searchTerm}`,
+                method: 'get',
+            })
+        }),
     })
 })
 
-export const { useLazyFilterProductsBySearchTermQuery } = searchApi
+export const { useLazyFilterProductsBySearchTermQuery,useLazyFetchProductsBySearchTermQuery } = searchApi

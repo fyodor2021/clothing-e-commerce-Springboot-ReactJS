@@ -13,7 +13,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebExceptionHandler;
-
+import jakarta.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,12 +77,21 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     public static class Config {
     }
     private Boolean validateJwtCookie(ServerWebExchange exchange,  MultiValueMap<String, HttpCookie> cookies) {
-        String jwtCookie = Objects.requireNonNull(cookies.getFirst("jwt")).getValue();
+        String jwtCookie = cookies.getFirst("jwt").getValue();
+        if(jwtCookie != null){
+
         try{
             jwtService.validateToken(jwtCookie);
         }catch (Exception exception){
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+            exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+            ResponseCookie cookie = ResponseCookie.from("jwt", "")
+            .httpOnly(true)
+            .secure(true)
+            .path("/")
+            .maxAge(0).build();
+            exchange.getResponse().addCookie(cookie);
             return false;
+        }
         }
         Claims  storedClaims = jwtService.extractAllClaims(jwtCookie);
         var jwtToken = jwtService.generateToken(storedClaims);

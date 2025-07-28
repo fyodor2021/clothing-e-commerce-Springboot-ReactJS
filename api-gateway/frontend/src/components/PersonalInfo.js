@@ -1,29 +1,27 @@
-import { useState, useRef, useEffect } from "react";
-import Input from "../components/Input";
-import { useLoggedUserQuery, useUpdateUserMutation } from "../store";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useRef, useEffect } from 'react';
+import Input from '../components/Input';
+import { useLoggedUserQuery, useUpdateUserMutation } from '../store';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setFname,
   setLname,
   setAddress,
   setPassword,
   setPasswordRetype,
-} from "../store";
+} from '../store';
+import { useNavigate } from 'react-router-dom';
 export default function PersonalInfo() {
   const {
-    email,
     fname,
     lname,
     address,
     password,
     passwordRetype,
-    emailVal,
     fnameVal,
     lnameVal,
     addressVal,
     passwordVal,
     passwordRetypeVal,
-    emailValMes,
     fnameValMes,
     lnameValMes,
     addressValMes,
@@ -38,49 +36,54 @@ export default function PersonalInfo() {
   const [userEdit, setUserEdit] = useState(false);
   const [addressEdit, setAddressEdit] = useState(false);
   const [passwordEdit, setPasswordEdit] = useState(false);
-  const [updateUser] = useUpdateUserMutation();
-  const dispatch = useDispatch();
-  const { value: token } = useSelector((state) => {
-    return state.token;
-  });
-
+  const [updateUser, updateUserResults] = useUpdateUserMutation();
+  const navigate = useNavigate();
   const editToggle = (editable) => {
     switch (editable) {
-      case "user":
+      case 'user':
         setUserEdit(true);
         setAddressEdit(false);
         setPasswordEdit(false);
         break;
-      case "address":
+      case 'address':
         setAddressEdit(true);
         setUserEdit(false);
         setPasswordEdit(false);
         break;
-      case "password":
+      case 'password':
         setPasswordEdit(true);
         setUserEdit(false);
         setAddressEdit(false);
         break;
     }
   };
+
   const cancelEditAction = (editable) => {
     switch (editable) {
-      case "user":
+      case 'user':
         setUserEdit(false);
         break;
-      case "address":
+      case 'address':
         setAddressEdit(false);
         break;
-      case "password":
+      case 'password':
         setPasswordEdit(false);
         break;
     }
   };
+
+  useEffect(() => {
+    console.log(updateUserResults);
+    if (updateUserResults.isSuccess) {
+      navigate(0);
+    }
+  }, [updateUserResults]);
+
   const submitAction = async (event, editable) => {
     event.preventDefault();
     let user;
     switch (editable) {
-      case "user":
+      case 'user':
         if (fname == loggedUser.fname && lname == loggedUser.lname) {
           setUserEdit(false);
           break;
@@ -89,13 +92,13 @@ export default function PersonalInfo() {
             firstname: fname,
             lastname: lname,
             email: loggedUser.email,
-            updateForm: "user",
+            updateForm: 'user',
           };
           updateUser(user);
           setUserEdit(false);
         }
         break;
-      case "address":
+      case 'address':
         if (address === loggedUser.address) {
           setAddressEdit(false);
           break;
@@ -103,21 +106,21 @@ export default function PersonalInfo() {
           user = {
             address,
             email: loggedUser.email,
-            updateForm: "address",
+            updateForm: 'address',
           };
           updateUser(user);
           setAddressEdit(false);
           break;
         }
-      case "password":
-        if (password === "*************") {
+      case 'password':
+        if (password === '*************') {
           setPasswordEdit(false);
           break;
         } else if (passwordVal && passwordRetypeVal) {
           user = {
             password,
             email: loggedUser.email,
-            updateForm: "password",
+            updateForm: 'password',
           };
           updateUser(user);
           setPasswordEdit(false);
@@ -125,11 +128,12 @@ export default function PersonalInfo() {
         }
     }
   };
-  const accountInfoItem = "text-white flex justify-between m-2 border p-2";
-  const accountInfoChange = "";
-  const inputFieldStyle = "h-[35px] text-[.95rem] w-full ";
-  const inputLabelStyle = "text-[.85rem] m-0 p-1 text-white";
-  const button = 'button p-[.5rem]'
+  const accountInfoItem = 'text-white flex justify-between m-2 border p-2';
+  const accountInfoChange = '';
+  const inputFieldStyle = 'h-[35px] text-[.95rem] w-full ';
+  const inputLabelStyle = 'text-[.85rem] m-0 p-1 text-white';
+  const button =
+    'button py-[.5rem] rounded text-gray-500 hover:bg-gray-300 text-[.75rem] border border-black border-1';
   return (
     loggedUser && (
       <div className="w-full">
@@ -146,14 +150,14 @@ export default function PersonalInfo() {
                 </div>
               </div>
               <div>
-                <button onClick={() => editToggle("user")}>Edit</button>
+                <button onClick={() => editToggle('user')}>Edit</button>
               </div>
             </div>
           </div>
         ) : (
           <form
             className={accountInfoChange}
-            onSubmit={(event) => submitAction(event, "user")}
+            onSubmit={(event) => submitAction(event, 'user')}
           >
             <div className="flex flex-col sm:flex-row">
               <Input
@@ -187,7 +191,7 @@ export default function PersonalInfo() {
               </button>
               <button
                 className={button}
-                onClick={() => cancelEditAction("user")}
+                onClick={() => cancelEditAction('user')}
               >
                 Cancel
               </button>
@@ -200,7 +204,7 @@ export default function PersonalInfo() {
             <div className="account-info-label">{loggedUser.email}</div>
           </div>
           <div>
-            <div style={{ color: "gray", fontSize: "15px" }}>Edit</div>
+            <div style={{ color: 'gray', fontSize: '15px' }}>Edit</div>
           </div>
         </div>
 
@@ -211,13 +215,13 @@ export default function PersonalInfo() {
               <div>{loggedUser.address}</div>
             </div>
             <div>
-              <button onClick={() => editToggle("address")}>Edit</button>
+              <button onClick={() => editToggle('address')}>Edit</button>
             </div>
           </div>
         ) : (
           <form
             className={accountInfoChange}
-            onSubmit={(event) => submitAction(event, "address")}
+            onSubmit={(event) => submitAction(event, 'address')}
           >
             <div className="reg-input">
               <Input
@@ -232,7 +236,7 @@ export default function PersonalInfo() {
               <button className={button}>Submit</button>
               <button
                 className={button}
-                onClick={() => cancelEditAction("address")}
+                onClick={() => cancelEditAction('address')}
               >
                 Cancel
               </button>
@@ -247,13 +251,13 @@ export default function PersonalInfo() {
               <div>*************</div>
             </div>
             <div>
-              <button onClick={() => editToggle("password")}>Edit</button>
+              <button onClick={() => editToggle('password')}>Edit</button>
             </div>
           </div>
         ) : (
           <form
             className={accountInfoChange}
-            onSubmit={(event) => submitAction(event, "password")}
+            onSubmit={(event) => submitAction(event, 'password')}
           >
             <div className="flex-row">
               <Input
@@ -261,8 +265,8 @@ export default function PersonalInfo() {
                 state={password}
                 val={passwordVal}
                 valMes={passwordValMes}
-                htmlFor={"password"}
-                labelContent={"Password: "}
+                htmlFor={'password'}
+                labelContent={'Password: '}
                 fieldClassName={inputFieldStyle}
                 labelClassName={inputLabelStyle}
                 required={true}
@@ -273,8 +277,8 @@ export default function PersonalInfo() {
                 state={passwordRetype}
                 val={passwordRetypeVal}
                 valMes={passwordRetypeValMes}
-                htmlFor={"passwordretype"}
-                labelContent={"Retype Password: "}
+                htmlFor={'passwordretype'}
+                labelContent={'Retype Password: '}
                 fieldClassName={inputFieldStyle}
                 labelClassName={inputLabelStyle}
                 required={true}
@@ -285,7 +289,7 @@ export default function PersonalInfo() {
               <button className={button}>Submit</button>
               <button
                 className={button}
-                onClick={() => cancelEditAction("password")}
+                onClick={() => cancelEditAction('password')}
               >
                 Cancel
               </button>

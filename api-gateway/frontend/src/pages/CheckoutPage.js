@@ -1,13 +1,9 @@
-import { useRef, useState, useEffect } from "react";
-import CartProductList from "../components/CartProductList";
-import { useNavigate } from "react-router-dom";
-import { useEmptyCartMutation } from "../store/apis/cartApi";
-import {
-  useAddPaymentMethodMutation,
-  useLoggedUserQuery,
-  usePlaceOrderMutation,
-} from "../store";
-import { useDispatch, useSelector } from "react-redux";
+import { useRef, useState, useEffect } from 'react';
+import CartProductList from '../components/CartProductList';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEmptyCartMutation } from '../store/apis/cartApi';
+import { useAddPaymentMethodMutation, usePlaceOrderMutation } from '../store';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   useFetchCardsInfoQuery,
   setFname,
@@ -15,16 +11,13 @@ import {
   setSecurityCode,
   setCardNumber,
   setExpire,
-} from "../store/index";
-import Input from "../components/Input.js";
-import { HiCreditCard } from "react-icons/hi2";
+} from '../store/index';
+import Input from '../components/Input.js';
 
 export default function CheckoutPage() {
-  const { cartItems } = useSelector((state) => {
-    return state.cartSlice;
-  });
-  const [emptyCart] = useEmptyCartMutation();
-  const [placeOrder] = usePlaceOrderMutation();
+
+  const [emptyCart, emptyCartResults] = useEmptyCartMutation();
+  const [placeOrder, placeOrderResults] = usePlaceOrderMutation();
   const [subTotal, setSubTotal] = useState(0.0);
   const [addPayment, setAddPayment] = useState(false);
   const dispatch = useDispatch();
@@ -38,9 +31,11 @@ export default function CheckoutPage() {
   const [paymentCard, setPaymentCard] = useState();
   const [payWithPoints, setPayWithPoints] = useState(false);
   const [addPaymentMethod] = useAddPaymentMethodMutation();
-  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-  const navigate = useNavigate();
-  const summaryPanelRef = useRef();
+  const navigate = useNavigate(0)
+  const location = useLocation();
+    const { cartItems } = useSelector((state) => {
+    return state.cartSlice;
+  });
   const {
     fname,
     fnameVal,
@@ -60,13 +55,27 @@ export default function CheckoutPage() {
   } = useSelector((state) => {
     return state.input;
   });
+
   useEffect(() => {
     setPaymentCard(
-      cardsInfo && cardsInfo.length > 0 ? cardsInfo[0].lastFourDigit : ""
+      cardsInfo && cardsInfo.length > 0 ? cardsInfo[0].lastFourDigit : ''
     );
   }, [cartItems]);
   useEffect(() => {
-    const data = cartItems;
+    console.log("placeOrderResults",placeOrderResults)
+    if(placeOrderResults.isSuccess){
+      emptyCart(loggedUser.email);
+    }
+  },[placeOrderResults])
+
+    useEffect(() => {
+    if(emptyCartResults.isSuccess){
+      window.localStorage.removeItem('cart')
+      navigate(0)
+    }
+  },[emptyCartResults])
+  useEffect(() => {
+    const data = location.state.products;
     if (data) {
       const calSubTotal = data.reduce((acc, product) => {
         return acc + product.price * product.quantity;
@@ -83,7 +92,7 @@ export default function CheckoutPage() {
       }, 0);
       setTax(calTax);
     }
-  }, [cartItems]);
+  }, []);
 
   const total = subTotal + tax;
 
@@ -105,33 +114,16 @@ export default function CheckoutPage() {
 
   const handlePlaceOrder = async () => {
     if (!paymentCard) {
-      console.log("Please select a payment method");
-      setValMessage("Please select a payment method");
+      console.log(paymentCard)
+      console.log('Please select a payment method');
+      setValMessage('Please select a payment method');
     }
-    const storedCart = window.localStorage.getItem("cart");
-    const storedCartItems = storedCart ? JSON.parse(storedCart) : [];
-    let productIds = [];
-    for (let cartItem of cartItems){
-      productIds.push({
-        productId: cartItem.productId,
-        size: cartItem.size,
-        quantity: cartItem.quantity,
-      });
-    }
-    if(storedCartItems && storedCartItems.length > 0){
-      for (let cartItem of storedCartItems){
-        productIds.push({
-          productId: cartItem.productId,
-          size: cartItem.size,
-          quantity: cartItem.quantity,
-        });
-      }
-    }
+
     if (paymentCard) {
       const orderRequest = {
         userEmail: loggedUser.email,
         orderTotal: total,
-        productIds,
+        products:cartItems,
         cardBrand: paymentCard,
         pointsToAdd: pointsGainedByPurchase,
         pointsToPay: payWithPoints ? loggedUser.points : 0,
@@ -139,15 +131,13 @@ export default function CheckoutPage() {
         moneyToPay: payWithPoints ? total - loggedUser.points / 1000 : total,
       };
       placeOrder(orderRequest);
-      emptyCart(loggedUser.email);
-      setValMessage("Order was successfully placed");
-      await delay(1000);
-      window.location.reload();
+      setValMessage('Order was successfully placed');
+
     }
   };
   const handleAddPaymentSubmit = (event) => {
     event.preventDefault();
-    const storedCart = window.localStorage.getItem("cart");
+    const storedCart = window.localStorage.getItem('cart');
     const storedCartItems = storedCart ? JSON.parse(storedCart) : [];
     const addPaymentRequest = {
       cardHolderFirstName: fname,
@@ -158,45 +148,46 @@ export default function CheckoutPage() {
       userEmail: loggedUser.email,
     };
     addPaymentMethod(addPaymentRequest);
-    dispatch(setFname(""));
-    dispatch(setLname(""));
-    dispatch(setSecurityCode(""));
-    dispatch(setCardNumber(""));
-    dispatch(setExpire(""));
+    dispatch(setFname(''));
+    dispatch(setLname(''));
+    dispatch(setSecurityCode(''));
+    dispatch(setCardNumber(''));
+    dispatch(setExpire(''));
     setAddPayment(false);
   };
 
   const inputFieldStyle =
-    "input-field h-[35px] text-[.95rem] w-full rounded-[0] font-semibold";
+    'input-field h-[35px] text-[.95rem] w-full rounded-[0] font-semibold';
   const inputLabelStyle =
-    "input-label text-[.85rem] m-0  text-black font-semibold";
-  const button = "button p-[.5rem] m-[.15rem] rounded-[0] font-semibold";
+    'input-label text-[.85rem] m-0  text-black font-semibold';
+  const button = 'button p-[.5rem] m-[.15rem] rounded-[0] font-semibold';
   return (
     <div
-      className="bg-black bg-opacity-80  py-10  mt-44 md:mt-36 xl:mt-48 w-full xl:h-[calc(100vh-192px)] 
+      className="bg-black bg-opacity-80  py-10  mt-44 md:mt-36 l:w-full xl:mt-48 xl:h-[calc(100vh-192px)] 
    w-full flex justify-center items-center "
     >
-      <div className="flex flex-col-reverse xl:flex xl:flex-row justify-center items-center h-full xl:w-[75%]">
+      <div className="flex flex-col-reverse  lg:w-full xl:flex xl:flex-row justify-center items-center h-full xl:w-[75%]">
         <div className="w-full lg:w-3/4 px-10 py-10">
           <div className="flex justify-between border-b pb-8">
             <h1 className="font-semibold text-2xl text-white">Shopping Cart</h1>
           </div>
           <div className=" h-[calc(100vh-300px)] overflow-y-auto">
-            <CartProductList checkout={true} products={cartItems} />
+            <CartProductList checkout={true} products={location.state.products} />
           </div>
         </div>
         <div
           id="summary"
-          className="w-full lg:w-2/4 px-8 py-10 bg-gray-100 h-full"
+          className="w-full lg:w-3/4 px-8 py-10 bg-gray-100 h-full"
         >
-          {valMessage === "Please select a pickup location" ||
-          valMessage === "Please select a payment method" ? (
+          {valMessage === 'Please select a pickup location' ||
+          valMessage === 'Please select a payment method' ? (
             valMessage ? (
               <div
                 style={{
-                  backgroundColor: "rgba(255, 0, 0, 0.37)",
-                  color: "red",
-                  fontWeight: "bold",
+                  backgroundColor: 'rgba(255, 0, 0, 0.3)',
+                  color: 'rgba(255, 54, 54, 0.98)',
+                  fontWeight: 'normal',
+
                 }}
               >
                 {valMessage}
@@ -207,9 +198,9 @@ export default function CheckoutPage() {
           ) : valMessage ? (
             <div
               style={{
-                backgroundColor: "rgba(43, 255, 0, 0.37)",
-                color: "green",
-                fontWeight: "bold",
+                backgroundColor: 'rgba(43, 255, 0, 0.37)',
+                color: 'green',
+                fontWeight: 'bold',
               }}
             >
               {valMessage}

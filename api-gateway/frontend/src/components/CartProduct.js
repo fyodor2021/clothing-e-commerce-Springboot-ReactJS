@@ -1,22 +1,15 @@
-import { useCookies } from "react-cookie";
-import {
-  useProductCountDecrementMutation,
-  useProductCountIncrementMutation,
-} from "../store/apis/cartApi";
-export default function CartProduct({ product, checkout }) {
-  const [cookie] = useCookies(["SESSION"]);
-  const [productCountDecrement] = useProductCountDecrementMutation();
-  const [productCountIncrement] = useProductCountIncrementMutation();
+import useCartContext from '../hooks/useCartContext';
 
-  const incDecRequest = {
-    productId: product.productId,
-    productSize: product.size,
-    headerValue: window.localStorage.getItem(
-      process.env.REACT_APP_AUTH_TOKEN_LOCAL
-    )
-      ? window.localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_LOCAL)
-      : cookie["SESSION"],
+export default function CartProduct({ product, checkout }) {
+  const { handleAddToCart } = useCartContext();
+  const productCountDecrement = (product) => {
+    console.log('im hrer')
+    handleAddToCart(product.productId, product.size, -1);
   };
+  const productCountIncrement = (product) => {
+    handleAddToCart(product.productId, product.size, 1);
+  };
+  const incDecRequest = {};
   return (
     <div className="md:flex items-center my-3 border-t border-gray-200">
       <div className="w-1/4">
@@ -37,15 +30,15 @@ export default function CartProduct({ product, checkout }) {
             <div className="flex flex-col justify-center items-center px-8">
               <div className="qty-field">
                 <p
-                  onClick={() => productCountDecrement(incDecRequest)}
-                  style={{ cursor: "pointer" }}
+                  onClick={() => productCountDecrement(product)}
+                  style={{ cursor: 'pointer' }}
                 >
                   -
                 </p>
                 <p>{product.quantity}</p>
                 <p
-                  onClick={() => productCountIncrement(incDecRequest)}
-                  style={{ cursor: "pointer" }}
+                  onClick={() => productCountIncrement(product)}
+                  style={{ cursor: 'pointer' }}
                 >
                   +
                 </p>
@@ -60,7 +53,7 @@ export default function CartProduct({ product, checkout }) {
             <>
               <div className="flex">
                 <div className="size-display-cart-product mr-1">
-                <p>{product.quantity}</p>
+                  <p>{product.quantity}</p>
                 </div>
                 <div className="size-display-cart-product">
                   {product.size.toUpperCase()}
@@ -81,5 +74,4 @@ export default function CartProduct({ product, checkout }) {
       </div>
     </div>
   );
-
 }

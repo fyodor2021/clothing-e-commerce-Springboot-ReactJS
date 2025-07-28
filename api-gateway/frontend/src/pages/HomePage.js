@@ -5,6 +5,7 @@ import slide3 from '../statics/slide3.jpg'
 import slide4 from '../statics/slide4.jpg'
 import { FaArrowRight } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
 export default function HomePage() {
   const anchorRef1 = useRef(null)
   const anchorRef2 = useRef(null)
@@ -56,6 +57,7 @@ export default function HomePage() {
         <div><FaArrowLeft onClick={leftClickHandle} /></div>
         <div><FaArrowRight onClick={RightClickHandle} /></div>
       </div>
+      
     </section>
 
   );

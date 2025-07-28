@@ -1,20 +1,19 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.js";
-import { BrowserRouter } from "react-router-dom";
-import "./index.css";
-import { ProductProvider } from "./context/ProductContext.js";
-import { FilterProvider } from "./context/FilterContext.js";
-import { Provider, useDispatch } from "react-redux";
-import axios from "axios";
-import {
-  store,
-} from "./store/index.js";
-import "./mobile.css";
-import { CartProvider } from "./context/cartContext.js";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.js';
+import { BrowserRouter } from 'react-router-dom';
+import './index.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { ProductProvider } from './context/ProductContext.js';
+import { FilterProvider } from './context/FilterContext.js';
+import { Provider, useDispatch } from 'react-redux';
+import axios from 'axios';
+import { store } from './store/index.js';
+import './mobile.css';
+import { CartProvider } from './context/cartContext.js';
 async function getdata() {
   try {
-    const res = await axios.get("/api/auth/user");
+    const res = await axios.get('/api/auth/user');
     return {
       token: res.data.token,
       fname: res.data.firstname,
@@ -22,9 +21,15 @@ async function getdata() {
       email: res.data.email,
       address: res.data.address,
     };
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    console.log(error.response.status);
+    if (error.response.status === 403) {
+      window.localStorage.removeItem('cart');
+    }
+  }
 }
-const el = document.getElementById("root");
+const el = document.getElementById('root');
 const root = ReactDOM.createRoot(el);
 
 root.render(
